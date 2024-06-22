@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
+import { Toaster } from "sonner"
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { Toaster } from "sonner"
 
 const inter = Inter({ subsets: ["latin"] });
 
