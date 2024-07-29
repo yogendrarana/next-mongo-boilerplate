@@ -7,38 +7,73 @@ export enum AuthProviderEnum {
     google = 'google'
 }
 
+// role enum
+export enum UserRoleEnum {
+    user = 'user',
+    admin = 'admin'
+}
+
 // user schema 
-export interface IUserModel extends Document {
+export interface IUser extends Document {
+    clientId: string;
     name: string;
     email: string;
-    password: string;
+    password?: string;
+    providerAccountId?: string;
     authProvider?: AuthProviderEnum;
+    role?: UserRoleEnum;
+    projects?: string[];
     isValidPassword: (password: string) => Promise<boolean>;
 }
 
-const userSchema: Schema = new Schema<IUserModel>({
-    name: { type: String, required: true },
-    email: { type: String, required: true },
-    password: { type: String, required: true },
-    authProvider: { type: String, required: true, enum: AuthProviderEnum }
+const userSchema: Schema = new Schema<IUser>({
+    clientId: {
+        type: Schema.Types.String,
+        required: true,
+        unique: true
+    },
+    name: {
+        type: Schema.Types.String,
+        required: true
+    },
+    email: {
+        type: Schema.Types.String,
+        required: true,
+        unique: true
+    },
+    password: {
+        type: Schema.Types.String
+    },
+    providerAccountId: {
+        type: Schema.Types.String
+    },
+    authProvider: {
+        type: Schema.Types.String,
+        required: true,
+        enum: AuthProviderEnum
+    },
+    role: {
+        type: Schema.Types.String,
+        required: true,
+        enum: UserRoleEnum,
+        default: UserRoleEnum.user
+    },
+
+    // references
+    projects: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Project'
+    }]
+}, {
+    timestamps: true
 })
 
-// pre save hook to hash password
-userSchema.pre<IUserModel>('save', async function (next) {
-    if (!this.isModified('password')) next();
-    try {
-        this.password = await bcrypt.hash(this.password, 10);
-        next();
-    } catch (err: any) {
-        next(err);
-    }
-})
-
-// methods
+// static methods
 userSchema.methods.isValidPassword = async function (password: string) {
-    return await bcrypt.compare(password, this.password);
+    return this.password ? await bcrypt.compare(password, this.password) : false;
 };
 
 
 // export model
-export default mongoose.models.User || mongoose.model<IUserModel>('User', userSchema);
+const UserModel = mongoose.models.User || mongoose.model<IUser>('User', userSchema);
+export default UserModel;
