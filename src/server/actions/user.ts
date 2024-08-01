@@ -2,12 +2,12 @@
 
 import type { z } from "zod";
 import mongoose from "mongoose";
-import { connectDb } from "@/db";
+import { connectDb } from "@/server/db";
 import { v4 as uuid } from "uuid";
 import { auth, signOut } from "@/auth";
 import { revalidatePath } from "next/cache";
-import { UpdateProfileSchema } from "../schemas/user";
-import UserModel, { IUser } from "@/db/models/user-model";
+import { UpdateProfileSchema } from "../../schemas/user";
+import UserModel, { IUser } from "@/server/db/models/user-model";
 
 
 // create user with google provider

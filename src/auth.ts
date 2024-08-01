@@ -2,7 +2,7 @@ import NextAuth from "next-auth"
 import { PROVIDER } from "@/constants";
 import { authConfig } from "./auth.config";
 import { createUser, getUserByEmail } from "./server/actions/user";
-import { AuthProviderEnum, UserRoleEnum } from "./db/models/user-model";
+import { AuthProviderEnum, UserRoleEnum } from "./server/db/models/user-model";
 
 const basePath = "/api/auth";
 

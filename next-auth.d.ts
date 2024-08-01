@@ -1,4 +1,4 @@
-import { UserRoleEnum } from "@/db/models/user-model"
+import { UserRoleEnum } from "@/server/db/models/user-model"
 import { type DefaultSession } from "next-auth"
 
 export type ExtendedUser = DefaultSession["user"] & {
