@@ -15,26 +15,20 @@ export enum UserRoleEnum {
 
 // user schema 
 export interface IUser extends Document {
-    clientId: string;
-    name: string;
+    name?: string;
     email: string;
     password?: string;
     providerAccountId?: string;
     authProvider?: AuthProviderEnum;
     role?: UserRoleEnum;
-    projects?: string[];
+    createdAt: Date;
+    updatedAt: Date;
     isValidPassword: (password: string) => Promise<boolean>;
 }
 
-const userSchema: Schema = new Schema<IUser>({
-    clientId: {
-        type: Schema.Types.String,
-        required: true,
-        unique: true
-    },
+const UserSchema: Schema = new Schema<IUser>({
     name: {
-        type: Schema.Types.String,
-        required: true
+        type: Schema.Types.String
     },
     email: {
         type: Schema.Types.String,
@@ -58,22 +52,16 @@ const userSchema: Schema = new Schema<IUser>({
         enum: UserRoleEnum,
         default: UserRoleEnum.user
     },
-
-    // references
-    projects: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Project'
-    }]
 }, {
     timestamps: true
 })
 
 // static methods
-userSchema.methods.isValidPassword = async function (password: string) {
+UserSchema.methods.isValidPassword = async function (password: string) {
     return this.password ? await bcrypt.compare(password, this.password) : false;
 };
 
 
 // export model
-const UserModel = mongoose.models.User || mongoose.model<IUser>('User', userSchema);
+const UserModel = mongoose.models.User || mongoose.model<IUser>('User', UserSchema);
 export default UserModel;

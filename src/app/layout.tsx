@@ -1,15 +1,14 @@
 import "@/styles/globals.css";
 import { Toaster } from "sonner"
+import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/provider/theme-provider";
 import BackgroundProvider from "@/components/provider/background-provider";
-import { cn } from "@/lib/utils";
 
 
 export const metadata: Metadata = {
-  title: "Next.js Boilerplate",
-  description: "Next.js boilerplate",
+  title: "Next JS MongoDB Boilerplate",
+  description: "Next JS and Mongo DB Boilerplate",
 };
 
 // fonts

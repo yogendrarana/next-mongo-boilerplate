@@ -1,7 +1,8 @@
 import NextAuth from "next-auth"
-import { PROVIDER } from "@/constants";
+import { authProviders } from "@/lib/constants";
 import { authConfig } from "./auth.config";
-import { createUser, getUserByEmail } from "./server/actions/user";
+import { createUser } from "@/server/actions/user";
+import { getUserByEmail } from "@/server/queries/user";
 import { AuthProviderEnum, UserRoleEnum } from "./server/db/models/user-model";
 
 const basePath = "/api/auth";
@@ -9,7 +10,7 @@ const basePath = "/api/auth";
 export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
     callbacks: {
         async signIn({ account, profile }) {
-            if (account?.provider === PROVIDER.GOOGLE && profile?.email) {
+            if (account?.provider === authProviders.google && profile?.email) {
                 const existingUser = await getUserByEmail(profile?.email as string);
 
                 if (!existingUser) {

@@ -5,8 +5,6 @@ import mongoose from "mongoose";
 import { connectDb } from "@/server/db";
 import { v4 as uuid } from "uuid";
 import { auth, signOut } from "@/auth";
-import { revalidatePath } from "next/cache";
-import { UpdateProfileSchema } from "../../schemas/user";
 import UserModel, { IUser } from "@/server/db/models/user-model";
 
 
@@ -36,35 +34,6 @@ export async function createUser({
         return { success: true, message: "User created successfully." };
     } catch (err: any) {
         return { success: false, message: err.message || "Internal server error" };
-    }
-}
-
-// update profile
-export async function updateProfile(values: z.infer<typeof UpdateProfileSchema>) {
-    const { name, email } = values;
-    const authSession = await auth();
-
-    try {
-        if (!authSession) {
-            return { success: false, message: "Not authenticated." };
-        }
-
-        await connectDb();
-        const user = await UserModel.findOneAndUpdate(
-            { email },
-            { name },
-            { new: true }
-        ).exec();
-
-
-        if (!user) {
-            return { success: false, message: "User not found" };
-        }
-
-        revalidatePath("/dashboard/settings");
-        return { success: true, message: "Profile updated successfully." };
-    } catch (error: any) {
-        return { message: error.message || "Internal server error" };
     }
 }
 
@@ -106,21 +75,5 @@ export async function deleteUser() {
         if (dbSession) {
             dbSession.endSession();
         }
-    }
-}
-
-// get user by email
-export async function getUserByEmail(email: string) {
-    try {
-        await connectDb();
-        const user = await UserModel.findOne({ email });
-
-        if (!user) {
-            return { success: false, message: "User not found", user: null };
-        }
-
-        return { success: true, message: "User found", user };
-    } catch (err: any) {
-        return { success: false, message: err.message || "Internal server error", user: null };
     }
 }
