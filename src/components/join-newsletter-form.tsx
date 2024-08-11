@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 import { unknownError } from "@/lib/constants"
-import { emailSchema, type EmailSchema } from "@/lib/schemas/notification"
+import { emailSchema, type EmailSchema } from "@/lib/validations/notification"
 import {
     Form,
     FormControl,

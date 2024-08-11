@@ -6,7 +6,7 @@ import { cn, formatPrice } from "@/lib/utils"
 import { Separator } from "@/components/ui/separator"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { UpdateCart } from "@/components/checkout/update-cart"
-import { type CartLineItemSchema } from "@/lib/schemas/cart"
+import { type CartLineItemSchema } from "@/lib/validations/cart"
 
 interface CartLineItemsProps extends React.HTMLAttributes<HTMLDivElement> {
     items: Partial<CartLineItemSchema>[]
