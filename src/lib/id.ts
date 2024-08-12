@@ -10,20 +10,24 @@ const prefixes = {
     address: "adr",
     order: "ord",
     notification: "not",
+    subcategory: "subcat",
 }
 
 interface GenerateIdOptions {
     length?: number
-    separator?: string
+    separator?: string,
+    includeTimestamp?: boolean;
 }
 
 export function generateId(
     prefix?: keyof typeof prefixes,
-    { length = 12, separator = "_" }: GenerateIdOptions = {}
+    { length = 15, separator = "_", includeTimestamp = true }: GenerateIdOptions = {}
 ) {
-    const id = customAlphabet(
+    const nanoid = customAlphabet(
         "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
         length
-    )()
-    return prefix ? `${prefixes[prefix]}${separator}${id}` : id
+    );
+
+    const timestamp = includeTimestamp ? Date.now().toString(36) + separator : '';
+    return prefix ? `${prefixes[prefix]}${separator}${timestamp}${nanoid()}` : `${timestamp}${nanoid()}`;
 }

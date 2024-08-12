@@ -1,6 +1,6 @@
-import { AuthProviderEnum, UserRoleEnum } from "@/constants/enum";
 import bcrypt from "bcrypt";
 import mongoose, { Document, Schema } from "mongoose";
+import { AuthProviderEnum, UserRoleEnum } from "@/constants/enum";
 
 // user schema 
 export interface IUser extends Document {

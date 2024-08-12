@@ -1,5 +1,5 @@
-import mongoose, { Schema, Document } from 'mongoose';
 import { generateId } from '@/lib/id';
+import mongoose, { Schema, Document } from 'mongoose';
 
 export interface ISubcategory extends Document {
     id: string;
@@ -13,7 +13,7 @@ export interface ISubcategory extends Document {
 const SubcategorySchema: Schema = new Schema({
     id: {
         type: String,
-        default: generateId(),
+        default: generateId("subcategory"),
         unique: true,
         required: true,
     },

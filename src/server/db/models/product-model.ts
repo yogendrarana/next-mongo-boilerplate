@@ -6,14 +6,11 @@ export interface IProduct extends Document {
     description: string;
     price: number;
     categoryId: string;
-    subcategoryId: string;
-    subId: string;
+    subCategoryId: string;
     sku: string;
     inventory: number;
     images: string[];
     sex: string;
-    createdAt: Date;
-    updatedAt: Date;
 }
 
 // Schema definition for the Product
@@ -37,7 +34,7 @@ const ProductSchema: Schema = new Schema({
         required: true,
         ref: "Category"
     },
-    subcategoryId: {
+    subCategoryId: {
         type: String,
         required: true,
         ref: "Subcategory"
