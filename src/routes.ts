@@ -3,7 +3,13 @@ export const DEFAULT_LOGIN_REDIRECT = "/dashboard";
 
 export const PUBLIC_ROUTES = [
   "/",
-  "/login"
+  "/about",
+  "/contact",
+  "/blog",
+  "/terms",
+  "/privacy",  
+  "/build-a-board",
+  "/products",
 ];
 
 export const PUBLIC_ROUTE_HANDLERS = [
@@ -11,7 +17,8 @@ export const PUBLIC_ROUTE_HANDLERS = [
 ];
 
 export const AUTH_ROUTES = [
-  "/auth",
+  "/login",
+  "/register",
   "/reset",
   "/verify",
   "/register",

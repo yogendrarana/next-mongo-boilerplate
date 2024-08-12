@@ -12,8 +12,8 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
 import { Icons } from "@/components/icons"
+import { Skeleton } from "@/components/ui/skeleton"
 
 interface CategoryCardProps {
     category: Awaited<ReturnType<typeof getCategories>>[number]

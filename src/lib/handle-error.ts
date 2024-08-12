@@ -1,7 +1,7 @@
 import * as z from "zod"
 import { toast } from "sonner"
 
-import { unknownError } from "@/lib/constants"
+import { unknownError } from "@/constants"
 
 export function getErrorMessage(err: unknown) {
     if (err instanceof z.ZodError) {

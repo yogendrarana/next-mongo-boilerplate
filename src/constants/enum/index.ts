@@ -1,0 +1,20 @@
+
+// product enums
+export enum ProductSexEnum {
+    MALE = 'male',
+    FEMALE = 'female',
+    UNISEX = 'unisex',
+    OTHER = 'other'
+}
+
+// user enums
+export enum UserRoleEnum {
+    ADMIN = 'admin',
+    USER = 'user'
+}
+
+// auth enums
+export enum AuthProviderEnum {
+    CREDENTIALS = 'credentials',
+    GOOGLE = 'google'
+}

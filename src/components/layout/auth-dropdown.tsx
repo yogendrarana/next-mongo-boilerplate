@@ -31,10 +31,10 @@ export async function AuthDropdown({
 
     if (!user) {
         return (
-            <Button size="sm" className={cn(className)} {...props} asChild>
-                <Link href="/signin">
-                    Sign In
-                    <span className="sr-only">Sign In</span>
+            <Button size="sm" variant="secondary" className={cn(className, "px-4 border")} {...props} asChild>
+                <Link href="/login">
+                    Login
+                    <span className="sr-only">Login</span>
                 </Link>
             </Button>
         )

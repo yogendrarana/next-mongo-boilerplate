@@ -1,17 +1,6 @@
+import { AuthProviderEnum, UserRoleEnum } from "@/constants/enum";
 import bcrypt from "bcrypt";
 import mongoose, { Document, Schema } from "mongoose";
-
-// auth provider enum
-export enum AuthProviderEnum {
-    credentials = 'credentials',
-    google = 'google'
-}
-
-// role enum
-export enum UserRoleEnum {
-    user = 'user',
-    admin = 'admin'
-}
 
 // user schema 
 export interface IUser extends Document {
@@ -49,8 +38,8 @@ const UserSchema: Schema = new Schema<IUser>({
     role: {
         type: Schema.Types.String,
         required: true,
-        enum: UserRoleEnum,
-        default: UserRoleEnum.user
+        enum: Object.values(UserRoleEnum),
+        default: UserRoleEnum.USER
     },
 }, {
     timestamps: true

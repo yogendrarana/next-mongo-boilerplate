@@ -15,6 +15,8 @@ import {
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 import { Icons } from "../icons"
+import { siteConfig } from "@/config/site"
+import { ComponentBooleanIcon } from "@radix-ui/react-icons"
 
 interface MainNavProps {
     items?: MainNavItem[]
@@ -24,9 +26,9 @@ export function MainNav({ items }: MainNavProps) {
     return (
         <div className="hidden gap-6 lg:flex">
             <Link href="/" className="hidden items-center space-x-2 lg:flex">
-                <Icons.logo className="size-7" aria-hidden="true" />
+                <ComponentBooleanIcon className="size-7" aria-hidden={true} />
                 <span className="hidden font-bold lg:inline-block">
-                    {/* {siteConfig.name} */} AAA
+                    {siteConfig.name}
                 </span>
                 <span className="sr-only">Home</span>
             </Link>
@@ -38,7 +40,7 @@ export function MainNav({ items }: MainNavProps) {
                                 {items[0].title}
                             </NavigationMenuTrigger>
                             <NavigationMenuContent>
-                                <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                                <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
                                     <li className="row-span-3">
                                         <NavigationMenuLink asChild>
                                             <Link
@@ -47,10 +49,10 @@ export function MainNav({ items }: MainNavProps) {
                                             >
                                                 <Icons.logo className="size-6" aria-hidden="true" />
                                                 <div className="mb-2 mt-4 text-lg font-medium">
-                                                    {/* {siteConfig.name} */} aaaa
+                                                    {siteConfig.name}
                                                 </div>
                                                 <p className="text-sm leading-tight text-muted-foreground">
-                                                    {/* {siteConfig.description} */} bbbb
+                                                    {siteConfig.description}
                                                 </p>
                                                 <span className="sr-only">Home</span>
                                             </Link>
@@ -136,4 +138,5 @@ const ListItem = React.forwardRef<
         </li>
     )
 })
+
 ListItem.displayName = "ListItem"

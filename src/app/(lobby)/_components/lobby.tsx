@@ -1,15 +1,11 @@
 import {
-    PageActions,
     PageHeader,
     PageHeaderDescription,
     PageHeaderHeading,
 } from "@/components/page-header"
-import Link from "next/link"
-import { cn } from "@/lib/utils"
 import { Shell } from "@/components/shell"
 import { CategoryCard } from "./category-card"
 import { ProductCard } from "@/components/product-card"
-import { buttonVariants } from "@/components/ui/button"
 import { ContentSection } from "@/components/content-section"
 import type { getCategories, getFeaturedProducts } from "@/server/queries/product"
 
@@ -35,30 +31,17 @@ export async function Lobby({ productsPromise, categoriesPromise, }: LobbyProps)
                     className="animate-fade-up"
                     style={{ animationDelay: "0.20s", animationFillMode: "both" }}
                 >
-                    Foundation for your commerce platform
+                    Get your favourite fashion items
                 </PageHeaderHeading>
                 <PageHeaderDescription
                     className="max-w-[46.875rem] animate-fade-up"
                     style={{ animationDelay: "0.30s", animationFillMode: "both" }}
                 >
-                    Skateshop is an open-source platform for building and customizing your
-                    own commerce platform with ease.
+                    In Fashion house you can find the trendiest fashion items, apparel, and accessories.
                 </PageHeaderDescription>
-                <PageActions
-                    className="animate-fade-up"
-                    style={{ animationDelay: "0.40s", animationFillMode: "both" }}
-                >
-                    <Link href="/products" className={cn(buttonVariants())}>
-                        Buy now
-                    </Link>
-                    <Link
-                        href="/dashboard/stores"
-                        className={cn(buttonVariants({ variant: "outline" }))}
-                    >
-                        Sell now
-                    </Link>
-                </PageActions>
             </PageHeader>
+
+            {/* categories */}
             <section
                 className="grid animate-fade-up grid-cols-1 gap-4 xs:grid-cols-2 md:grid-cols-4"
                 style={{ animationDelay: "0.50s", animationFillMode: "both" }}
@@ -67,6 +50,8 @@ export async function Lobby({ productsPromise, categoriesPromise, }: LobbyProps)
                     <CategoryCard key={category.name} category={category} />
                 ))}
             </section>
+
+            {/* featured products */}
             <ContentSection
                 title="Featured products"
                 description="Explore products from around the world"

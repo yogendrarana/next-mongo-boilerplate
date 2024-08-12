@@ -1,3 +1,4 @@
+import { ProductSexEnum } from '@/constants/enum';
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IProduct extends Document {
@@ -5,25 +6,59 @@ export interface IProduct extends Document {
     description: string;
     price: number;
     categoryId: string;
+    subcategoryId: string;
     subId: string;
     sku: string;
     inventory: number;
     images: string[];
+    sex: string;
     createdAt: Date;
     updatedAt: Date;
 }
 
 // Schema definition for the Product
 const ProductSchema: Schema = new Schema({
-    name: { type: String, required: true, trim: true },
-    description: { type: String, required: true },
-    price: { type: Number, required: true, min: 0 },
-    categoryId: { type: String, required: true, ref: "Category" },
-    sku: { type: String, required: true, unique: true },
-    inventory: { type: Number, required: true, min: 0, default: 0 },
-    images: [{ type: String }],
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now }
+    name: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    price: {
+        type: Number,
+        required: true,
+        min: 0
+    },
+    categoryId: {
+        type: String,
+        required: true,
+        ref: "Category"
+    },
+    subcategoryId: {
+        type: String,
+        required: true,
+        ref: "Subcategory"
+    },
+    sku: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    inventory: {
+        type: Number,
+        required: true,
+        min: 0,
+        default: 0
+    },
+    sex: {
+        type: String,
+        enum: Object.values(ProductSexEnum),
+        required: true
+    },
+    images: [{ type: String }]
 }, {
     timestamps: true
 });

@@ -1,9 +1,9 @@
 import NextAuth from "next-auth"
-import { authProviders } from "@/lib/constants";
+import { authProviders } from "@/constants";
 import { authConfig } from "./auth.config";
 import { createUser } from "@/server/actions/user";
 import { getUserByEmail } from "@/server/queries/user";
-import { AuthProviderEnum, UserRoleEnum } from "./server/db/models/user-model";
+import { AuthProviderEnum, UserRoleEnum } from "./constants/enum";
 
 const basePath = "/api/auth";
 
@@ -17,7 +17,7 @@ export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
                     const res = await createUser({
                         name: profile.name as string,
                         email: profile.email as string,
-                        authProvider: AuthProviderEnum.google,
+                        authProvider: AuthProviderEnum.GOOGLE,
                         providerAccountId: profile.sub as string,
                     })
 
