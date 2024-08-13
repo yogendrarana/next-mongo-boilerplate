@@ -25,8 +25,8 @@ export function ProductsCombobox() {
     const [open, setOpen] = React.useState(false)
     const [query, setQuery] = React.useState("")
     const debouncedQuery = useDebounce(query, 300)
-    const [data, setData] = React.useState<any[] | null>(null)
     const [loading, setLoading] = React.useState(false)
+    const [data, setData] = React.useState<any[] | null>(null)
 
     React.useEffect(() => {
         if (debouncedQuery.length <= 0) {
@@ -36,13 +36,13 @@ export function ProductsCombobox() {
 
         async function fetchData() {
             setLoading(true)
-            const { data, success } = await searchProduct({ query: debouncedQuery })
+            const res = await searchProduct({ query: debouncedQuery })
 
-            if (!success) {
+            if (!res.success) {
                 setLoading(false)
                 return
             }
-            setData(data!)
+            setData(res.data as any[] | null)
             setLoading(false)
         }
 

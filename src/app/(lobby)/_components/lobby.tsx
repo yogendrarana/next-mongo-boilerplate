@@ -8,6 +8,8 @@ import { CategoryCard } from "./category-card"
 import { ProductCard } from "@/components/product-card"
 import { ContentSection } from "@/components/content-section"
 import type { getCategories, getFeaturedProducts } from "@/server/queries/product"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 interface LobbyProps {
     productsPromise: ReturnType<typeof getFeaturedProducts>
@@ -39,11 +41,14 @@ export async function Lobby({ productsPromise, categoriesPromise, }: LobbyProps)
                 >
                     In Fashion house you can find the trendiest fashion items, apparel, and accessories.
                 </PageHeaderDescription>
+                <Button className="mt-6">
+                    <Link href="/products">View all products</Link>
+                </Button>
             </PageHeader>
 
             {/* categories */}
             <section
-                className="grid animate-fade-up grid-cols-1 gap-4 xs:grid-cols-2 md:grid-cols-4"
+                className="grid animate-fade-up grid-cols-1 gap-4 xs:grid-cols-2 md:grid-cols-3"
                 style={{ animationDelay: "0.50s", animationFillMode: "both" }}
             >
                 {categories.map((category) => (

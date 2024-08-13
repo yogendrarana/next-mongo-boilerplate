@@ -1,34 +1,21 @@
-"use server"
-
+import { ApiResponse } from "@/helpers/api-response";
+import { connectDb } from "../db";
+import ProductModel from "../db/models/product-model";
 import { getErrorMessage } from "@/lib/handle-error";
-import { unstable_noStore as noStore, revalidatePath } from "next/cache"
 
-export const searchProduct = async ({ query }: { query: string }) => {
-    noStore()
+// search products
+export const searchProduct = async ({ query }: { query: string }): Promise<ApiResponse> => {
+    await connectDb()
 
     if (query.length === 0) {
-        return { success: false, message: "Query is empty" }
+        return ApiResponse.failure("Query is empty");
     }
 
     try {
-        // TODO: Implement search product logic
-        return {
-            success: true,
-            message: "Product found",
-            data: [
-                {
-                    id: 1,
-                    name: "Product 1",
-                    price: 100,
-                },
-                {
-                    id: 2,
-                    name: "Product 2",
-                    price: 200,
-                }
-            ],
-        };
+        // const products = await ProductModel.find({ $text: { $search: query } }).limit(5);
+
+        return ApiResponse.success("Products found", []);
     } catch (err: any) {
-        return { success: false, message: getErrorMessage(err) };
+        return ApiResponse.failure(getErrorMessage(err));
     }
 };

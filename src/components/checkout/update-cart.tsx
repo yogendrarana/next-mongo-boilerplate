@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { type CartLineItemSchema } from "@/lib/validations/cart"
 import { MinusIcon, PlusIcon, TrashIcon } from "@radix-ui/react-icons"
-import useCartStore, { CartItemQuantityOperation } from "@/store/use-cart-store"
+import useCartStore from "@/store/use-cart-store"
+import { CartItemQuantityOperation } from "@/constants/enum"
 
 interface UpdateCartProps {
     cartLineItem: Partial<CartLineItemSchema>

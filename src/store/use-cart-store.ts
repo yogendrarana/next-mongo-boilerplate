@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { CartItemQuantityOperation } from '@/constants/enum';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 export type CartItem = {
@@ -8,13 +9,6 @@ export type CartItem = {
     price: number;
 };
 
-export enum CartItemQuantityOperation {
-    ADD = 'add',
-    SUBTRACT = 'subtract',
-    SET = 'set'
-}
-
-// Define the type for your cart store
 interface CartStoreType {
     items: CartItem[];
     addCartItem: (item: CartItem) => void;
@@ -22,22 +16,12 @@ interface CartStoreType {
     updateQuantity: (id: string, operation: string, quantity?: number) => void;
 }
 
-// Initial state for the cart store
-const initialState: CartStoreType = {
-    items: localStorage.getItem('cart-items') ? JSON.parse(localStorage.getItem('cart')!) : [],
-    addCartItem: () => { },
-    removeCartItem: () => { },
-    updateQuantity: () => { },
-};
-
-// Create the cart store with persistence
 const useCartStore = create<CartStoreType>()(
     persist(
         (set) => ({
-            ...initialState,
+            items: [],
             addCartItem: (item) => set((state) => ({ items: [...state.items, item] })),
             removeCartItem: (id) => set((state) => ({ items: state.items.filter((i) => i.id !== id) })),
-
             updateQuantity: (id, operation, quantity) => {
                 if (operation === CartItemQuantityOperation.ADD) {
                     set((state) => ({

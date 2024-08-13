@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/card"
 import Link from "next/link"
 import * as React from "react"
-import { toast } from "sonner"
 import Image from "next/image"
 import { Icons } from "@/components/icons"
 import { cn, formatPrice } from "@/lib/utils"

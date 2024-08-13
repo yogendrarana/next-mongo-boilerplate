@@ -3,7 +3,6 @@ import { siteConfig } from "@/config/site"
 import { MobileNav } from "./mobile-nav"
 import { AuthDropdown } from "./auth-dropdown"
 import { CartSheet } from "../checkout/cart-sheet"
-import { IUser } from "@/server/db/models/user-model"
 import { ProductsCombobox } from "./products-combobox"
 
 export function SiteHeader() {

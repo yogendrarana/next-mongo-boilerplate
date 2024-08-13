@@ -1,5 +1,6 @@
 import { Icons } from "@/components/icons"
 
+// nav
 export interface NavItem {
     title: string
     href?: string
@@ -18,6 +19,8 @@ export interface NavItemWithChildren extends NavItem {
 export type MainNavItem = NavItemWithChildren
 export type SidebarNavItem = NavItemWithChildren
 
+
+// footer
 export interface FooterItem {
     title: string
     items: {
@@ -25,4 +28,9 @@ export interface FooterItem {
         href: string
         external?: boolean
     }[]
+}
+
+// product
+export interface SearchParams {
+    [key: string]: string | string[] | undefined
 }

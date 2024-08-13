@@ -1,17 +1,111 @@
 import "server-only"
 
+import { FilterQuery } from "mongoose"
 import {
     unstable_cache as cache,
     unstable_noStore as noStore,
 } from "next/cache"
 import { connectDb } from "../db"
-import ProductModel from "../db/models/product-model"
+import { SearchParams } from "@/types"
+import { getErrorMessage } from "@/lib/handle-error"
+import { ApiResponse } from "@/helpers/api-response"
 import CategoryModel from "../db/models/category-model"
+import { getProductsSchema } from "@/lib/validations/product"
+import ProductModel, { IProduct } from "../db/models/product-model"
+
+
+// get products
+export async function getProducts(input: SearchParams) {
+    await connectDb()
+    noStore()
+
+    try {
+        const limit = Number(input.per_page) || 10;
+        const page = Number(input.page) || 1;
+        const skip = (page - 1) * limit;
+        const search = getProductsSchema.parse(input)
+
+        const [sortField, sortOrder] = (search.sort?.split('.') as [
+            keyof IProduct | undefined, 'asc' | 'desc' | undefined
+        ]) ?? ['createdAt', 'desc'];
+
+        const categoryIds = search.categories?.split(".") ?? []
+        const subcategoryIds = search.subcategories?.split(".") ?? []
+        const [minPrice, maxPrice] = search.price_range?.split("-") ?? []
+
+        const filter: FilterQuery<IProduct> = {};
+
+        if (categoryIds.length > 0) {
+            filter.categoryId = { $in: categoryIds };
+        }
+        if (subcategoryIds.length > 0) {
+            filter.subcategoryId = { $in: subcategoryIds };
+        }
+        if (minPrice !== undefined) {
+            filter.price = { ...filter.price, $gte: minPrice };
+        }
+        if (maxPrice !== undefined) {
+            filter.price = { ...filter.price, $lte: maxPrice };
+        }
+
+        const products = await ProductModel.aggregate([
+            { $match: filter },
+            {
+                $lookup: {
+                    from: 'categories',
+                    localField: 'categoryId',
+                    foreignField: '_id',
+                    as: 'category'
+                }
+            },
+            { $unwind: '$category' },
+            {
+                $lookup: {
+                    from: 'subcategories',
+                    localField: 'subcategoryId',
+                    foreignField: '_id',
+                    as: 'subcategory'
+                }
+            },
+            { $unwind: '$subcategory' },
+            {
+                $project: {
+                    id: '$_id',
+                    name: 1,
+                    description: 1,
+                    images: 1,
+                    category: '$category.name',
+                    subcategory: '$subcategory.name',
+                    price: 1,
+                    inventory: 1,
+                    createdAt: 1,
+                    updatedAt: 1,
+                }
+            },
+            { $sort: { [sortField as string]: sortOrder === 'asc' ? 1 : -1 } },
+            { $skip: skip },
+            { $limit: limit }
+        ]);
+
+        const total = await ProductModel.countDocuments(filter);
+        const pageCount = Math.ceil(total / limit);
+
+        return {
+            data: products,
+            pageCount,
+        };
+    } catch (err) {
+        return {
+            data: [],
+            pageCount: 0,
+        }
+    }
+}
 
 
 // get featured products
 export async function getFeaturedProducts() {
-    connectDb()
+    await connectDb()
 
     return await cache(
         async () => {
@@ -28,7 +122,7 @@ export async function getFeaturedProducts() {
 
 // get product count by category
 export async function getProductCountByCategory({ categoryId }: { categoryId: string }) {
-    connectDb()
+    await connectDb()
 
     return await cache(
         async () => {
@@ -45,7 +139,7 @@ export async function getProductCountByCategory({ categoryId }: { categoryId: st
 
 // get categories
 export async function getCategories() {
-    connectDb()
+    await connectDb()
 
     return await cache(
         async () => {

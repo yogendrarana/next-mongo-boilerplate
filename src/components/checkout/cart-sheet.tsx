@@ -11,7 +11,7 @@ import {
 import { Icons } from "@/components/icons"
 import { cn, formatPrice } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
-import { dummyCartItems } from "@/data/dummy-data"
+import { dummyCartItems } from "@/assets/data/dummy-data"
 import { Separator } from "@/components/ui/separator"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { CartLineItems } from "@/components/checkout/cart-line-items"

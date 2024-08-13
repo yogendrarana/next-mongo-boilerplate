@@ -18,3 +18,10 @@ export enum AuthProviderEnum {
     CREDENTIALS = 'credentials',
     GOOGLE = 'google'
 }
+
+// cart
+export enum CartItemQuantityOperation {
+    ADD = 'add',
+    SUBTRACT = 'subtract',
+    SET = 'set'
+}

@@ -1,3 +1,5 @@
+"use server"
+
 import mongoose, { Connection } from 'mongoose';
 
 interface MongoConnection {

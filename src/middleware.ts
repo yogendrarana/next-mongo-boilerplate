@@ -18,10 +18,14 @@ export default auth(async (req) => {
     const isLoggedIn = !!req.auth;
 
     const isAuthRoute = AUTH_ROUTES.includes(nextUrl.pathname);
-    const isPublicRoute = PUBLIC_ROUTES.includes(nextUrl.pathname);
     const isApiAuthRoute = nextUrl.pathname.startsWith(API_AUTH_PREFIX_ROUTE);
     const isProtectedRoute = PROTECTED_ROUTES.includes(nextUrl.pathname);
     const isPublicRouteHandlers = PUBLIC_ROUTE_HANDLERS.includes(nextUrl.pathname);
+
+    const isPublicRoute = PUBLIC_ROUTES.some(route => {
+        const regexPattern = new RegExp(`^${route.replace(/\[.*?\]/g, '[^/]+')}$`);
+        return regexPattern.test(nextUrl.pathname);
+    });
 
     // If public route or api route. No need to check authentication:
     if (isPublicRoute || isApiAuthRoute || isPublicRouteHandlers) {
@@ -38,7 +42,7 @@ export default auth(async (req) => {
         return;
     }
 
-    // Is Protected routes. If not authenticated, redirect to /auth:
+    // Is Protected routes. If not authenticated, redirect to /login:
     if (isProtectedRoute && !isLoggedIn) {
         let callbackUrl = nextUrl.pathname;
         if (nextUrl.search) {
@@ -46,12 +50,13 @@ export default auth(async (req) => {
         }
         const encodedCallbackUrl = encodeURIComponent(callbackUrl);
         return NextResponse.redirect(
-            new URL(`/auth?callbackUrl=${encodedCallbackUrl}`, nextUrl),
+            new URL(`/login?callbackUrl=${encodedCallbackUrl}`, nextUrl),
         );
     }
 
+    // If not authenticated and not public route, redirect to /login:
     if (!isLoggedIn && !isPublicRoute) {
-        return NextResponse.redirect(new URL("/auth", nextUrl));
+        return NextResponse.redirect(new URL("/login", nextUrl));
     }
 
     return;
