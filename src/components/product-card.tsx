@@ -1,5 +1,7 @@
 "use client"
 
+import * as React from "react"
+
 import {
     Card,
     CardContent,
@@ -9,45 +11,60 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import Link from "next/link"
-import * as React from "react"
+import { toast } from "sonner"
 import Image from "next/image"
-import { Icons } from "@/components/icons"
+import { useRouter } from "next/navigation"
 import { cn, formatPrice } from "@/lib/utils"
-import { AspectRatio } from "@/components/ui/aspect-ratio"
-import { Button, buttonVariants } from "@/components/ui/button"
-import { PlaceholderImage } from "@/components/placeholder-image"
-import { CheckIcon, EyeOpenIcon, PlusIcon } from "@radix-ui/react-icons"
 import useCartStore from "@/store/use-cart-store"
+import { motion, AnimatePresence } from "framer-motion"
+import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { IProduct } from "@/server/db/models/product-model"
+import { Check, EyeIcon, ShoppingCart } from "lucide-react"
+import { PlaceholderImage } from "@/components/placeholder-image"
 
 interface ProductCardProps extends React.HTMLAttributes<HTMLDivElement> {
-    product: Pick<IProduct, "id" | "name" | "price" | "images" | "inventory"> & {
-        category: string | null
-    }
-    variant?: "default" | "switchable"
-    isAddedToCart?: boolean
-    onSwitch?: () => Promise<void>
+    product: IProduct
 }
 
 export function ProductCard({
     product,
-    variant = "default",
-    isAddedToCart = false,
-    onSwitch,
     className,
     ...props
 }: ProductCardProps) {
-    const { addCartItem } = useCartStore()
-    const [isUpdatePending, startUpdateTransition] = React.useTransition()
+    const {
+        cartItems,
+        addToCart,
+        removeFromCart
+    } = useCartStore()
+
+    const router = useRouter()
+    const [isHovered, setIsHovered] = React.useState(false);
+
+    const containerVariants = {
+        hidden: { opacity: 0, x: '100%' },
+        visible: { opacity: 1, x: 0, transition: { duration: 0.3 } },
+    };
+
+    const firstButtonVariants = {
+        hidden: { x: '100%', transition: { duration: 0.3 } },
+        visible: { x: 0, transition: { duration: 0.3 } },
+    };
+
+    const secondButtonVariants = {
+        hidden: { x: '100%', transition: { duration: 0.3, delay: 0.1 } },
+        visible: { x: 0, transition: { duration: 0.3, delay: 0.1 } },
+    };
 
     return (
         <Card
-            className={cn("size-full overflow-hidden rounded-lg", className)}
             {...props}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            className={cn("size-full overflow-hidden relative rounded-lg", className)}
         >
             <Link aria-label={product.name} href={`/product/${product.id}`}>
                 <CardHeader className="border-b p-0">
-                    <AspectRatio ratio={4 / 3}>
+                    <AspectRatio ratio={5 / 4}>
                         {product.images?.length ? (
                             <Image
                                 src={
@@ -66,81 +83,65 @@ export function ProductCard({
                 </CardHeader>
                 <span className="sr-only">{product.name}</span>
             </Link>
-            <Link href={`/product/${product.id}`} tabIndex={-1}>
-                <CardContent className="space-y-1.5 p-4">
-                    <CardTitle className="line-clamp-1">{product.name}</CardTitle>
-                    <CardDescription className="line-clamp-1">
-                        {formatPrice(product.price)}
-                    </CardDescription>
-                </CardContent>
-            </Link>
-            <CardFooter className="p-4 pt-1">
-                {variant === "default" ? (
-                    <div className="flex w-full items-center space-x-2">
-                        <Button
-                            aria-label="Add to cart"
-                            size="sm"
-                            className="h-8 w-full rounded-sm"
-                            onClick={async () => {
-                                startUpdateTransition(() => { })
 
-                                addCartItem({
-                                    id: product.id,
-                                    name: product.name,
-                                    price: product.price,
-                                    quantity: 1,
-                                })
-                            }}
-                            disabled={isUpdatePending}
-                        >
-                            {isUpdatePending && (
-                                <Icons.spinner
-                                    className="mr-2 size-4 animate-spin"
-                                    aria-hidden="true"
-                                />
-                            )}
-                            Add to cart
-                        </Button>
-                        <Link
-                            href={`/preview/product/${product.id}`}
-                            title="Preview"
-                            className={cn(
-                                buttonVariants({
-                                    variant: "secondary",
-                                    size: "icon",
-                                    className: "h-8 w-8 shrink-0",
-                                })
-                            )}
-                        >
-                            <EyeOpenIcon className="size-4" aria-hidden="true" />
-                            <span className="sr-only">Preview</span>
-                        </Link>
-                    </div>
-                ) : (
-                    <Button
-                        aria-label={isAddedToCart ? "Remove from cart" : "Add to cart"}
-                        size="sm"
-                        className="h-8 w-full rounded-sm"
-                        onClick={async () => {
-                            startUpdateTransition(async () => { })
-                            await onSwitch?.()
-                        }}
-                        disabled={isUpdatePending}
+            {/* icons */}
+            <AnimatePresence>
+                {isHovered && (
+                    <motion.div
+                        initial="hidden"
+                        animate="visible"
+                        exit="hidden"
+                        variants={containerVariants}
+                        className="flex flex-col gap-2 absolute top-2 right-2"
                     >
-                        {isUpdatePending ? (
-                            <Icons.spinner
-                                className="mr-2 size-4 animate-spin"
-                                aria-hidden="true"
-                            />
-                        ) : isAddedToCart ? (
-                            <CheckIcon className="mr-2 size-4" aria-hidden="true" />
-                        ) : (
-                            <PlusIcon className="mr-2 size-4" aria-hidden="true" />
-                        )}
-                        {isAddedToCart ? "Added" : "Add to cart"}
-                    </Button>
+                        <motion.button
+                            variants={firstButtonVariants}
+                            className="p-2 rounded-md bg-white border"
+                            onClick={() => {
+                                if (cartItems.find(item => item.id === product._id)) {
+                                    removeFromCart(product._id)
+                                    toast.error("Removed from cart.");
+                                } else {
+
+                                    addToCart({
+                                        id: product._id,
+                                        name: product.name,
+                                        price: product.price,
+                                        quantity: 1,
+                                        image: product.images?.[0] ?? "/images/product-placeholder.webp",
+                                    })
+                                    toast.success("Added to cart.");
+                                }
+                            }}
+                        >
+                            {
+                                cartItems.find(item => item.id === product._id)
+                                    ? <Check size={14} />
+                                    : <ShoppingCart size={14} />
+                            }
+                        </motion.button>
+
+                        <motion.button
+                            variants={secondButtonVariants}
+                            className="p-2 rounded-md bg-white border"
+                            onClick={() => router.push(`/product/${product.id}`)}
+                        >
+                            <EyeIcon size={14} />
+                        </motion.button>
+                    </motion.div>
                 )}
-            </CardFooter>
+            </AnimatePresence>
+
+            {/* name and price */}
+            {/* <motion.div
+                className='p-[1rem] flex justify-between absolute left-0 bottom-0 right-0 bg-white/60 border rounded-[0.5rem] m-[0.5rem]'
+                initial={{ opacity: 0, y: '100%' }}
+                animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : '100%', transition: { duration: 0.3 } }}
+            > */}
+            <motion.div className="px-3 py-4 flex justify-between items-center">
+                <div className="text-md">{product.name}</div>
+                <div className="text-md font-semibold"> {formatPrice(product.price)} </div>
+            </motion.div>
         </Card>
     )
 }

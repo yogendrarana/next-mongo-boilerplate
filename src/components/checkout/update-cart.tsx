@@ -4,19 +4,17 @@ import * as React from "react"
 
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { type CartLineItemSchema } from "@/lib/validations/cart"
-import { MinusIcon, PlusIcon, TrashIcon } from "@radix-ui/react-icons"
-import useCartStore from "@/store/use-cart-store"
 import { CartItemQuantityOperation } from "@/constants/enum"
+import useCartStore, { TCartItem } from "@/store/use-cart-store"
+import { MinusIcon, PlusIcon, TrashIcon } from "@radix-ui/react-icons"
 
 interface UpdateCartProps {
-    cartLineItem: Partial<CartLineItemSchema>
+    cartLineItem: TCartItem
 }
 
 export function UpdateCart({ cartLineItem }: UpdateCartProps) {
-    const id = React.useId()
-    const [isPending, startTransition] = React.useTransition()
-    const { updateQuantity, removeCartItem } = useCartStore()
+    const id = cartLineItem.id
+    const { updateQuantity, removeFromCart } = useCartStore()
 
     return (
         <div className="flex w-full items-center justify-between space-x-2 xs:w-auto xs:justify-normal">
@@ -27,27 +25,18 @@ export function UpdateCart({ cartLineItem }: UpdateCartProps) {
                     size="icon"
                     className="size-8 rounded-r-none"
                     onClick={() => {
-                        startTransition(async () => {
-                            updateQuantity((id), CartItemQuantityOperation.SUBTRACT)
-                        })
+                        updateQuantity((id), CartItemQuantityOperation.SUBTRACT)
                     }}
-                    disabled={isPending}
                 >
                     <MinusIcon className="size-3" aria-hidden="true" />
                     <span className="sr-only">Remove one item</span>
                 </Button>
                 <Input
-                    id={`${id}-quantity`}
-                    type="number"
-                    min="0"
-                    className="h-8 w-14 rounded-none border-x-0"
+                    type="text"
                     value={cartLineItem.quantity}
-                    onChange={(e) => {
-                        startTransition(async () => {
-                            updateQuantity(id, CartItemQuantityOperation.SET)
-                        })
-                    }}
-                    disabled={isPending}
+                    id={`${id}-quantity`}
+                    className="h-8 w-10 text-center rounded-none border-x-0"
+                    disabled
                 />
                 <Button
                     id={`${id}-increment`}
@@ -55,11 +44,8 @@ export function UpdateCart({ cartLineItem }: UpdateCartProps) {
                     size="icon"
                     className="size-8 rounded-l-none"
                     onClick={() => {
-                        startTransition(async () => {
-                            updateQuantity(id, CartItemQuantityOperation.ADD)
-                        })
+                        updateQuantity(id, CartItemQuantityOperation.ADD)
                     }}
-                    disabled={isPending}
                 >
                     <PlusIcon className="size-3" aria-hidden="true" />
                     <span className="sr-only">Add one item</span>
@@ -71,11 +57,9 @@ export function UpdateCart({ cartLineItem }: UpdateCartProps) {
                 size="icon"
                 className="size-8"
                 onClick={() => {
-                    startTransition(async () => {
-                        removeCartItem(id)
-                    })
+
+                    removeFromCart(id)
                 }}
-                disabled={isPending}
             >
                 <TrashIcon className="size-3" aria-hidden="true" />
                 <span className="sr-only">Delete item</span>

@@ -23,7 +23,7 @@ export async function Lobby({ productsPromise, categoriesPromise, }: LobbyProps)
     ])
 
     return (
-        <Shell className="max-w-6xl gap-0">
+        <Shell className="gap-0">
             <PageHeader
                 as="section"
                 className="mx-auto items-center gap-2 text-center"

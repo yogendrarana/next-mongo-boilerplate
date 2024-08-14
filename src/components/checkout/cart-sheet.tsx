@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 
 import {
@@ -11,15 +13,15 @@ import {
 import { Icons } from "@/components/icons"
 import { cn, formatPrice } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
-import { dummyCartItems } from "@/assets/data/dummy-data"
 import { Separator } from "@/components/ui/separator"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { CartLineItems } from "@/components/checkout/cart-line-items"
+import useCartStore from "@/store/use-cart-store"
 
-export async function CartSheet() {
-    const cartLineItems = dummyCartItems;
-    const itemCount = cartLineItems.reduce((total, item) => total + Number(item.quantity), 0)
-    const cartTotal = cartLineItems.reduce((total, item) => total + item.quantity * Number(item.price), 0)
+export function CartSheet() {
+    const { cartItems } = useCartStore();
+    const itemCount = cartItems.reduce((total, item) => total + Number(item.quantity), 0)
+    const cartTotal = cartItems.reduce((total, item) => total + item.quantity * Number(item.price), 0)
 
     return (
         <Sheet>
@@ -48,7 +50,7 @@ export async function CartSheet() {
                 </SheetHeader>
                 {itemCount > 0 ? (
                     <>
-                        <CartLineItems items={cartLineItems} className="flex-1" />
+                        <CartLineItems items={cartItems} className="flex-1" />
                         <div className="space-y-4 pr-6">
                             <Separator />
                             <div className="space-y-1.5 text-sm">

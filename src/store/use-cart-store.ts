@@ -2,43 +2,50 @@ import { create } from 'zustand';
 import { CartItemQuantityOperation } from '@/constants/enum';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
-export type CartItem = {
+export type TCartItem = {
     id: string;
     name: string;
     quantity: number;
     price: number;
+    image: string;
 };
 
 interface CartStoreType {
-    items: CartItem[];
-    addCartItem: (item: CartItem) => void;
-    removeCartItem: (id: string) => void;
+    cartItems: TCartItem[] | [];
+    addToCart: (item: TCartItem) => void;
+    removeFromCart: (id: string) => void;
     updateQuantity: (id: string, operation: string, quantity?: number) => void;
 }
 
 const useCartStore = create<CartStoreType>()(
     persist(
         (set) => ({
-            items: [],
-            addCartItem: (item) => set((state) => ({ items: [...state.items, item] })),
-            removeCartItem: (id) => set((state) => ({ items: state.items.filter((i) => i.id !== id) })),
+            cartItems: [],
+            addToCart: (item) => set((state) => ({ cartItems: [...state.cartItems, item] })),
+            removeFromCart: (id) => set((state) => ({ cartItems: state.cartItems.filter((item) => item.id !== id) })),
             updateQuantity: (id, operation, quantity) => {
                 if (operation === CartItemQuantityOperation.ADD) {
                     set((state) => ({
-                        items: state.items.map((item) =>
+                        cartItems: state.cartItems.map((item) =>
                             item.id === id ? { ...item, quantity: item.quantity + 1 } : item
                         ),
                     }));
                 } else if (operation === CartItemQuantityOperation.SUBTRACT) {
                     set((state) => ({
-                        items: state.items.map((item) =>
-                            item.id === id ? { ...item, quantity: item.quantity - 1 } : item
+                        cartItems: state.cartItems.map((item) =>
+                            item.id === id
+                                ? item.quantity > 1
+                                    ? { ...item, quantity: item.quantity - 1 }
+                                    : item
+                                : item
                         ),
                     }));
                 } else if (operation === CartItemQuantityOperation.SET && quantity) {
                     set((state) => ({
-                        items: state.items.map((item) =>
-                            item.id === id ? { ...item, quantity } : item
+                        cartItems: state.cartItems.map((item) =>
+                            item.id === id
+                                ? { ...item, quantity }
+                                : item
                         ),
                     }));
                 }

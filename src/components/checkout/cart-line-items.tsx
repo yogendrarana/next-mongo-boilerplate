@@ -1,15 +1,15 @@
 import Image from "next/image"
 
-import { Slot } from "@radix-ui/react-slot"
 import { Icons } from "@/components/icons"
+import { Slot } from "@radix-ui/react-slot"
 import { cn, formatPrice } from "@/lib/utils"
+import { TCartItem } from "@/store/use-cart-store"
 import { Separator } from "@/components/ui/separator"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { UpdateCart } from "@/components/checkout/update-cart"
-import { type CartLineItemSchema } from "@/lib/validations/cart"
 
 interface CartLineItemsProps extends React.HTMLAttributes<HTMLDivElement> {
-    items: Partial<CartLineItemSchema>[]
+    items: TCartItem[] | []
     isScrollable?: boolean
     isEditable?: boolean
     variant?: "default" | "minimal"
@@ -46,13 +46,13 @@ export function CartLineItems({
                             <div className="flex items-center space-x-4">
                                 {variant === "default" ? (
                                     <div className="relative aspect-square size-16 min-w-fit overflow-hidden rounded">
-                                        {item?.images?.length ? (
+                                        {item.image ? (
                                             <Image
                                                 src={
-                                                    item.images[0]?.url ??
+                                                    item.image ??
                                                     "/images/product-placeholder.webp"
                                                 }
-                                                alt={item.images[0]?.name ?? item.name}
+                                                alt={item.name ?? "cart-item"}
                                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                                 fill
                                                 className="absolute object-cover"
@@ -75,21 +75,22 @@ export function CartLineItems({
                                     {isEditable ? (
                                         <span className="line-clamp-1 text-xs text-muted-foreground">
                                             {formatPrice(item.price!)} x {item.quantity} ={" "}
-                                            {formatPrice(
-                                                (Number(item.price) * Number(item.quantity)).toFixed(2)
-                                            )}
+                                            {formatPrice((Number(item.price) * Number(item.quantity)).toFixed(2))}
                                         </span>
                                     ) : (
                                         <span className="line-clamp-1 text-xs text-muted-foreground">
                                             Qty {item.quantity}
                                         </span>
                                     )}
-                                    {variant === "default" ? (
+
+                                    {/* TODO: add category and subcategory information */}
+                                    
+                                    {/* {variant === "default" ? (
                                         <span className="line-clamp-1 text-xs capitalize text-muted-foreground">
                                             {`${item.category} ${item.subcategory ? `/ ${item.subcategory}` : ""
                                                 }`}
                                         </span>
-                                    ) : null}
+                                    ) : null} */}
                                 </div>
                             </div>
                             {isEditable ? (
