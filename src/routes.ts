@@ -10,9 +10,9 @@ export const PUBLIC_ROUTES = [
   "/privacy",  
   "/build-a-board",
   "/products",
-  "/product/[slug]",
+  "/product/[prodctId]",
   "/preview/product/[slug]",
-  "/categories/[slug]",
+  "/categories/[categoryId]",
 ];
 
 export const PUBLIC_ROUTE_HANDLERS = [

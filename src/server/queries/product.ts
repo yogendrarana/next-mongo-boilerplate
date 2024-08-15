@@ -166,3 +166,47 @@ export async function getCategories() {
         }
     )()
 }
+
+
+// get product by id
+export async function getProductById(productId: string) {
+    await connectDb()
+
+    return await cache(
+        async () => {
+            return ProductModel.findById(productId);
+        },
+        [`product-${productId}`],
+        {
+            revalidate: 3600,
+            tags: [`product-${productId}`],
+        }
+    )()
+}
+
+// get related products
+export async function getRelatedProducts(productId: string) {
+    await connectDb();
+
+    return await cache(
+        async () => {
+            const product = await ProductModel.findById(productId).select('categoryId subCategoryId');
+            console.log("product", product);
+            if (!product) {
+                return [];
+            }
+
+            return ProductModel.find({
+                $or: [
+                    { categoryId: product.categoryId },
+                    { subCategoryId: product.subCategoryId }
+                ]
+            }).limit(4).sort({ createdAt: -1 });
+        },
+        [`related-products-${productId}`],
+        {
+            revalidate: 3600,
+            tags: [`related-products-${productId}`],
+        }
+    )()
+}

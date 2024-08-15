@@ -3,13 +3,13 @@ import {
     PageHeaderDescription,
     PageHeaderHeading,
 } from "@/components/page-header"
+import Link from "next/link"
 import { Shell } from "@/components/shell"
 import { CategoryCard } from "./category-card"
+import { Button } from "@/components/ui/button"
 import { ProductCard } from "@/components/product-card"
 import { ContentSection } from "@/components/content-section"
 import type { getCategories, getFeaturedProducts } from "@/server/queries/product"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
 
 interface LobbyProps {
     productsPromise: ReturnType<typeof getFeaturedProducts>

@@ -131,15 +131,7 @@ async function seed() {
             }
         }
 
-        // Seed some example categories (you may want to expand this in future)
-        const clothingCategory = await CategoryModel.findOne({ name: "Clothing" });
-        const shoesCategory = await CategoryModel.findOne({ name: "Shoes" });
-        const accessoriesCategory = await CategoryModel.findOne({ name: "Accessories" });
-
-        const tshirtSubcategory = await SubcategoryModel.findOne({ name: "T-shirts" });
-        const lowtopSubcategory = await SubcategoryModel.findOne({ name: "Low Tops" });
-        const hoodieSubcategory = await SubcategoryModel.findOne({ name: "Hoodies" });
-        const bagSubcategory = await SubcategoryModel.findOne({ name: "Bags" });
+        // Seed some example products (you may want to expand this in future)
 
         console.log('Seeded products..........');
         await ProductModel.create([
@@ -147,8 +139,8 @@ async function seed() {
                 name: 'Cool Skater Tee',
                 description: 'Comfortable cotton t-shirt for skaters',
                 price: 29.99,
-                categoryId: clothingCategory?.id,
-                subCategoryId: tshirtSubcategory?.id,
+                categoryId: await CategoryModel.findOne({ name: "Clothing" })?.then(cat => cat?.id),
+                subCategoryId: await SubcategoryModel.findOne({ name: "T-shirts" }).then(sub => sub?.id),
                 sku: 'TSH001',
                 inventory: 100,
                 images: [
@@ -161,8 +153,8 @@ async function seed() {
                 name: 'Rad Low Top Sneakers',
                 description: 'Stylish low top sneakers for skateboarding',
                 price: 79.99,
-                categoryId: shoesCategory?.id,
-                subCategoryId: lowtopSubcategory?.id,
+                categoryId: await CategoryModel.findOne({ name: "Shoes" }).then(cat => cat?.id),
+                subCategoryId: await SubcategoryModel.findOne({ name: "Low Tops" }).then(sub => sub?.id),
                 sku: 'SHO001',
                 inventory: 50,
                 images: [
@@ -175,8 +167,8 @@ async function seed() {
                 name: 'Women\'s Skateboard Hoodie',
                 description: 'Stylish and comfortable hoodie for female skaters',
                 price: 49.99,
-                categoryId: clothingCategory?.id,
-                subCategoryId: hoodieSubcategory?.id,
+                categoryId: await CategoryModel.findOne({ name: "Clothing" })?.then(cat => cat?.id),
+                subCategoryId: await SubcategoryModel.findOne({ name: "Hoodies" }).then(sub => sub?.id),
                 sku: 'HOD001',
                 inventory: 60,
                 images: [
@@ -189,8 +181,8 @@ async function seed() {
                 name: 'Men\'s Backpack',
                 description: 'Spacious and durable backpack for skaters',
                 price: 39.99,
-                categoryId: accessoriesCategory?.id,
-                subCategoryId: bagSubcategory?.id,
+                categoryId: await CategoryModel.findOne({ name: "Accessories" }).then(cat => cat?.id),
+                subCategoryId: await SubcategoryModel.findOne({ name: "Bags" }).then(sub => sub?.id),
                 sku: 'BAG001',
                 inventory: 75,
                 images: [
@@ -203,7 +195,7 @@ async function seed() {
                 name: 'Skater Cargo Pants',
                 description: 'Comfortable and functional cargo pants for skaters',
                 price: 59.99,
-                categoryId: clothingCategory?.id,
+                categoryId: await CategoryModel.findOne({ name: "Clothing" })?.then(cat => cat?.id),
                 subCategoryId: await SubcategoryModel.findOne({ name: "Pants" }).then(sub => sub?._id),
                 sku: 'PNT001',
                 inventory: 80,
@@ -217,7 +209,7 @@ async function seed() {
                 name: 'Classic High Top Skate Shoes',
                 description: 'Durable high top shoes perfect for skateboarding',
                 price: 89.99,
-                categoryId: shoesCategory?.id,
+                categoryId: await CategoryModel.findOne({ name: "Shoes" }).then(cat => cat?.id),
                 subCategoryId: await SubcategoryModel.findOne({ name: "High Tops" }).then(sub => sub?._id),
                 sku: 'SHO002',
                 inventory: 40,
@@ -231,7 +223,7 @@ async function seed() {
                 name: 'Skater Sunglasses',
                 description: 'Stylish and protective sunglasses for skaters',
                 price: 24.99,
-                categoryId: accessoriesCategory?.id,
+                categoryId: await CategoryModel.findOne({ name: "Accessories" }).then(cat => cat?.id),
                 subCategoryId: await SubcategoryModel.findOne({ name: "Sunglasses" }).then(sub => sub?._id),
                 sku: 'SUN001',
                 inventory: 100,
@@ -245,7 +237,7 @@ async function seed() {
                 name: 'Skater Beanie',
                 description: 'Warm and trendy beanie for skaters',
                 price: 19.99,
-                categoryId: accessoriesCategory?.id,
+                categoryId: await CategoryModel.findOne({ name: "Accessories" }).then(cat => cat?.id),
                 subCategoryId: await SubcategoryModel.findOne({ name: "Hats & Caps" }).then(sub => sub?._id),
                 sku: 'HAT001',
                 inventory: 120,

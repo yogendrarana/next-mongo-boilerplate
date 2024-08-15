@@ -1,6 +1,3 @@
-import NextAuth from "next-auth";
-import { authConfig } from "@/auth.config"
-import { NextResponse } from "next/server";
 import {
     AUTH_ROUTES,
     PUBLIC_ROUTES,
@@ -9,6 +6,9 @@ import {
     PUBLIC_ROUTE_HANDLERS,
     DEFAULT_LOGIN_REDIRECT
 } from "./routes";
+import NextAuth from "next-auth";
+import { authConfig } from "./auth.config";
+import { NextResponse } from "next/server";
 
 const { auth } = NextAuth(authConfig);
 
@@ -23,7 +23,7 @@ export default auth(async (req) => {
     const isPublicRouteHandlers = PUBLIC_ROUTE_HANDLERS.includes(nextUrl.pathname);
 
     const isPublicRoute = PUBLIC_ROUTES.some(route => {
-        const regexPattern = new RegExp(`^${route.replace(/\[.*?\]/g, '[^/]+')}$`);
+        const regexPattern = new RegExp(`^${route.replace(/\[.*?\]/g, '([^/]*)')}$`);
         return regexPattern.test(nextUrl.pathname);
     });
 

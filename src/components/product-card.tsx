@@ -4,11 +4,7 @@ import * as React from "react"
 
 import {
     Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
     CardHeader,
-    CardTitle,
 } from "@/components/ui/card"
 import Link from "next/link"
 import { toast } from "sonner"
@@ -60,20 +56,23 @@ export function ProductCard({
             {...props}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className={cn("size-full overflow-hidden relative rounded-lg", className)}
+            className={cn("group", "size-full overflow-hidden relative rounded-lg", className)}
         >
-            <Link aria-label={product.name} href={`/product/${product.id}`}>
-                <CardHeader className="border-b p-0">
+            <Link
+                aria-label={product.name}
+                href={`/product/${product._id}`}
+            >
+                <CardHeader className="border-b p-0 overflow-hidden">
                     <AspectRatio ratio={5 / 4}>
                         {product.images?.length ? (
                             <Image
                                 src={
                                     product.images[0] ?? "/images/product-placeholder.webp"
                                 }
-                                alt={product.name ?? product.name}
-                                className="object-cover"
-                                sizes="(min-width: 1024px) 20vw, (min-width: 768px) 25vw, (min-width: 640px) 33vw, (min-width: 475px) 50vw, 100vw"
                                 fill
+                                alt={product.name ?? product.name}
+                                className="object-cover group-hover:scale-[1.1] duration-500"
+                                sizes="(min-width: 1024px) 20vw, (min-width: 768px) 25vw, (min-width: 640px) 33vw, (min-width: 475px) 50vw, 100vw"
                                 loading="lazy"
                             />
                         ) : (
@@ -102,7 +101,6 @@ export function ProductCard({
                                     removeFromCart(product._id)
                                     toast.error("Removed from cart.");
                                 } else {
-
                                     addToCart({
                                         id: product._id,
                                         name: product.name,
@@ -133,11 +131,6 @@ export function ProductCard({
             </AnimatePresence>
 
             {/* name and price */}
-            {/* <motion.div
-                className='p-[1rem] flex justify-between absolute left-0 bottom-0 right-0 bg-white/60 border rounded-[0.5rem] m-[0.5rem]'
-                initial={{ opacity: 0, y: '100%' }}
-                animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : '100%', transition: { duration: 0.3 } }}
-            > */}
             <motion.div className="px-3 py-4 flex justify-between items-center">
                 <div className="text-md">{product.name}</div>
                 <div className="text-md font-semibold"> {formatPrice(product.price)} </div>
