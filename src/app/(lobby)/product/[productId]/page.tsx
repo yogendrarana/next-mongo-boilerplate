@@ -1,4 +1,3 @@
-import Link from "next/link"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 
@@ -15,8 +14,6 @@ import { ProductCard } from "@/components/product-card"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { ProductImageCarousel } from "./_components/product-image-carousel"
 import { getProductById, getRelatedProducts } from "@/server/queries/product"
-import { UpdateCart } from "@/components/checkout/update-cart"
-import { Button } from "@/components/ui/button"
 import CartItemAddRemove from "@/app/(lobby)/product/[productId]/_components/product-actions"
 
 interface ProductPageProps {

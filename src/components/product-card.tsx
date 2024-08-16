@@ -133,7 +133,7 @@ export function ProductCard({
             {/* name and price */}
             <motion.div className="px-3 py-4 flex justify-between items-center">
                 <div className="text-md">{product.name}</div>
-                <div className="text-md font-semibold"> {formatPrice(product.price)} </div>
+                <div className="text-md font-semibold"> {formatPrice(product.price, { currency: "NRS" })} </div>
             </motion.div>
         </Card>
     )

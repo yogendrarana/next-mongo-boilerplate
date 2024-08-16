@@ -4,7 +4,6 @@ export enum ProductSexEnum {
     MALE = 'male',
     FEMALE = 'female',
     UNISEX = 'unisex',
-    OTHER = 'other'
 }
 
 // user enums

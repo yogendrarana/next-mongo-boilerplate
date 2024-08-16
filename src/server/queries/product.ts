@@ -12,6 +12,7 @@ import { ApiResponse } from "@/helpers/api-response"
 import CategoryModel from "../db/models/category-model"
 import { getProductsSchema } from "@/lib/validations/product"
 import ProductModel, { IProduct } from "../db/models/product-model"
+import { ProductSexEnum } from "@/constants/enum"
 
 
 // get products
@@ -126,7 +127,7 @@ export async function getProductCountByCategory({ categoryId }: { categoryId: st
 
     return await cache(
         async () => {
-            return ProductModel.countDocuments({ categoryId });
+            return ProductModel.countDocuments({ 'category.id': categoryId });
         },
         [`product-count-${categoryId}`],
         {
@@ -191,7 +192,6 @@ export async function getRelatedProducts(productId: string) {
     return await cache(
         async () => {
             const product = await ProductModel.findById(productId).select('categoryId subCategoryId');
-            console.log("product", product);
             if (!product) {
                 return [];
             }
@@ -209,4 +209,34 @@ export async function getRelatedProducts(productId: string) {
             tags: [`related-products-${productId}`],
         }
     )()
+}
+
+// get product by category
+export async function getProductsByCategory({
+    slug,
+    sex
+}: {
+    slug: string;
+    sex: string;
+}) {
+    await connectDb();
+
+    const matchConditions: any = {
+        'category.slug': slug
+    };
+
+    if (sex in ProductSexEnum) {
+        matchConditions.sex = sex;
+    }
+
+    return await cache(
+        async () => {
+            return await ProductModel.find(matchConditions).sort({ createdAt: -1 });
+        },
+        [`product-by-category-${slug}`, sex],
+        {
+            revalidate: 3600,
+            tags: ["product-by-category"],
+        }
+    )();
 }

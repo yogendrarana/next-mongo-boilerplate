@@ -23,7 +23,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
     const productCountPromise = getProductCountByCategory({ categoryId: category.id })
 
     return (
-        <Link href={`/collections/${category.slug}`}>
+        <Link href={`/category/${category.slug}`}>
             <Card className="h-full rounded-lg transition-colors hover:bg-muted/25">
                 <CardHeader className="flex-1">
                     <CardTitle className="capitalize">{category.name}</CardTitle>

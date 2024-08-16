@@ -64,7 +64,7 @@ export function CartSheet() {
                                 </div>
                                 <div className="flex">
                                     <span className="flex-1">Total</span>
-                                    <span>{formatPrice(cartTotal.toFixed(2))}</span>
+                                    <span>{formatPrice(cartTotal.toFixed(2), { currency: "NPR" })}</span>
                                 </div>
                             </div>
                             <SheetFooter>

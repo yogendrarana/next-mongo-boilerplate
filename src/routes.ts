@@ -11,8 +11,7 @@ export const PUBLIC_ROUTES = [
   "/build-a-board",
   "/products",
   "/product/[prodctId]",
-  "/preview/product/[slug]",
-  "/categories/[categoryId]",
+  "/category/[slug]",
 ];
 
 export const PUBLIC_ROUTE_HANDLERS = [

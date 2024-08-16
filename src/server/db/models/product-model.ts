@@ -6,7 +6,10 @@ export interface IProduct extends Document {
     name: string;
     description: string;
     price: number;
-    categoryId: string;
+    category: {
+        id: string;
+        slug: string;
+    };
     subCategoryId: string;
     sku: string;
     inventory: number;
@@ -30,10 +33,16 @@ const ProductSchema: Schema = new Schema({
         required: true,
         min: 0
     },
-    categoryId: {
-        type: String,
-        required: true,
-        ref: "Category"
+    category: {
+        id: {
+            type: String,
+            required: true,
+            ref: "Category"
+        },
+        slug: {
+            type: String,
+            required: true
+        }
     },
     subCategoryId: {
         type: String,
