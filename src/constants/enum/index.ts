@@ -1,6 +1,6 @@
 
 // product enums
-export enum ProductSexEnum {
+export enum ProductGenderEnum {
     MALE = 'male',
     FEMALE = 'female',
     UNISEX = 'unisex',

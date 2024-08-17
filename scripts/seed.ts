@@ -1,11 +1,10 @@
-// import 'tsconfig-paths/register';
+import { generateId } from '@/lib/id';
 import { connectDb } from '../src/server/db';
 import UserModel from '../src/server/db/models/user-model';
 import ProductModel from '../src/server/db/models/product-model';
 import CategoryModel from '../src/server/db/models/category-model';
 import SubcategoryModel from '../src/server/db/models/subcategory-model';
-import { AuthProviderEnum, ProductSexEnum, UserRoleEnum } from '@/constants/enum';
-import { generateId } from '@/lib/id';
+import { AuthProviderEnum, ProductGenderEnum, UserRoleEnum } from '@/constants/enum';
 
 async function seed() {
     try {
@@ -156,7 +155,7 @@ async function seed() {
                     'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab',
                     'https://images.unsplash.com/photo-1622445275576-721325763afe'
                 ],
-                sex: ProductSexEnum.UNISEX,
+                gender: ProductGenderEnum.UNISEX,
             },
             {
                 name: 'Rad Low Top Sneakers',
@@ -176,7 +175,7 @@ async function seed() {
                     'https://images.unsplash.com/photo-1607522370275-f14206abe5d3',
                     'https://images.unsplash.com/photo-1608231387042-66d1773070a5'
                 ],
-                sex: ProductSexEnum.UNISEX,
+                gender: ProductGenderEnum.UNISEX,
             },
             {
                 name: 'Women\'s Skateboard Hoodie',
@@ -197,7 +196,7 @@ async function seed() {
                     'https://images.unsplash.com/photo-1556821840-3a63f95609a7',
                     'https://images.unsplash.com/photo-1614495039153-e9cd13240469'
                 ],
-                sex: ProductSexEnum.FEMALE,
+                gender: ProductGenderEnum.FEMALE,
             },
             {
                 name: 'Men\'s Backpack',
@@ -217,7 +216,7 @@ async function seed() {
                     'https://images.unsplash.com/photo-1553062407-98eeb64c6a62',
                     'https://images.unsplash.com/photo-1622560480605-d83c853bc5c3'
                 ],
-                sex: ProductSexEnum.MALE,
+                gender: ProductGenderEnum.MALE,
             },
             {
                 name: 'Skater Cargo Pants',
@@ -237,7 +236,7 @@ async function seed() {
                     'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80',
                     'https://images.unsplash.com/photo-1618225747659-433d5a5c6af7'
                 ],
-                sex: ProductSexEnum.UNISEX,
+                gender: ProductGenderEnum.UNISEX,
             },
             {
                 name: 'Classic High Top Skate Shoes',
@@ -257,7 +256,7 @@ async function seed() {
                     'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77',
                     'https://images.unsplash.com/photo-1560769629-975ec94e6a86'
                 ],
-                sex: ProductSexEnum.UNISEX,
+                gender: ProductGenderEnum.UNISEX,
             },
             {
                 name: 'Skater Sunglasses',
@@ -277,7 +276,7 @@ async function seed() {
                     'https://images.unsplash.com/photo-1511499767150-a48a237f0083',
                     'https://images.unsplash.com/photo-1577803645773-f96470509666'
                 ],
-                sex: ProductSexEnum.UNISEX,
+                gender: ProductGenderEnum.UNISEX,
             },
             {
                 name: 'Skater Beanie',
@@ -297,7 +296,7 @@ async function seed() {
                     'https://images.unsplash.com/photo-1576063270807-d4cc0f0c2942',
                     'https://images.unsplash.com/photo-1621976360623-004223985b0b'
                 ],
-                sex: ProductSexEnum.UNISEX,
+                gender: ProductGenderEnum.UNISEX,
             },
         ]);
 

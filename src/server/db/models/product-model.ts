@@ -1,4 +1,4 @@
-import { ProductSexEnum } from '@/constants/enum';
+import { ProductGenderEnum } from '@/constants/enum';
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IProduct extends Document {
@@ -17,7 +17,7 @@ export interface IProduct extends Document {
     sku: string;
     inventory: number;
     images: string[];
-    sex: string;
+    gender: string;
 }
 
 // Schema definition for the Product
@@ -69,9 +69,9 @@ const ProductSchema: Schema = new Schema({
         min: 0,
         default: 0
     },
-    sex: {
+    gender: {
         type: String,
-        enum: Object.values(ProductSexEnum),
+        enum: Object.values(ProductGenderEnum),
         required: true
     },
     images: [{ type: String }]

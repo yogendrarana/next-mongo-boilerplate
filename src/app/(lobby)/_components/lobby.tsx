@@ -41,9 +41,15 @@ export async function Lobby({ productsPromise, categoriesPromise, }: LobbyProps)
                 >
                     In Fashion house you can find the trendiest fashion items, apparel, and accessories.
                 </PageHeaderDescription>
-                <Button className="mt-6">
-                    <Link href="/products">View all products</Link>
-                </Button>
+                <div className="flex items-center gap-4">
+                    <Button variant="secondary" className="mt-6 bg-gray-200">
+                        <Link href="#featured-products">Featured Products</Link>
+                    </Button>
+
+                    <Button className="mt-6">
+                        <Link href="/products">View all products</Link>
+                    </Button>
+                </div>
             </PageHeader>
 
             {/* categories */}
@@ -63,6 +69,7 @@ export async function Lobby({ productsPromise, categoriesPromise, }: LobbyProps)
                 href="/products"
                 linkText="View all products"
                 className="pt-14 md:pt-20 lg:pt-24"
+                id="featured-products"
             >
                 {products.map((product) => (
                     <ProductCard key={product.id} product={product} />

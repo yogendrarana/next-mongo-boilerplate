@@ -11,7 +11,7 @@ import { toTitleCase } from '@/lib/utils'
 import { Shell } from '@/components/shell'
 import ProductFilter from './_components/product-filter'
 import { ProductList } from './_components/product-list'
-import { getSubCategoriesOfCategory } from '@/server/queries/product'
+import { getSubcategoriesOfCategory } from '@/server/queries/product'
 
 interface CategoryPageProps {
     params: { slug: string };
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: CategoryPageProps) {
 
 export default async function Page({ params, searchParams }: CategoryPageProps) {
     const { slug } = params;
-    const { data: subcategories } = await getSubCategoriesOfCategory(slug);
+    const { data: subcategories } = await getSubcategoriesOfCategory(slug);
 
     return (
         <Shell className="pb-12 md:pb-14">

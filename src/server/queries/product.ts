@@ -211,24 +211,32 @@ export async function getRelatedProducts(productId: string) {
 
 // filter category product
 export type SearchParams = {
-    sex?: string;
     gte?: string;
     lte?: string;
+    gender?: string;
     subcategory?: string;
     [key: string]: string | string[] | undefined;
 };
 
 export async function getProductsByCategory(category: string, searchParams: SearchParams) {
     await connectDb();
-
-    const { sex, subcategory, gte, lte } = searchParams;
-
+    const { gender, subcategory, gte, lte } = searchParams;
+    
     const matchConditions: any = {
         'category.slug': category,
     };
 
-    if (sex) matchConditions.sex = sex;
-    if (subcategory) matchConditions['subCategory.slug'] = subcategory;
+    // Handle multiple values for sex
+    if (gender) {
+        const genderValues = gender.split(',').map(gen => gen.trim());
+        matchConditions.gender = { $in: genderValues };
+    }
+
+    // Handle multiple values for subcategory
+    if (subcategory) {
+        const subcategoryValues = subcategory.split(',').map(s => s.trim());
+        matchConditions['subcategory.slug'] = { $in: subcategoryValues };
+    }
 
     if (gte || lte) {
         matchConditions.price = {};
@@ -237,7 +245,7 @@ export async function getProductsByCategory(category: string, searchParams: Sear
     }
 
     // Generate a dynamic cache key based on all search parameters
-    const cacheKey = `products-${category}-${sex || ''}-${subcategory || ''}-${gte || ''}-${lte || ''}`;
+    const cacheKey = `products-${category}-${JSON.stringify(searchParams)}`;
 
     const result = await cache(
         async () => {
@@ -246,7 +254,6 @@ export async function getProductsByCategory(category: string, searchParams: Sear
                     .sort({ createdAt: -1 })
                     .lean()
                     .exec();
-
                 return ApiResponse.success(`Successfully fetched products for category: ${category}`, products as IProduct[]);
             } catch (err: any) {
                 return ApiResponse.failure(err.message);
@@ -269,22 +276,23 @@ export async function getProductsByCategory(category: string, searchParams: Sear
 
 
 // get all subcategories
-export async function getSubCategoriesOfCategory(slug: string) {
+export async function getSubcategoriesOfCategory(slug: string) {
     await connectDb()
 
     const result = await cache(
         async () => {
             try {
                 const categories = await SubcategoryModel.find({ "category.slug": slug }).lean().exec();
+                console.log(categories)
                 return ApiResponse.success("Fetched subcategories!", categories as ISubcategory[])
             } catch (err: any) {
                 return ApiResponse.failure(err.message)
             }
         },
-        ["subcategories"],
+        [`subcategories-of-${slug}`],
         {
             revalidate: 3600,
-            tags: ["subcategories"],
+            tags: [`subcategories-of-${slug}`],
         }
     )()
 

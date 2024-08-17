@@ -8,7 +8,7 @@ export function SiteFooter() {
     return (
         <footer className="w-full py-6 border-t bg-background">
             <Shell>
-                <section className="flex flex-col gap-10 lg:flex-row lg:gap-20">
+                <section className="flex gap-10 lg:flex-row lg:gap-20">
                     <section>
                         <Link href="/" className="flex w-fit items-center space-x-2">
                             <ComponentBooleanIcon className="size-6" aria-hidden="true" />
