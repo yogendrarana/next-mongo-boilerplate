@@ -18,8 +18,9 @@ import { IProduct } from "@/server/db/models/product-model"
 import { Check, EyeIcon, ShoppingCart } from "lucide-react"
 import { PlaceholderImage } from "@/components/placeholder-image"
 
-interface ProductCardProps extends React.HTMLAttributes<HTMLDivElement> {
-    product: IProduct
+interface ProductCardProps {
+    product: IProduct;
+    className?: string;
 }
 
 export function ProductCard({

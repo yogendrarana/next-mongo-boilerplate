@@ -1,18 +1,16 @@
 import "server-only"
 
-import { FilterQuery } from "mongoose"
 import {
     unstable_cache as cache,
     unstable_noStore as noStore,
 } from "next/cache"
 import { connectDb } from "../db"
-import { SearchParams } from "@/types"
-import { getErrorMessage } from "@/lib/handle-error"
+import { FilterQuery } from "mongoose"
 import { ApiResponse } from "@/helpers/api-response"
 import CategoryModel from "../db/models/category-model"
 import { getProductsSchema } from "@/lib/validations/product"
+import SubcategoryModel, { ISubcategory } from "../db/models/subcategory-model"
 import ProductModel, { IProduct } from "../db/models/product-model"
-import { ProductSexEnum } from "@/constants/enum"
 
 
 // get products
@@ -211,32 +209,84 @@ export async function getRelatedProducts(productId: string) {
     )()
 }
 
-// get product by category
-export async function getProductsByCategory({
-    slug,
-    sex
-}: {
-    slug: string;
-    sex: string;
-}) {
+// filter category product
+export type SearchParams = {
+    sex?: string;
+    gte?: string;
+    lte?: string;
+    subcategory?: string;
+    [key: string]: string | string[] | undefined;
+};
+
+export async function getProductsByCategory(category: string, searchParams: SearchParams) {
     await connectDb();
 
+    const { sex, subcategory, gte, lte } = searchParams;
+
     const matchConditions: any = {
-        'category.slug': slug
+        'category.slug': category,
     };
 
-    if (sex in ProductSexEnum) {
-        matchConditions.sex = sex;
+    if (sex) matchConditions.sex = sex;
+    if (subcategory) matchConditions['subCategory.slug'] = subcategory;
+
+    if (gte || lte) {
+        matchConditions.price = {};
+        if (gte) matchConditions.price.$gte = parseFloat(gte);
+        if (lte) matchConditions.price.$lte = parseFloat(lte);
     }
 
-    return await cache(
+    // Generate a dynamic cache key based on all search parameters
+    const cacheKey = `products-${category}-${sex || ''}-${subcategory || ''}-${gte || ''}-${lte || ''}`;
+
+    const result = await cache(
         async () => {
-            return await ProductModel.find(matchConditions).sort({ createdAt: -1 });
+            try {
+                const products = await ProductModel.find(matchConditions)
+                    .sort({ createdAt: -1 })
+                    .lean()
+                    .exec();
+
+                return ApiResponse.success(`Successfully fetched products for category: ${category}`, products as IProduct[]);
+            } catch (err: any) {
+                return ApiResponse.failure(err.message);
+            }
         },
-        [`product-by-category-${slug}`, sex],
+        [cacheKey],
         {
             revalidate: 3600,
-            tags: ["product-by-category"],
+            tags: [
+                `products-${category}`,
+                ...Object.entries(searchParams).map(
+                    ([key, value]) => `products-${category}-${key}-${value}`
+                ),
+            ],
         }
     )();
+
+    return result;
+}
+
+
+// get all subcategories
+export async function getSubCategoriesOfCategory(slug: string) {
+    await connectDb()
+
+    const result = await cache(
+        async () => {
+            try {
+                const categories = await SubcategoryModel.find({ "category.slug": slug }).lean().exec();
+                return ApiResponse.success("Fetched subcategories!", categories as ISubcategory[])
+            } catch (err: any) {
+                return ApiResponse.failure(err.message)
+            }
+        },
+        ["subcategories"],
+        {
+            revalidate: 3600,
+            tags: ["subcategories"],
+        }
+    )()
+
+    return result;
 }

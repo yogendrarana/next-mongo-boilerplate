@@ -1,19 +1,22 @@
-import React from 'react'
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator
+} from '@/components/ui/breadcrumb'
+import React, { Suspense } from 'react'
 import { toTitleCase } from '@/lib/utils'
 import { Shell } from '@/components/shell'
-import { getProductsByCategory } from '@/server/queries/product'
-import Link from 'next/link'
-import { redirect } from 'next/navigation'
-import { ProductSexEnum } from '@/constants/enum'
+import ProductFilter from './_components/product-filter'
+import { ProductList } from './_components/product-list'
+import { getSubCategoriesOfCategory } from '@/server/queries/product'
 
 interface CategoryPageProps {
-    params: {
-        slug: string
-    },
-    searchParams: {
-        sex?: string
-    }
-}
+    params: { slug: string };
+    searchParams: { [key: string]: string | string[] | undefined };
+};
 
 export async function generateMetadata({ params }: CategoryPageProps) {
     return {
@@ -22,38 +25,38 @@ export async function generateMetadata({ params }: CategoryPageProps) {
     }
 }
 
-const Page = async (props: CategoryPageProps) => {
-    const { slug } = props.params;
-    const { sex } = props.searchParams;
-
-    // If sex is not provided in the URL, redirect to the default URL
-    if (!sex) {
-        redirect(`/category/${slug}?sex=${ProductSexEnum.MALE}`);
-    }
-
-    const products = await getProductsByCategory({ slug, sex });
+export default async function Page({ params, searchParams }: CategoryPageProps) {
+    const { slug } = params;
+    const { data: subcategories } = await getSubCategoriesOfCategory(slug);
 
     return (
         <Shell className="pb-12 md:pb-14">
-            <div className="flex flex-col gap-8 md:flex-row md:gap-16">
-                <div>
-                    <h2>Sex Filter</h2>
-                    <ul>
-                        {Object.values(ProductSexEnum).map((option) => (
-                            <li key={option}>
-                                <Link href={`/category/${slug}?sex=${option}`}>
-                                    {toTitleCase(option)}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <div>
-                    <h2>Products ({products.length})</h2>
-                </div>
+            <header className='flex items-center justify-between'>
+                <Breadcrumb>
+                    <BreadcrumbList>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbSeparator />
+                        <BreadcrumbItem>
+                            <BreadcrumbPage>Category</BreadcrumbPage>
+                        </BreadcrumbItem>
+                        <BreadcrumbSeparator />
+                        <BreadcrumbItem>
+                            <BreadcrumbPage>{slug.charAt(0).toUpperCase() + slug.slice(1)}</BreadcrumbPage>
+                        </BreadcrumbItem>
+                        <BreadcrumbSeparator />
+                    </BreadcrumbList>
+                </Breadcrumb>
+
+                <ProductFilter category={slug} subcategories={subcategories} />
+            </header>
+
+            <div>
+                <Suspense fallback={<div>Loading products...</div>}>
+                    <ProductList category={slug} searchParams={searchParams} />
+                </Suspense>
             </div>
         </Shell>
     )
 }
-
-export default Page

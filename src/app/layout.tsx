@@ -7,7 +7,7 @@ import BackgroundProvider from "@/components/provider/background-provider";
 
 
 export const metadata: Metadata = {
-  title: "Next JS MongoDB Boilerplate",
+  title: "Ecommerce Boilerlate | Next JS and Mongo DB",
   description: "Next JS and Mongo DB Boilerplate",
 };
 

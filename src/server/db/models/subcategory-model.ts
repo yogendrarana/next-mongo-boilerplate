@@ -32,10 +32,16 @@ const SubcategorySchema: Schema = new Schema({
         type: String,
         trim: true,
     },
-    categoryId: {
-        type: String,
-        required: true,
-        ref: 'Category',
+    category: {
+        id: {
+            type: String,
+            required: true,
+            ref: 'Category',
+        },
+        slug: {
+            type: String,
+            required: true,
+        }
     },
     image: {
         type: String,
@@ -45,4 +51,5 @@ const SubcategorySchema: Schema = new Schema({
     timestamps: true
 });
 
-export const SubcategoryModel = mongoose.model<ISubcategory>('Subcategory', SubcategorySchema);
+const SubcategoryModel = mongoose.models.Subcategory || mongoose.model<ISubcategory>('Subcategory', SubcategorySchema);
+export default SubcategoryModel

@@ -3,7 +3,7 @@ import { connectDb } from '../src/server/db';
 import UserModel from '../src/server/db/models/user-model';
 import ProductModel from '../src/server/db/models/product-model';
 import CategoryModel from '../src/server/db/models/category-model';
-import { SubcategoryModel } from '../src/server/db/models/subcategory-model';
+import SubcategoryModel from '../src/server/db/models/subcategory-model';
 import { AuthProviderEnum, ProductSexEnum, UserRoleEnum } from '@/constants/enum';
 import { generateId } from '@/lib/id';
 
@@ -112,7 +112,10 @@ async function seed() {
                             name: subcategory.name,
                             slug: subcategory.slug,
                             description: subcategory.description,
-                            categoryId: newCategory.id
+                            category: {
+                                id: newCategory.id,
+                                slug: newCategory.slug,
+                            }
                         });
                         break;
                     } catch (error: any) {
@@ -143,7 +146,10 @@ async function seed() {
                     id: await CategoryModel.findOne({ name: "Clothing" })?.then(cat => cat?.id),
                     slug: await CategoryModel.findOne({ name: "Clothing" })?.then(cat => cat?.slug),
                 },
-                subCategoryId: await SubcategoryModel.findOne({ name: "T-shirts" }).then(sub => sub?.id),
+                subcategory: {
+                    id: await SubcategoryModel.findOne({ name: "T-shirts" }).then(sub => sub?.id),
+                    slug: await SubcategoryModel.findOne({ name: "T-shirts" }).then(sub => sub?.slug)
+                },
                 sku: 'TSH001',
                 inventory: 100,
                 images: [
@@ -160,7 +166,10 @@ async function seed() {
                     id: await CategoryModel.findOne({ name: "Shoes" }).then(cat => cat?.id),
                     slug: await CategoryModel.findOne({ name: "Shoes" })?.then(cat => cat?.slug),
                 },
-                subCategoryId: await SubcategoryModel.findOne({ name: "Low Tops" }).then(sub => sub?.id),
+                subcategory: {
+                    id: await SubcategoryModel.findOne({ name: "Low Tops" }).then(sub => sub?.id),
+                    slug: await SubcategoryModel.findOne({ name: "Low Tops" }).then(sub => sub?.slug)
+                },
                 sku: 'SHO001',
                 inventory: 50,
                 images: [
@@ -178,7 +187,10 @@ async function seed() {
                     id: await CategoryModel.findOne({ name: "Clothing" })?.then(cat => cat?.id),
                     slug: await CategoryModel.findOne({ name: "Clothing" })?.then(cat => cat?.slug),
                 },
-                subCategoryId: await SubcategoryModel.findOne({ name: "Hoodies" }).then(sub => sub?.id),
+                subcategory: {
+                    id: await SubcategoryModel.findOne({ name: "Hoodies" }).then(sub => sub?.id),
+                    slug: await SubcategoryModel.findOne({ name: "Hoodies" }).then(sub => sub?.slug)
+                },
                 sku: 'HOD001',
                 inventory: 60,
                 images: [
@@ -195,7 +207,10 @@ async function seed() {
                     id: await CategoryModel.findOne({ name: "Accessories" }).then(cat => cat?.id),
                     slug: await CategoryModel.findOne({ name: "Accessories" })?.then(cat => cat?.slug),
                 },
-                subCategoryId: await SubcategoryModel.findOne({ name: "Bags" }).then(sub => sub?.id),
+                subcategory: {
+                    id: await SubcategoryModel.findOne({ name: "Bags" }).then(sub => sub?.id),
+                    slug: await SubcategoryModel.findOne({ name: "Bags" }).then(sub => sub?.slug)
+                },
                 sku: 'BAG001',
                 inventory: 75,
                 images: [
@@ -212,7 +227,10 @@ async function seed() {
                     id: await CategoryModel.findOne({ name: "Clothing" })?.then(cat => cat?.id),
                     slug: await CategoryModel.findOne({ name: "Clothing" })?.then(cat => cat?.slug),
                 },
-                subCategoryId: await SubcategoryModel.findOne({ name: "Pants" }).then(sub => sub?.id),
+                subcategory: {
+                    id: await SubcategoryModel.findOne({ name: "Pants" }).then(sub => sub?.id),
+                    slug: await SubcategoryModel.findOne({ name: "Pants" }).then(sub => sub?.slug)
+                },
                 sku: 'PNT001',
                 inventory: 80,
                 images: [
@@ -229,7 +247,10 @@ async function seed() {
                     id: await CategoryModel.findOne({ name: "Shoes" }).then(cat => cat?.id),
                     slug: await CategoryModel.findOne({ name: "Shoes" })?.then(cat => cat?.slug),
                 },
-                subCategoryId: await SubcategoryModel.findOne({ name: "High Tops" }).then(sub => sub?.id),
+                subcategory: {
+                    id: await SubcategoryModel.findOne({ name: "High Tops" }).then(sub => sub?.id),
+                    slug: await SubcategoryModel.findOne({ name: "High Tops" }).then(sub => sub?.slug)
+                },
                 sku: 'SHO002',
                 inventory: 40,
                 images: [
@@ -246,7 +267,10 @@ async function seed() {
                     id: await CategoryModel.findOne({ name: "Accessories" }).then(cat => cat?.id),
                     slug: await CategoryModel.findOne({ name: "Accessories" })?.then(cat => cat?.slug),
                 },
-                subCategoryId: await SubcategoryModel.findOne({ name: "Sunglasses" }).then(sub => sub?.id),
+                subcategory: {
+                    id: await SubcategoryModel.findOne({ name: "Sunglasses" }).then(sub => sub?.id),
+                    slug: await SubcategoryModel.findOne({ name: "Sunglasses" }).then(sub => sub?.slug)
+                },
                 sku: 'SUN001',
                 inventory: 100,
                 images: [
@@ -263,7 +287,10 @@ async function seed() {
                     id: await CategoryModel.findOne({ name: "Accessories" }).then(cat => cat?.id),
                     slug: await CategoryModel.findOne({ name: "Accessories" })?.then(cat => cat?.slug),
                 },
-                subCategoryId: await SubcategoryModel.findOne({ name: "Hats & Caps" }).then(sub => sub?.id),
+                subcategory: {
+                    id: await SubcategoryModel.findOne({ name: "Hats & Caps" }).then(sub => sub?.id),
+                    slug: await SubcategoryModel.findOne({ name: "Hats & Caps" }).then(sub => sub?.slug)
+                },
                 sku: 'HAT001',
                 inventory: 120,
                 images: [

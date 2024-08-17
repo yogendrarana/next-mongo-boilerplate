@@ -1,6 +1,5 @@
 import * as React from "react"
 
-
 import { Lobby } from "./_components/lobby"
 import { LobbySkeleton } from "./_components/lobby-skeleton"
 import { getCategories, getFeaturedProducts } from "@/server/queries/product"

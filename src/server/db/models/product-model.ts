@@ -10,7 +10,10 @@ export interface IProduct extends Document {
         id: string;
         slug: string;
     };
-    subCategoryId: string;
+    subcategory: {
+        id: string;
+        slug: string;
+    };
     sku: string;
     inventory: number;
     images: string[];
@@ -44,10 +47,16 @@ const ProductSchema: Schema = new Schema({
             required: true
         }
     },
-    subCategoryId: {
-        type: String,
-        required: true,
-        ref: "Subcategory"
+    subcategory: {
+        id: {
+            type: String,
+            required: true,
+            ref: "Subcategory"
+        },
+        slug: {
+            type: String,
+            required: true
+        }
     },
     sku: {
         type: String,
