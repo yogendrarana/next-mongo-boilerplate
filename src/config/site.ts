@@ -21,45 +21,28 @@ export const siteConfig = {
     mobile: "+977 9812345678",
     mainNav: [
         {
-            title: "Lobby",
+            title: "Products",
             items: [
                 {
-                    title: "Products",
-                    href: "/products",
-                    description: "All the products we have to offer.",
+                    title: "Clothing",
+                    href: "/category/clothing",
+                    description: "Get all kinds of clothes.",
                     items: [],
                 },
                 {
-                    title: "Build a Board",
-                    href: "/build-a-board",
-                    description: "Customize your own clothes.",
+                    title: "Shoes",
+                    href: "/category/shoes",
+                    description: "Get all kinds of shoes.",
                     items: [],
                 },
                 {
-                    title: "Blog",
-                    href: "/blog",
-                    description: "Read our latest blog posts.",
+                    title: "Accessories",
+                    href: "/category/accessories",
+                    description: "Get all kinds of shoes.",
                     items: [],
                 },
             ],
-        },
-        ...productConfig.categories.map((category) => ({
-            title: category.name,
-            items: [
-                {
-                    title: "All",
-                    href: `/categories/${slugify(category.name)}`,
-                    description: `All ${category.name}.`,
-                    items: [],
-                },
-                ...category.subcategories.map((subcategory) => ({
-                    title: subcategory.name,
-                    href: `/categories/${slugify(category.name)}/${slugify(subcategory.name)}`,
-                    description: subcategory.description,
-                    items: [],
-                })),
-            ],
-        })),
+        }
     ] satisfies MainNavItem[],
     footerNav: [
         {
