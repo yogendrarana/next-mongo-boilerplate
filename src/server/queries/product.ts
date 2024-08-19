@@ -5,52 +5,42 @@ import {
     unstable_noStore as noStore,
 } from "next/cache"
 import { connectDb } from "../db"
-import { FilterQuery } from "mongoose"
-import { SearchParams } from "@/types"
 import { ApiResponse } from "@/helpers/api-response"
 import { ProductSearchParams } from "@/types/product"
 import CategoryModel, { ICategory } from "../db/models/category-model"
-import { getProductsSchema } from "@/lib/validations/product"
 import ProductModel, { IProduct } from "../db/models/product-model"
 import SubcategoryModel, { ISubcategory } from "../db/models/subcategory-model"
 
 
-// get products
-export async function getProducts(params: ProductSearchParams) {
-    noStore();
-    await connectDb();
-
+// filter products  
+async function filterProducts(params: ProductSearchParams) {
     const {
         gte,
         lte,
         page = 1,
-        limit = 10,
+        limit = 20,
         gender,
         category,
         subcategory,
-        sort = 'createdAt',
-        order = 'desc'
+        sort = "price",
+        order = "",
     } = params;
-
-    console.log("params", params);
-
-    const pipeline: any[] = [];
 
     // Match stage
     const matchStage: any = {};
 
     if (category) {
-        const catevoryValues = category.split(',').map(s => s.trim());
-        matchStage['category.slug'] = { $in: catevoryValues };
+        const categoryValues = category.split(',').map((s) => s.trim());
+        matchStage['category.slug'] = { $in: categoryValues };
     }
 
     if (subcategory) {
-        const subcategoryValues = subcategory.split(',').map(s => s.trim());
+        const subcategoryValues = subcategory.split(',').map((s) => s.trim());
         matchStage['subcategory.slug'] = { $in: subcategoryValues };
     }
 
     if (gender) {
-        const genderValues = gender.split(',').map(gen => gen.trim());
+        const genderValues = gender.split(',').map((gen) => gen.trim());
         matchStage.gender = { $in: genderValues };
     }
 
@@ -60,12 +50,45 @@ export async function getProducts(params: ProductSearchParams) {
         if (lte) matchStage.price.$lte = parseFloat(lte);
     }
 
-    pipeline.push({ $match: matchStage });
-
     // Sort stage
     const sortStage: any = {};
-    sortStage[sort] = order === 'desc' ? -1 : 1;
-    pipeline.push({ $sort: sortStage });
+    sortStage[sort] = order === "asc" ? 1 : -1;
+
+    // Pagination stages (add to pipeline later)
+    const paginationStage = [
+        { $skip: (Number(page) - 1) * Number(limit) },
+        { $limit: Number(limit) },
+    ];
+
+    return { matchStage, sortStage, paginationStage };
+}
+
+
+// get products
+export async function getProducts(params: ProductSearchParams) {
+    await connectDb();
+
+    const { page, limit } = params;
+    const { matchStage, sortStage, paginationStage } = await filterProducts(params);
+
+    console.log({ matchStage, sortStage, paginationStage });
+
+    const pipeline = [
+        { $match: matchStage },
+        { $sort: sortStage },
+        {
+            $facet: {
+                metadata: [{ $count: "total" }],
+                products: [...paginationStage],
+            },
+        },
+        {
+            $project: {
+                products: 1,
+                totalCount: { $arrayElemAt: ["$metadata.total", 0] },
+            },
+        },
+    ];
 
     // Generate a dynamic cache key based on all search parameters
     const cacheKey = `products-${JSON.stringify(
@@ -75,32 +98,13 @@ export async function getProducts(params: ProductSearchParams) {
         }, {})
     )}`;
 
-
     const result = await cache(
         async () => {
             try {
-                const [resultData] = await ProductModel.aggregate([
-                    ...pipeline,
-                    {
-                        $facet: {
-                            metadata: [{ $count: "total" }],
-                            products: [
-                                { $skip: (Number(page) - 1) * Number(limit) },
-                                { $limit: limit }
-                            ]
-                        }
-                    },
-                    {
-                        $project: {
-                            products: 1,
-                            totalCount: { $arrayElemAt: ["$metadata.total", 0] }
-                        }
-                    }
-                ]).exec();
-
-                const { products, totalCount } = resultData;
+                const [res] = await ProductModel.aggregate(pipeline).exec();
+                console.log("res", res);
+                const { products, totalCount } = res;
                 const totalPages = Math.ceil(totalCount / Number(limit));
-
                 return ApiResponse.success(
                     "Successfully fetched products",
                     {
@@ -114,6 +118,7 @@ export async function getProducts(params: ProductSearchParams) {
                     }
                 );
             } catch (err: any) {
+                console.error("error message", err.message);
                 return ApiResponse.failure(err.message);
             }
         },
@@ -121,15 +126,15 @@ export async function getProducts(params: ProductSearchParams) {
         {
             revalidate: 3600,
             tags: [
-                `products-${category}`,
+                `products-${params.category}`,
                 ...Object.entries(params).map(
-                    ([key, value]) => `products-${category}-${key}-${value}`
+                    ([key, value]) => `products-${key}-${value}`
                 ),
             ],
         }
     )();
 
-    console.log("match", matchStage);
+    console.log("result", result);
 
     return result;
 }

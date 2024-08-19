@@ -6,8 +6,8 @@ export type ProductSearchParams = {
     subcategory?: string;
     page?: string;
     limit?: string;
+    search?: string;
     sort?: string;
     order?: string;
-    search?: string;
     [key: string]: string | string[] | undefined;
 };
