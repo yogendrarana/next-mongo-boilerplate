@@ -1,7 +1,8 @@
 import React from "react"
 import { type Metadata } from "next"
-import Store from "@/components/store/store"
-import { getAllCategories, getAllSubcategories, getProducts } from "@/server/queries/product"
+import Store from "@/app/(lobby)/store/_components/store"
+import { ProductsSkeletion } from "../../../components/products-skeleton"
+import { getAllCategories, getAllSubcategories, getStoreProducts } from "@/server/queries/product"
 
 export const metadata: Metadata = {
     title: "Store",
@@ -15,11 +16,10 @@ interface ProductsPageProps {
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
     const categoriesPromise = getAllCategories();
     const subcategoriesPromise = getAllSubcategories();
-    const productsPromise = getProducts(searchParams);
+    const productsPromise = getStoreProducts(searchParams);
 
     return (
-        // TODO: add proper skeleton loading
-        <React.Suspense fallback={<h1>Loading products</h1>}>
+        <React.Suspense fallback={<ProductsSkeletion />}>
             <Store 
                 categoriesPromise={categoriesPromise} 
                 subcategoriesPromise={subcategoriesPromise}

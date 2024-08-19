@@ -13,21 +13,29 @@ import { Button } from '@/components/ui/button';
 import { SliderIcon } from '@radix-ui/react-icons';
 import { Checkbox } from "@/components/ui/checkbox";
 import { ProductGenderEnum } from '@/constants/enum';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { ICategory } from '@/server/db/models/category-model';
+import { ISubcategory } from '@/server/db/models/subcategory-model';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 type Props = {
-    categories: ICategory[] | null;
+    categories?: ICategory[] | null;
+    subCategories?: ISubcategory[] | null;
 };
 
-export default function ProductFilter({ categories }: Props) {
+export default function ProductFilterDropdown({
+    categories,
+    subCategories
+}: Props) {
     const router = useRouter();
+    const pathname = usePathname();
     const searchParams = useSearchParams();
     const [isOpen, setIsOpen] = useState(false);
     const [selectedGender, setSelectedGender] = useState<string[]>([]);
     const [minPrice, setMinPrice] = useState(searchParams.get('gte') || '');
     const [maxPrice, setMaxPrice] = useState(searchParams.get('lte') || '');
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+    const [selectedSubcategories, setSelectedSuccategories] = useState<string[]>([]);
+
 
     useEffect(() => {
         setSelectedGender(searchParams.get('gender')?.split(',') || []);
@@ -44,7 +52,7 @@ export default function ProductFilter({ categories }: Props) {
         } else {
             params.delete(key);
         }
-        router.push(`/store?${params.toString()}`);
+        router.push(`${pathname}?${params.toString()}`);
     };
 
     const handleGenderChange = (gender: string) => {
@@ -69,13 +77,21 @@ export default function ProductFilter({ categories }: Props) {
         updateFilter('category', newSelectedCategories);
     };
 
+    const handleSubcategoryCategoryChange = (slug: string) => {
+        const newSubcategories = selectedSubcategories.includes(slug)
+            ? selectedSubcategories.filter(c => c !== slug)
+            : [...selectedSubcategories, slug];
+        setSelectedSuccategories(newSubcategories);
+        updateFilter('subcategory', newSubcategories);
+    }
+
     const resetAndClose = () => {
         setMinPrice('');
         setMaxPrice('');
         setIsOpen(false);
         setSelectedGender([]);
         setSelectedCategories([]);
-        router.push('/store');
+        router.push(`${pathname}`);
     };
 
     return (
@@ -94,19 +110,42 @@ export default function ProductFilter({ categories }: Props) {
                 sideOffset={10}
             >
                 {/* Category */}
-                <DropdownMenuGroup>
-                    <label className='text-md font-semibold'>Category</label>
-                    {categories?.map(cat => (
-                        <div key={cat.id} className="flex items-center space-x-2 mt-2">
-                            <Checkbox
-                                id={`category-${cat.slug}`}
-                                checked={selectedCategories.includes(cat.slug)}
-                                onCheckedChange={() => handleCategoryChange(cat.slug)}
-                            />
-                            <Label htmlFor={`category-${cat.slug}`}>{cat.name}</Label>
-                        </div>
-                    ))}
-                </DropdownMenuGroup>
+                {
+                    categories && categories.length > 0 && (
+                        <DropdownMenuGroup>
+                            <label className='text-md font-semibold'>Category</label>
+                            {categories?.map(cat => (
+                                <div key={cat.id} className="flex items-center space-x-2 mt-2">
+                                    <Checkbox
+                                        id={`category-${cat.slug}`}
+                                        checked={selectedCategories.includes(cat.slug)}
+                                        onCheckedChange={() => handleCategoryChange(cat.slug)}
+                                    />
+                                    <Label htmlFor={`category-${cat.slug}`}>{cat.name}</Label>
+                                </div>
+                            ))}
+                        </DropdownMenuGroup>
+                    )
+                }
+
+                {/* Sub categories */}
+                {
+                    subCategories && subCategories.length > 0 && (
+                        <DropdownMenuGroup>
+                            <label className='text-md font-semibold'>Sub Categories</label>
+                            {subCategories.map(subcategory => (
+                                <div key={subcategory.id} className="flex items-center space-x-2 mt-2">
+                                    <Checkbox
+                                        id={`subcategory-${subcategory.slug}`}
+                                        checked={selectedSubcategories.includes(subcategory.slug)}
+                                        onCheckedChange={() => handleSubcategoryCategoryChange(subcategory.slug)}
+                                    />
+                                    <Label htmlFor={`subcategory-${subcategory.slug}`}>{subcategory.name}</Label>
+                                </div>
+                            ))}
+                        </DropdownMenuGroup>
+                    )
+                }
 
                 {/* Gender */}
                 <DropdownMenuGroup>

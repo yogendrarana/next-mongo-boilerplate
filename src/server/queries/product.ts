@@ -65,13 +65,11 @@ async function filterProducts(params: ProductSearchParams) {
 
 
 // get products
-export async function getProducts(params: ProductSearchParams) {
+export async function getStoreProducts(params: ProductSearchParams) {
     await connectDb();
 
     const { page, limit } = params;
     const { matchStage, sortStage, paginationStage } = await filterProducts(params);
-
-    console.log({ matchStage, sortStage, paginationStage });
 
     const pipeline = [
         { $match: matchStage },
@@ -91,7 +89,76 @@ export async function getProducts(params: ProductSearchParams) {
     ];
 
     // Generate a dynamic cache key based on all search parameters
-    const cacheKey = `products-${JSON.stringify(
+    const cacheKey = `store-${JSON.stringify(
+        Object.keys(params).sort().reduce((obj: { [key: string]: any }, key) => {
+            obj[key] = params[key];
+            return obj;
+        }, {})
+    )}`;
+
+    const result = await cache(
+        async () => {
+            try {
+                const [res] = await ProductModel.aggregate(pipeline).exec();
+                const { products, totalCount } = res;
+                const totalPages = Math.ceil(totalCount / Number(limit));
+                return ApiResponse.success(
+                    "Successfully fetched products",
+                    {
+                        products: products as IProduct[],
+                        pagination: {
+                            currentPage: page,
+                            totalPages,
+                            totalItems: totalCount,
+                            itemsPerPage: limit
+                        }
+                    }
+                );
+            } catch (err: any) {
+                return ApiResponse.failure(err.message);
+            }
+        },
+        [cacheKey],
+        {
+            revalidate: 3600,
+            tags: [
+                "store",
+                ...Object.entries(params).map(
+                    ([key, value]) => `products-${key}-${value}`
+                ),
+            ],
+        }
+    )();
+
+    return result;
+}
+
+// get products by category
+export async function getProductsByCategory(category: string, params: ProductSearchParams) {
+    await connectDb();
+
+    const { page, limit } = params;
+    const { matchStage, sortStage, paginationStage } = await filterProducts({...params, category});
+
+    const pipeline = [
+        { $match: matchStage },
+        { $sort: sortStage },
+        {
+            $facet: {
+                metadata: [{ $count: "total" }],
+                products: [...paginationStage],
+            },
+        },
+        {
+            $project: {
+                products: 1,
+                totalCount: { $arrayElemAt: ["$metadata.total", 0] },
+            },
+        },
+    ];
+
+    // Generate a dynamic cache key based on all search parameters
+    const cacheKey = `products-${category}-${JSON.stringify(
         Object.keys(params).sort().reduce((obj: { [key: string]: any }, key) => {
             obj[key] = params[key];
             return obj;
@@ -118,7 +185,6 @@ export async function getProducts(params: ProductSearchParams) {
                     }
                 );
             } catch (err: any) {
-                console.error("error message", err.message);
                 return ApiResponse.failure(err.message);
             }
         },
@@ -133,8 +199,6 @@ export async function getProducts(params: ProductSearchParams) {
             ],
         }
     )();
-
-    console.log("result", result);
 
     return result;
 }
@@ -261,63 +325,6 @@ export async function getRelatedProducts(productId: string) {
             tags: [`related-products-${productId}`],
         }
     )()
-}
-
-// filter category product
-export async function getProductsByCategory(category: string, searchParams: ProductSearchParams) {
-    await connectDb();
-    const { gender, subcategory, gte, lte } = searchParams;
-
-    const matchConditions: any = {
-        'category.slug': category,
-    };
-
-    // Handle multiple values for sex
-    if (gender) {
-        const genderValues = gender.split(',').map(gen => gen.trim());
-        matchConditions.gender = { $in: genderValues };
-    }
-
-    // Handle multiple values for subcategory
-    if (subcategory) {
-        const subcategoryValues = subcategory.split(',').map(s => s.trim());
-        matchConditions['subcategory.slug'] = { $in: subcategoryValues };
-    }
-
-    if (gte || lte) {
-        matchConditions.price = {};
-        if (gte) matchConditions.price.$gte = parseFloat(gte);
-        if (lte) matchConditions.price.$lte = parseFloat(lte);
-    }
-
-    // Generate a dynamic cache key based on all search parameters
-    const cacheKey = `products-${category}-${JSON.stringify(searchParams)}`;
-
-    const result = await cache(
-        async () => {
-            try {
-                const products = await ProductModel.find(matchConditions)
-                    .sort({ createdAt: -1 })
-                    .lean()
-                    .exec();
-                return ApiResponse.success(`Successfully fetched products for category: ${category}`, products as IProduct[]);
-            } catch (err: any) {
-                return ApiResponse.failure(err.message);
-            }
-        },
-        [cacheKey],
-        {
-            revalidate: 3600,
-            tags: [
-                `products-${category}`,
-                ...Object.entries(searchParams).map(
-                    ([key, value]) => `products-${category}-${key}-${value}`
-                ),
-            ],
-        }
-    )();
-
-    return result;
 }
 
 

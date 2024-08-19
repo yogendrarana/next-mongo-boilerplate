@@ -1,17 +1,8 @@
-import {
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbLink,
-    BreadcrumbList,
-    BreadcrumbPage,
-    BreadcrumbSeparator
-} from '@/components/ui/breadcrumb'
 import React, { Suspense } from 'react'
 import { toTitleCase } from '@/lib/utils'
-import { Shell } from '@/components/shell'
-import ProductFilter from './_components/product-filter'
-import { ProductList } from './_components/product-list'
-import { getSubcategoriesOfCategory } from '@/server/queries/product'
+import CategoryProducts from './_components/category-products'
+import { getProductsByCategory, getSubcategoriesOfCategory } from '@/server/queries/product'
+import { ProductsSkeletion } from '@/components/products-skeleton';
 
 interface CategoryPageProps {
     params: { slug: string };
@@ -27,34 +18,17 @@ export async function generateMetadata({ params }: CategoryPageProps) {
 
 export default async function Page({ params, searchParams }: CategoryPageProps) {
     const { slug } = params;
-    const { data: subcategories } = await getSubcategoriesOfCategory(slug);
+    const getSubcategoriesOfCategoryPromise = getSubcategoriesOfCategory(slug);
+    const productsPromise = getProductsByCategory(slug, searchParams);
 
     return (
-        <Shell className="pb-12 md:pb-14">
-            <header className='flex items-center justify-between'>
-                <Breadcrumb>
-                    <BreadcrumbList>
-                        <BreadcrumbItem>
-                            <BreadcrumbLink href="/">Home</BreadcrumbLink>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator />
-                        <BreadcrumbItem>
-                            <BreadcrumbPage>Category</BreadcrumbPage>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator />
-                        <BreadcrumbItem>
-                            <BreadcrumbPage>{slug.charAt(0).toUpperCase() + slug.slice(1)}</BreadcrumbPage>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator />
-                    </BreadcrumbList>
-                </Breadcrumb>
 
-                <ProductFilter category={slug} subcategories={subcategories} />
-            </header>
-
-            <Suspense fallback={<div>Loading products...</div>}>
-                <ProductList category={slug} searchParams={searchParams} />
-            </Suspense>
-        </Shell>
+        <Suspense fallback={<ProductsSkeletion />}>
+            <CategoryProducts
+                slug={slug}
+                subcategoriesPromise={getSubcategoriesOfCategoryPromise}
+                productsPromise={productsPromise}
+            />
+        </Suspense>
     )
 }

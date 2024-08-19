@@ -3,18 +3,17 @@ import {
     BreadcrumbItem,
     BreadcrumbLink,
     BreadcrumbList,
-    BreadcrumbPage,
     BreadcrumbSeparator
 } from '@/components/ui/breadcrumb'
-import { Shell } from '../shell'
+import { Shell } from '../../../../components/shell'
 import React, { Suspense } from 'react'
-import StoreFilter from './store-filter'
-import { ProductCard } from '../product-card'
 import { IProduct } from '@/server/db/models/product-model'
-import { getAllCategories, getAllSubcategories, getProducts } from '@/server/queries/product'
+import { ProductCard } from '../../../../components/product-card'
+import ProductFilterDropdown from '../../../../components/product-filter-dropdown'
+import { getAllCategories, getAllSubcategories, getStoreProducts } from '@/server/queries/product'
 
 interface StoreProps {
-    productsPromise: ReturnType<typeof getProducts>
+    productsPromise: ReturnType<typeof getStoreProducts>
     categoriesPromise: ReturnType<typeof getAllCategories>
     subcategoriesPromise: ReturnType<typeof getAllSubcategories>
 };
@@ -46,7 +45,7 @@ export default async function Store({
                 </Breadcrumb>
 
                 {/* filter */}
-                <StoreFilter categories={categories?.data} />
+                <ProductFilterDropdown categories={categories?.data} />
             </header>
 
             <Suspense fallback={<div>Loading products...</div>}>
