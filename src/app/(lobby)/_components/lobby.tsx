@@ -6,24 +6,23 @@ import {
 import Link from "next/link"
 import { Shell } from "@/components/shell"
 import { CategoryCard } from "./category-card"
-import { Button } from "@/components/ui/button"
 import { ProductCard } from "@/components/product-card"
 import { ContentSection } from "@/components/content-section"
-import type { getCategories, getFeaturedProducts } from "@/server/queries/product"
+import type { getAllCategories, getFeaturedProducts } from "@/server/queries/product"
 
 interface LobbyProps {
     productsPromise: ReturnType<typeof getFeaturedProducts>
-    categoriesPromise: ReturnType<typeof getCategories>
+    categoriesPromise: ReturnType<typeof getAllCategories>
 }
 
-export async function Lobby({ productsPromise, categoriesPromise, }: LobbyProps) {
+export async function Lobby({ productsPromise, categoriesPromise }: LobbyProps) {
     const [products, categories] = await Promise.all([
         productsPromise,
         categoriesPromise,
     ])
 
     return (
-        <Shell className="gap-0">
+        <Shell>
             <PageHeader
                 as="section"
                 className="mx-auto items-center gap-2 text-center"
@@ -41,14 +40,13 @@ export async function Lobby({ productsPromise, categoriesPromise, }: LobbyProps)
                 >
                     In Fashion house you can find the trendiest fashion items, apparel, and accessories.
                 </PageHeaderDescription>
-                <div className="flex items-center gap-4">
-                    <Button variant="secondary" className="mt-6 bg-gray-200">
-                        <Link href="#featured-products">Featured Products</Link>
-                    </Button>
-
-                    <Button className="mt-6">
-                        <Link href="/products">View all products</Link>
-                    </Button>
+                <div className="mt-6 flex items-center gap-3">
+                    <Link href="#featured-products" className="px-4 py-2 border rounded-md hover:bg-gray-100 duration-200">
+                        Featured Products
+                    </Link>
+                    <Link href="/store" className="px-4 py-2 bg-black text-white rounded-md ">
+                        View all products
+                    </Link>
                 </div>
             </PageHeader>
 
@@ -57,7 +55,7 @@ export async function Lobby({ productsPromise, categoriesPromise, }: LobbyProps)
                 className="grid animate-fade-up grid-cols-1 gap-4 xs:grid-cols-2 md:grid-cols-3"
                 style={{ animationDelay: "0.50s", animationFillMode: "both" }}
             >
-                {categories.map((category) => (
+                {categories?.data?.map((category) => (
                     <CategoryCard key={category.name} category={category} />
                 ))}
             </section>
@@ -66,7 +64,7 @@ export async function Lobby({ productsPromise, categoriesPromise, }: LobbyProps)
             <ContentSection
                 title="Featured products"
                 description="Explore products from around the world"
-                href="/products"
+                href="/store"
                 linkText="View all products"
                 className="pt-14 md:pt-20 lg:pt-24"
                 id="featured-products"

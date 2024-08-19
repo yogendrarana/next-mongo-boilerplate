@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { Lobby } from "./_components/lobby"
 import { LobbySkeleton } from "./_components/lobby-skeleton"
-import { getCategories, getFeaturedProducts } from "@/server/queries/product"
+import { getAllCategories, getFeaturedProducts } from "@/server/queries/product"
 
 export default async function IndexPage() {
 
@@ -13,7 +13,7 @@ export default async function IndexPage() {
      * @see https://nextjs.org/docs/app/building-your-application/data-fetching/patterns#parallel-data-fetching
      */
 
-    const categoriesPromise = getCategories()
+    const categoriesPromise = getAllCategories()
     const productsPromise = getFeaturedProducts()
 
     return (

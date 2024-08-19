@@ -6,99 +6,132 @@ import {
 } from "next/cache"
 import { connectDb } from "../db"
 import { FilterQuery } from "mongoose"
+import { SearchParams } from "@/types"
 import { ApiResponse } from "@/helpers/api-response"
-import CategoryModel from "../db/models/category-model"
+import { ProductSearchParams } from "@/types/product"
+import CategoryModel, { ICategory } from "../db/models/category-model"
 import { getProductsSchema } from "@/lib/validations/product"
-import SubcategoryModel, { ISubcategory } from "../db/models/subcategory-model"
 import ProductModel, { IProduct } from "../db/models/product-model"
+import SubcategoryModel, { ISubcategory } from "../db/models/subcategory-model"
 
 
 // get products
-export async function getProducts(input: SearchParams) {
-    await connectDb()
-    noStore()
+export async function getProducts(params: ProductSearchParams) {
+    noStore();
+    await connectDb();
 
-    try {
-        const limit = Number(input.per_page) || 10;
-        const page = Number(input.page) || 1;
-        const skip = (page - 1) * limit;
-        const search = getProductsSchema.parse(input)
+    const {
+        gte,
+        lte,
+        page = 1,
+        limit = 10,
+        gender,
+        category,
+        subcategory,
+        sort = 'createdAt',
+        order = 'desc'
+    } = params;
 
-        const [sortField, sortOrder] = (search.sort?.split('.') as [
-            keyof IProduct | undefined, 'asc' | 'desc' | undefined
-        ]) ?? ['createdAt', 'desc'];
+    console.log("params", params);
 
-        const categoryIds = search.categories?.split(".") ?? []
-        const subcategoryIds = search.subcategories?.split(".") ?? []
-        const [minPrice, maxPrice] = search.price_range?.split("-") ?? []
+    const pipeline: any[] = [];
 
-        const filter: FilterQuery<IProduct> = {};
+    // Match stage
+    const matchStage: any = {};
 
-        if (categoryIds.length > 0) {
-            filter.categoryId = { $in: categoryIds };
-        }
-        if (subcategoryIds.length > 0) {
-            filter.subcategoryId = { $in: subcategoryIds };
-        }
-        if (minPrice !== undefined) {
-            filter.price = { ...filter.price, $gte: minPrice };
-        }
-        if (maxPrice !== undefined) {
-            filter.price = { ...filter.price, $lte: maxPrice };
-        }
-
-        const products = await ProductModel.aggregate([
-            { $match: filter },
-            {
-                $lookup: {
-                    from: 'categories',
-                    localField: 'categoryId',
-                    foreignField: '_id',
-                    as: 'category'
-                }
-            },
-            { $unwind: '$category' },
-            {
-                $lookup: {
-                    from: 'subcategories',
-                    localField: 'subcategoryId',
-                    foreignField: '_id',
-                    as: 'subcategory'
-                }
-            },
-            { $unwind: '$subcategory' },
-            {
-                $project: {
-                    id: '$_id',
-                    name: 1,
-                    description: 1,
-                    images: 1,
-                    category: '$category.name',
-                    subcategory: '$subcategory.name',
-                    price: 1,
-                    inventory: 1,
-                    createdAt: 1,
-                    updatedAt: 1,
-                }
-            },
-            { $sort: { [sortField as string]: sortOrder === 'asc' ? 1 : -1 } },
-            { $skip: skip },
-            { $limit: limit }
-        ]);
-
-        const total = await ProductModel.countDocuments(filter);
-        const pageCount = Math.ceil(total / limit);
-
-        return {
-            data: products,
-            pageCount,
-        };
-    } catch (err) {
-        return {
-            data: [],
-            pageCount: 0,
-        }
+    if (category) {
+        const catevoryValues = category.split(',').map(s => s.trim());
+        matchStage['category.slug'] = { $in: catevoryValues };
     }
+
+    if (subcategory) {
+        const subcategoryValues = subcategory.split(',').map(s => s.trim());
+        matchStage['subcategory.slug'] = { $in: subcategoryValues };
+    }
+
+    if (gender) {
+        const genderValues = gender.split(',').map(gen => gen.trim());
+        matchStage.gender = { $in: genderValues };
+    }
+
+    if (gte || lte) {
+        matchStage.price = {};
+        if (gte) matchStage.price.$gte = parseFloat(gte);
+        if (lte) matchStage.price.$lte = parseFloat(lte);
+    }
+
+    pipeline.push({ $match: matchStage });
+
+    // Sort stage
+    const sortStage: any = {};
+    sortStage[sort] = order === 'desc' ? -1 : 1;
+    pipeline.push({ $sort: sortStage });
+
+    // Generate a dynamic cache key based on all search parameters
+    const cacheKey = `products-${JSON.stringify(
+        Object.keys(params).sort().reduce((obj: { [key: string]: any }, key) => {
+            obj[key] = params[key];
+            return obj;
+        }, {})
+    )}`;
+
+
+    const result = await cache(
+        async () => {
+            try {
+                const [resultData] = await ProductModel.aggregate([
+                    ...pipeline,
+                    {
+                        $facet: {
+                            metadata: [{ $count: "total" }],
+                            products: [
+                                { $skip: (Number(page) - 1) * Number(limit) },
+                                { $limit: limit }
+                            ]
+                        }
+                    },
+                    {
+                        $project: {
+                            products: 1,
+                            totalCount: { $arrayElemAt: ["$metadata.total", 0] }
+                        }
+                    }
+                ]).exec();
+
+                const { products, totalCount } = resultData;
+                const totalPages = Math.ceil(totalCount / Number(limit));
+
+                return ApiResponse.success(
+                    "Successfully fetched products",
+                    {
+                        products: products as IProduct[],
+                        pagination: {
+                            currentPage: page,
+                            totalPages,
+                            totalItems: totalCount,
+                            itemsPerPage: limit
+                        }
+                    }
+                );
+            } catch (err: any) {
+                return ApiResponse.failure(err.message);
+            }
+        },
+        [cacheKey],
+        {
+            revalidate: 3600,
+            tags: [
+                `products-${category}`,
+                ...Object.entries(params).map(
+                    ([key, value]) => `products-${category}-${key}-${value}`
+                ),
+            ],
+        }
+    )();
+
+    console.log("match", matchStage);
+
+    return result;
 }
 
 
@@ -137,33 +170,49 @@ export async function getProductCountByCategory({ categoryId }: { categoryId: st
 
 
 // get categories
-export async function getCategories() {
+export async function getAllCategories() {
     await connectDb()
 
-    return await cache(
+    const result = await cache(
         async () => {
-            return CategoryModel.aggregate([
-                {
-                    $project: {
-                        _id: 0,
-                        id: 1,
-                        name: 1,
-                        slug: 1,
-                        description: 1,
-                        image: 1
-                    }
-                },
-                {
-                    $sort: { name: -1 }
-                }
-            ]);
+            try {
+                const categories = await CategoryModel.find().lean().exec();
+                return ApiResponse.success("Fetched all categories!", categories as ICategory[])
+            } catch (err: any) {
+                return ApiResponse.failure(err.message)
+            }
         },
-        ["categories"],
+        ["all-categories"],
         {
             revalidate: 3600,
-            tags: ["categories"],
+            tags: ["all-categories"],
         }
     )()
+
+    return result;
+}
+
+// get all subcategories
+export async function getAllSubcategories() {
+    await connectDb()
+
+    const result = await cache(
+        async () => {
+            try {
+                const subcategories = await SubcategoryModel.find().lean().exec();
+                return ApiResponse.success("Fetched all subcategories!", subcategories as ISubcategory[])
+            } catch (err: any) {
+                return ApiResponse.failure(err.message)
+            }
+        },
+        ["all-subcategories"],
+        {
+            revalidate: 3600,
+            tags: ["all-subcategories"],
+        }
+    )()
+
+    return result;
 }
 
 
@@ -210,18 +259,10 @@ export async function getRelatedProducts(productId: string) {
 }
 
 // filter category product
-export type SearchParams = {
-    gte?: string;
-    lte?: string;
-    gender?: string;
-    subcategory?: string;
-    [key: string]: string | string[] | undefined;
-};
-
-export async function getProductsByCategory(category: string, searchParams: SearchParams) {
+export async function getProductsByCategory(category: string, searchParams: ProductSearchParams) {
     await connectDb();
     const { gender, subcategory, gte, lte } = searchParams;
-    
+
     const matchConditions: any = {
         'category.slug': category,
     };

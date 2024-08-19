@@ -52,11 +52,9 @@ export default async function Page({ params, searchParams }: CategoryPageProps) 
                 <ProductFilter category={slug} subcategories={subcategories} />
             </header>
 
-            <div>
-                <Suspense fallback={<div>Loading products...</div>}>
-                    <ProductList category={slug} searchParams={searchParams} />
-                </Suspense>
-            </div>
+            <Suspense fallback={<div>Loading products...</div>}>
+                <ProductList category={slug} searchParams={searchParams} />
+            </Suspense>
         </Shell>
     )
 }

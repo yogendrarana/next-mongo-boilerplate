@@ -9,7 +9,7 @@ export const PUBLIC_ROUTES = [
   "/terms",
   "/privacy",  
   "/build-a-board",
-  "/products",
+  "/store",
   "/product/[prodctId]",
   "/category/[slug]",
 ];

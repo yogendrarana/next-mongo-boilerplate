@@ -5,7 +5,10 @@ export interface ISubcategory extends Document {
     id: string;
     name: string;
     slug: string;
-    categoryId: string;
+    category: {
+        id: string;
+        slug: string;
+    };
     description?: string;
     image?: string;
 }

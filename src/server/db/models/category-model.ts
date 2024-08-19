@@ -2,7 +2,7 @@ import { generateId } from '@/lib/id';
 import mongoose, { Document, Schema } from 'mongoose';
 
 // Interface to define the structure of a Category document
-interface ICategory extends Document {
+export interface ICategory extends Document {
     id: string;
     name: string;
     slug: string;
