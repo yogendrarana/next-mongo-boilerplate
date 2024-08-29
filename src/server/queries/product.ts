@@ -169,7 +169,6 @@ export async function getProductsByCategory(category: string, params: ProductSea
         async () => {
             try {
                 const [res] = await ProductModel.aggregate(pipeline).exec();
-                console.log("res", res);
                 const { products, totalCount } = res;
                 const totalPages = Math.ceil(totalCount / Number(limit));
                 return ApiResponse.success(
@@ -336,7 +335,6 @@ export async function getSubcategoriesOfCategory(slug: string) {
         async () => {
             try {
                 const categories = await SubcategoryModel.find({ "category.slug": slug }).lean().exec();
-                console.log(categories)
                 return ApiResponse.success("Fetched subcategories!", categories as ISubcategory[])
             } catch (err: any) {
                 return ApiResponse.failure(err.message)

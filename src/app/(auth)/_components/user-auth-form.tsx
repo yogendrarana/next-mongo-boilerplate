@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Icons } from "@/components/icons"
 import { toast } from "sonner"
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
@@ -27,9 +28,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     } = useForm<FormData>({
         resolver: zodResolver(userAuthSchema),
     })
-    const [isLoading, setIsLoading] = React.useState<boolean>(false)
-    const [isGitHubLoading, setIsGitHubLoading] = React.useState<boolean>(false)
     const searchParams = useSearchParams()
+    const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
     async function onSubmit(data: FormData) {
         setIsLoading(true)
@@ -68,12 +68,32 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                             autoCapitalize="none"
                             autoComplete="email"
                             autoCorrect="off"
-                            disabled={isLoading || isGitHubLoading}
+                            disabled={isLoading}
                             {...register("email")}
                         />
                         {errors?.email && (
                             <p className="px-1 text-xs text-red-600">
                                 {errors.email.message}
+                            </p>
+                        )}
+                    </div>
+                    <div className="grid gap-1">
+                        <Label className="sr-only" htmlFor="email">
+                            Password
+                        </Label>
+                        <Input
+                            id="password"
+                            placeholder="********"
+                            type="password"
+                            autoCapitalize="none"
+                            autoComplete="password"
+                            autoCorrect="off"
+                            disabled={isLoading}
+                            {...register("email")}
+                        />
+                        {errors?.password && (
+                            <p className="px-1 text-xs text-red-600">
+                                {errors.password.message}
                             </p>
                         )}
                     </div>
@@ -98,17 +118,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             <button
                 type="button"
                 className={cn(buttonVariants({ variant: "outline" }), "bg-gray-100")}
-                onClick={() => {
-                    setIsGitHubLoading(true)
-                    signIn("github")
-                }}
-                disabled={isLoading || isGitHubLoading}
+                onClick={() => signIn("google", { callbackUrl: DEFAULT_LOGIN_REDIRECT })}
+                disabled={isLoading}
             >
-                {isGitHubLoading ? (
-                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                    <Icons.google className="mr-2 h-4 w-4" />
-                )}{" "}
+
+                <Icons.google className="mr-2 h-4 w-4" />
+                {" "}
                 Google
             </button>
         </div>

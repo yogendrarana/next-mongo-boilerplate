@@ -2,13 +2,14 @@ import {
     AUTH_ROUTES,
     PUBLIC_ROUTES,
     API_AUTH_PREFIX_ROUTE,
-    PROTECTED_ROUTES,
+    ADMIN_ROUTES,
     PUBLIC_ROUTE_HANDLERS,
     DEFAULT_LOGIN_REDIRECT
 } from "./routes";
 import NextAuth from "next-auth";
 import { authConfig } from "./auth.config";
 import { NextResponse } from "next/server";
+import { UserRoleEnum } from "./constants/enum";
 
 const { auth } = NextAuth(authConfig);
 
@@ -19,7 +20,7 @@ export default auth(async (req) => {
 
     const isAuthRoute = AUTH_ROUTES.includes(nextUrl.pathname);
     const isApiAuthRoute = nextUrl.pathname.startsWith(API_AUTH_PREFIX_ROUTE);
-    const isProtectedRoute = PROTECTED_ROUTES.includes(nextUrl.pathname);
+    const isAdminRoutes = ADMIN_ROUTES.includes(nextUrl.pathname);
     const isPublicRouteHandlers = PUBLIC_ROUTE_HANDLERS.includes(nextUrl.pathname);
 
     const isPublicRoute = PUBLIC_ROUTES.some(route => {
@@ -42,16 +43,21 @@ export default auth(async (req) => {
         return;
     }
 
-    // Is Protected routes. If not authenticated, redirect to /login:
-    if (isProtectedRoute && !isLoggedIn) {
+    // Is Admin routes. If not authenticated, redirect to /login:
+    if (isAdminRoutes) {
         let callbackUrl = nextUrl.pathname;
         if (nextUrl.search) {
             callbackUrl += nextUrl.search;
         }
         const encodedCallbackUrl = encodeURIComponent(callbackUrl);
-        return NextResponse.redirect(
-            new URL(`/login?callbackUrl=${encodedCallbackUrl}`, nextUrl),
-        );
+
+        // check if is loggedin and role is admin
+        if (!isLoggedIn && req.auth?.user.role !== UserRoleEnum.ADMIN) {
+            return NextResponse.redirect(
+                new URL(`/login?callbackUrl=${encodedCallbackUrl}`, nextUrl),
+            );
+        }
+        return;
     }
 
     // If not authenticated and not public route, redirect to /login:

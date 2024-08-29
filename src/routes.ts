@@ -7,7 +7,7 @@ export const PUBLIC_ROUTES = [
   "/contact",
   "/blog",
   "/terms",
-  "/privacy",  
+  "/privacy",
   "/build-a-board",
   "/store",
   "/product/[prodctId]",
@@ -28,7 +28,11 @@ export const AUTH_ROUTES = [
   "/new-password"
 ];
 
-export const PROTECTED_ROUTES = [
-  "/dashboard/projects",
+export const ADMIN_ROUTES = [
+  "/dashboard/summary",
+  "/dashboard/users",
+  "/dashboard/products",
   "/dashboard/settings",
+  "/dashboard/orders",
+  "/dashboard/categories",
 ];

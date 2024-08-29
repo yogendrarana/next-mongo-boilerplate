@@ -8,12 +8,13 @@ import { AuthProviderEnum, UserRoleEnum } from "./constants/enum";
 const basePath = "/api/auth";
 
 export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
+    ...authConfig,
     callbacks: {
         async signIn({ account, profile }) {
             if (account?.provider === authProviders.google && profile?.email) {
                 const existingUser = await getUserByEmail(profile?.email as string);
 
-                if (!existingUser) {
+                if (!existingUser.success && !existingUser.user) {
                     const res = await createUser({
                         name: profile.name as string,
                         email: profile.email as string,
@@ -61,6 +62,5 @@ export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
     session: { strategy: "jwt" },
     secret: process.env.AUTH_SECRET,
     debug: process.env.NODE_ENV === 'development',
-    pages: { signIn: "/auth", error: "/api/auth/error" },
-    ...authConfig,
+    pages: { signIn: "/login", error: "/api/auth/error" },
 })

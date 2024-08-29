@@ -27,13 +27,13 @@ const UserSchema: Schema = new Schema<IUser>({
     password: {
         type: Schema.Types.String
     },
-    providerAccountId: {
-        type: Schema.Types.String
-    },
     authProvider: {
         type: Schema.Types.String,
         required: true,
         enum: AuthProviderEnum
+    },
+    providerAccountId: {
+        type: Schema.Types.String
     },
     role: {
         type: Schema.Types.String,
