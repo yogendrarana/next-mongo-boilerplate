@@ -25,7 +25,7 @@ interface ShellProps
 
 function Shell({
     className,
-    as: Comp = "section",
+    as: Comp = "div",
     variant,
     ...props
 }: ShellProps) {

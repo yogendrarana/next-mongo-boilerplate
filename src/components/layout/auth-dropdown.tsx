@@ -14,15 +14,14 @@ import Link from "next/link"
 import { auth } from "@/auth"
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/utils/icons"
-import { Button, buttonVariants, type ButtonProps } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { LayoutDashboard, Settings } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { getNameInitials } from "@/helpers/user"
 import { SignOut } from "./sign-out"
 
-interface AuthDropdownProps
-    extends React.ComponentPropsWithRef<typeof DropdownMenuTrigger>,
-    ButtonProps {
+interface AuthDropdownProps {
+    className?: string
 }
 
 export async function AuthDropdown({
@@ -30,7 +29,6 @@ export async function AuthDropdown({
     ...props
 }: AuthDropdownProps) {
     const session = await auth();
-    console.log(session)
 
     if (!session) {
         return (
@@ -81,7 +79,7 @@ export async function AuthDropdown({
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuItem asChild>
-                        <Link href="/dashboard">
+                        <Link href="/dashboard/analytics">
                             <LayoutDashboard className="mr-2 size-4" aria-hidden="true" />
                             Dashboard
                             <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>

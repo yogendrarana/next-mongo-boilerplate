@@ -1,6 +1,4 @@
-import { slugify } from "@/lib/utils"
-import { productConfig } from "./product"
-import { FooterItem, MainNavItem } from "@/types"
+import { FooterItem, MainNavItem, SidebarItem } from "@/types"
 
 export type SiteConfig = typeof siteConfig
 
@@ -42,8 +40,53 @@ export const siteConfig = {
                     items: [],
                 },
             ],
+        }, {
+            title: "Company",
+            items: [
+                {
+                    title: "About",
+                    href: "/about",
+                    description: "Learn about our company.",
+                    items: [],
+                },
+                {
+                    title: "Contact",
+                    href: "/contact",
+                    description: "Get in touch with us.",
+                    items: [],
+                },
+                {
+                    title: "Careers",
+                    href: "/careers",
+                    description: "Join our team.",
+                    items: [],
+                },
+            ],
+        }, {
+            title: "Legal",
+            items: [
+                {
+                    title: "Terms",
+                    href: "/terms",
+                    description: "Read our terms and conditions.",
+                    items: [],
+                },
+                {
+                    title: "Privacy",
+                    href: "/privacy",
+                    description: "Read our privacy policy.",
+                    items: [],
+                },
+                {
+                    title: "Refund",
+                    href: "/refund",
+                    description: "Read our refund policy.",
+                    items: [],
+                }
+            ],
         }
     ] satisfies MainNavItem[],
+
     footerNav: [
         {
             title: "Help",

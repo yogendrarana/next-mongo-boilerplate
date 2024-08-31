@@ -1,4 +1,4 @@
-import { Icons } from "@/components/icons"
+import { Icons } from "@/components/utils/icons"
 
 // nav
 export interface NavItem {
@@ -26,6 +26,17 @@ export interface FooterItem {
     items: {
         title: string
         href: string
+        external?: boolean
+    }[]
+}
+
+// sidebar
+export interface SidebarItem {
+    title: string
+    items: {
+        title: string
+        href: string
+        icon?: keyof typeof Icons
         external?: boolean
     }[]
 }

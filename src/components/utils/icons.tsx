@@ -1,25 +1,10 @@
-import { ChevronLeft, Home, Image, Settings, User } from "lucide-react"
+import { ComponentBooleanIcon } from "@radix-ui/react-icons"
+import { ChevronLeft, ChevronRight, Home, Image, ListOrdered, Settings, ShoppingBasket, User, Users } from "lucide-react"
 
 export type IconProps = React.HTMLAttributes<SVGElement>
 
 export const Icons = {
-    logo: (props: IconProps) => (
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            {...props}
-        >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <circle cx="7" cy="15" r="2" />
-            <circle cx="17" cy="15" r="2" />
-            <path d="M3 9a2 1 0 0 0 2 1h14a2 1 0 0 0 2 -1" />
-        </svg>
-    ),
+    logo: ComponentBooleanIcon,
     menu: ({ ...props }: IconProps) => (
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -321,4 +306,8 @@ export const Icons = {
     placeholder: Image,
     settings: Settings,
     chevronLeft: ChevronLeft,
+    chevronRight: ChevronRight,
+    orders: ListOrdered,
+    products: ShoppingBasket,
+    customers: Users
 }

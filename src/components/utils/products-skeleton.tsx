@@ -1,6 +1,6 @@
-import { Shell } from "@/components/shell"
-import { ContentSection } from "@/components/content-section"
-import { ProductCardSkeleton } from "@/components/product-card-skeleton"
+import { Shell } from "@/components/utils/shell"
+import { ContentSection } from "@/components/utils/content-section"
+import { ProductCardSkeleton } from "@/components/utils/product-card-skeleton"
 
 export function ProductsSkeletion() {
     return (

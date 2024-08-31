@@ -22,7 +22,7 @@ interface MainNavProps {
     items?: MainNavItem[]
 }
 
-export function MainNav({ items }: MainNavProps) {
+export function DesktopNav({ items }: MainNavProps) {
     return (
         <div className="hidden gap-6 lg:flex">
             <Link href="/" className="hidden items-center space-x-2 lg:flex">

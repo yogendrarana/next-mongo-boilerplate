@@ -5,12 +5,12 @@ import {
     BreadcrumbList,
     BreadcrumbSeparator
 } from '@/components/ui/breadcrumb'
-import { Shell } from '../../../../components/shell'
 import React, { Suspense } from 'react'
 import { IProduct } from '@/server/db/models/product-model'
-import { ProductCard } from '../../../../components/product-card'
-import ProductFilterDropdown from '../../../../components/product-filter-dropdown'
 import { getAllCategories, getAllSubcategories, getStoreProducts } from '@/server/queries/product'
+import { Shell } from '@/components/utils/shell'
+import ProductFilterDropdown from '@/components/utils/product-filter-dropdown'
+import { ProductCard } from '@/components/utils/product-card'
 
 interface StoreProps {
     productsPromise: ReturnType<typeof getStoreProducts>

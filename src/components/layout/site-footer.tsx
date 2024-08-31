@@ -1,31 +1,47 @@
-import Link from "next/link"
+import Link from 'next/link'
+import { Shell } from '../utils/shell'
+import { siteConfig } from '@/config/site'
 
-import { Shell } from "@/components/utils/shell"
-import { siteConfig } from "@/config/site"
-import { ComponentBooleanIcon } from "@radix-ui/react-icons"
-
-export function SiteFooter() {
+export default function SiteFooter() {
     return (
-        <footer className="w-full py-6 border-t bg-background">
-            <Shell>
-                <section className="flex gap-10 lg:flex-row lg:gap-20">
-                    <section>
-                        <Link href="/" className="flex w-fit items-center space-x-2">
-                            <ComponentBooleanIcon className="size-6" aria-hidden="true" />
-                            <span className="font-bold">{siteConfig.name}</span>
-                            <span className="sr-only">Home</span>
-                        </Link>
-                    </section>
-                    <section className="grid flex-1 grid-cols-1 gap-10 xxs:grid-cols-2 sm:grid-cols-4">
-
-                    </section>
-                    <section className="space-y-3">
-                        <div className="flex gap-4">
-                            <div>Contact: </div>
-                            <strong>{siteConfig.mobile.slice(4)}</strong>
+        <footer className="w-full py-6">
+            <Shell className='flex flex-col'>
+                <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center">
+                    <div className="mr:auto mb-8 md:mb-0">
+                        <div className="flex items-center">
+                            <span className="text-xl font-semibold">{siteConfig.name}</span>
                         </div>
-                    </section>
-                </section>
+                        <p className="mt-2 text-sm text-gray-500">Copyright © 2024 Fashion House</p>
+                        <p className="text-sm text-gray-500">All rights reserved</p>
+                    </div>
+                    <div className="grid grid-cols-3 gap-16">
+                        <div>
+                            <ul className="space-y-4">
+                                <li><Link href="/privacy-policy" className="text-sm text-gray-500 hover:text-gray-900">Privacy Policy</Link></li>
+                                <li><Link href="/terms-of-service" className="text-sm text-gray-500 hover:text-gray-900">Terms of Service</Link></li>
+                                <li><Link href="/refund-policy" className="text-sm text-gray-500 hover:text-gray-900">Refund Policy</Link></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <ul className="space-y-4">
+                                <li><Link href="/pricing" className="text-sm text-gray-500 hover:text-gray-900">Pricing</Link></li>
+                                <li><Link href="/blog" className="text-sm text-gray-500 hover:text-gray-900">Blog</Link></li>
+                                <li><Link href="/contact" className="text-sm text-gray-500 hover:text-gray-900">Contact</Link></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <ul className="space-y-4">
+                                <li><Link href="https://twitter.com" className="text-sm text-gray-500 hover:text-gray-900">Twitter</Link></li>
+                                <li><Link href="https://linkedin.com" className="text-sm text-gray-500 hover:text-gray-900">LinkedIn</Link></li>
+                                <li><Link href="https://github.com" className="text-sm text-gray-500 hover:text-gray-900">GitHub</Link></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="text-center text-5xl  md:text-9xl lg:text-[10rem] font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 dark:from-neutral-950 to-neutral-200 dark:to-neutral-800 inset-x-0">
+                    FASHION HOUSE
+                </div>
             </Shell>
         </footer>
     )

@@ -9,7 +9,7 @@ import useEmblaCarousel, {
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Icons } from "@/components/icons"
+import { Icons } from "@/components/utils/icons"
 
 type CarouselApi = UseEmblaCarouselType["1"]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
