@@ -1,6 +1,6 @@
 import Link from "next/link"
 
-import { Shell } from "@/components/shell"
+import { Shell } from "@/components/utils/shell"
 import { siteConfig } from "@/config/site"
 import { ComponentBooleanIcon } from "@radix-ui/react-icons"
 

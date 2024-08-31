@@ -10,9 +10,9 @@ import {
     CommandItem,
     CommandList,
 } from "@/components/ui/command"
-import { Kbd } from "@/components/kdb"
+import { Kbd } from "@/components/utils/kdb"
 import { cn, isMacOs } from "@/lib/utils"
-import { Icons } from "@/components/icons"
+import { Icons } from "@/components/utils/icons"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { useDebounce } from "@/hooks/use-debounce"

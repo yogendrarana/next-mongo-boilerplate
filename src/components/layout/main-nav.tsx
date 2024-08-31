@@ -14,7 +14,7 @@ import {
     NavigationMenuTrigger,
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
-import { Icons } from "../icons"
+import { Icons } from "../utils/icons"
 import { siteConfig } from "@/config/site"
 import { ComponentBooleanIcon } from "@radix-ui/react-icons"
 

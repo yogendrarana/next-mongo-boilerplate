@@ -13,12 +13,12 @@ import {
 import Link from "next/link"
 import { auth } from "@/auth"
 import { cn } from "@/lib/utils"
-import { Icons } from "@/components/icons"
+import { Icons } from "@/components/utils/icons"
 import { Button, buttonVariants, type ButtonProps } from "@/components/ui/button"
 import { LayoutDashboard, Settings } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { getNameInitials } from "@/helpers/user"
-import { SignOut } from "../auth/sign-out"
+import { SignOut } from "./sign-out"
 
 interface AuthDropdownProps
     extends React.ComponentPropsWithRef<typeof DropdownMenuTrigger>,

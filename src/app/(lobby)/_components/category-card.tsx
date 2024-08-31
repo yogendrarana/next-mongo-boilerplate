@@ -3,7 +3,7 @@ import Link from "next/link"
 
 import {
     getProductCountByCategory,
-    type getCategories,
+    type getAllCategories,
 } from "@/server/queries/product"
 import {
     Card,
@@ -12,11 +12,13 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Icons } from "@/components/icons"
+import { Icons } from "@/components/utils/icons"
 import { Skeleton } from "@/components/ui/skeleton"
+import { ICategory } from "@/server/db/models/category-model"
+
 
 interface CategoryCardProps {
-    category: Awaited<ReturnType<typeof getCategories>>[number]
+    category: ICategory
 }
 
 export function CategoryCard({ category }: CategoryCardProps) {

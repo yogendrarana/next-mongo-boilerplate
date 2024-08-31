@@ -8,9 +8,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { Shell } from "@/components/shell"
+import { Shell } from "@/components/utils/shell"
 import { Separator } from "@/components/ui/separator"
-import { ProductCard } from "@/components/product-card"
+import { ProductCard } from "@/components/utils/product-card"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { ProductImageCarousel } from "./_components/product-image-carousel"
 import { getProductById, getRelatedProducts } from "@/server/queries/product"

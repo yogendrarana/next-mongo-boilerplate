@@ -1,7 +1,7 @@
 import Link from "next/link"
 
 import { cn } from "@/lib/utils"
-import { Icons } from "@/components/icons"
+import { Icons } from "@/components/utils/icons"
 import { buttonVariants } from "@/components/ui/button"
 import { ComponentBooleanIcon } from "@radix-ui/react-icons"
 import { UserAuthForm } from "@/app/(auth)/_components/user-auth-form"

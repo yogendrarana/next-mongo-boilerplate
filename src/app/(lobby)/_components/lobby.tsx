@@ -2,12 +2,12 @@ import {
     PageHeader,
     PageHeaderDescription,
     PageHeaderHeading,
-} from "@/components/page-header"
+} from "@/components/utils/page-header"
 import Link from "next/link"
-import { Shell } from "@/components/shell"
+import { Shell } from "@/components/utils/shell"
 import { CategoryCard } from "./category-card"
-import { ProductCard } from "@/components/product-card"
-import { ContentSection } from "@/components/content-section"
+import { ProductCard } from "@/components/utils/product-card"
+import { ContentSection } from "@/components/utils/content-section"
 import type { getAllCategories, getFeaturedProducts } from "@/server/queries/product"
 
 interface LobbyProps {

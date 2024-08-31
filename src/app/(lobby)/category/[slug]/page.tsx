@@ -2,7 +2,7 @@ import React, { Suspense } from 'react'
 import { toTitleCase } from '@/lib/utils'
 import CategoryProducts from './_components/category-products'
 import { getProductsByCategory, getSubcategoriesOfCategory } from '@/server/queries/product'
-import { ProductsSkeletion } from '@/components/products-skeleton';
+import { ProductsSkeletion } from '@/components/utils/products-skeleton';
 
 interface CategoryPageProps {
     params: { slug: string };

@@ -3,15 +3,15 @@ import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
-} from "@/components/page-header"
+} from "@/components/utils/page-header"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
-import { Shell } from "@/components/shell"
+import { Shell } from "@/components/utils/shell"
 import { Skeleton } from "@/components/ui/skeleton"
 import { buttonVariants } from "@/components/ui/button"
-import { ContentSection } from "@/components/content-section"
+import { ContentSection } from "@/components/utils/content-section"
 import { CategoryCardSkeleton } from "./category-card-skeleton"
-import { ProductCardSkeleton } from "@/components/product-card-skeleton"
+import { ProductCardSkeleton } from "@/components/utils/product-card-skeleton"
 
 
 export function LobbySkeleton() {
