@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import * as React from "react"
-import type { MainNavItem } from "@/types"
+import type { MainNavItem } from "@/constants/types"
 
 import { cn } from "@/lib/utils"
 import {

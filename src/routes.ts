@@ -1,5 +1,5 @@
 export const API_AUTH_PREFIX_ROUTE = "/api/auth";
-export const DEFAULT_LOGIN_REDIRECT = "/dashboard";
+export const DEFAULT_LOGIN_REDIRECT = "/dashboard/analytics";
 
 export const PUBLIC_ROUTES = [
   "/",

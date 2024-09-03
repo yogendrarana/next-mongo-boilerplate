@@ -11,7 +11,7 @@ import {
     SheetContent,
     SheetTrigger,
 } from "@/components/ui/sheet"
-import useDashboardStore from "@/store/dashboard-store"
+import useDashboardStore from "@/store/use-dashboard-store"
 import { Icons } from "@/components/utils/icons"
 
 

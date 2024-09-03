@@ -1,6 +1,9 @@
 import { Icons } from "@/components/utils/icons"
+import { OrderStatus, PaymentMethod } from ".."
+import { OrderSchema } from "../schema"
+import { z } from "zod"
 
-// nav
+// nav types
 export interface NavItem {
     title: string
     href?: string
@@ -20,7 +23,7 @@ export type MainNavItem = NavItemWithChildren
 export type SidebarNavItem = NavItemWithChildren
 
 
-// footer
+// footer types
 export interface FooterItem {
     title: string
     items: {
@@ -30,7 +33,7 @@ export interface FooterItem {
     }[]
 }
 
-// sidebar
+// sidebar types
 export interface SidebarItem {
     title: string
     items: {
@@ -41,7 +44,27 @@ export interface SidebarItem {
     }[]
 }
 
-// product
+// product types
 export interface SearchParams {
     [key: string]: string | string[] | undefined
 }
+
+export type ProductSearchParams = {
+    gte?: string;
+    lte?: string;
+    gender?: string;
+    category?: string;
+    subcategory?: string;
+    page?: string;
+    limit?: string;
+    search?: string;
+    sort?: string;
+    order?: string;
+    [key: string]: string | string[] | undefined;
+};
+
+
+// order types
+export type OrderSchemaType = z.infer<typeof OrderSchema>
+export type OrderStatusType = typeof OrderStatus[keyof typeof OrderStatus];
+export type PaymentMethodType = typeof PaymentMethod[keyof typeof PaymentMethod];

@@ -6,7 +6,7 @@ import {
 } from "next/cache"
 import { connectDb } from "../db"
 import { ApiResponse } from "@/helpers/api-response"
-import { ProductSearchParams } from "@/types/product"
+import { ProductSearchParams } from "@/constants/types/index"
 import CategoryModel, { ICategory } from "../db/models/category-model"
 import ProductModel, { IProduct } from "../db/models/product-model"
 import SubcategoryModel, { ISubcategory } from "../db/models/subcategory-model"

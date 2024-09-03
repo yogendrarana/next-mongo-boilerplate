@@ -7,9 +7,9 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator
 } from '@/components/ui/breadcrumb'
-import { Shell } from '@/components/shell';
-import { ProductCard } from '@/components/product-card';
-import ProductFilterDropdown from '@/components/product-filter-dropdown';
+import { Shell } from '@/components/utils/shell';
+import { ProductCard } from '@/components/utils/product-card';
+import ProductFilterDropdown from '@/components/utils/product-filter-dropdown';
 import { getProductsByCategory, getSubcategoriesOfCategory } from '@/server/queries/product';
 
 interface CategoryProductsProps {
