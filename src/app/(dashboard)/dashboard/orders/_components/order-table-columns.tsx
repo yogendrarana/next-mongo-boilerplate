@@ -4,12 +4,16 @@ import { ColumnDef } from "@tanstack/react-table"
 import { OrderSchemaType } from "@/constants/types";
 import { OrderStatus } from "@/constants";
 import OrderTableRowActions from "./order-table-actions";
+import { Button } from "@/components/ui/button";
+import { ArrowUpDown } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 // Define the columns for the orders table
-export const orderColumns: ColumnDef<OrderSchemaType>[] = [
+export const orderTableColumns: ColumnDef<OrderSchemaType>[] = [
     {
         accessorKey: "id",
         header: () => <span>Order Id</span>,
+        enableHiding: false
     },
     {
         accessorKey: "customerName",
@@ -34,14 +38,25 @@ export const orderColumns: ColumnDef<OrderSchemaType>[] = [
     },
     {
         accessorKey: "amount",
-        header: () => <span>Amount</span>,
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    className="p-0 hover:text-black hover:bg-transparent"
+                >
+                    Amount
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
         cell: ({ row }) => {
             const amount = parseFloat(row.getValue("amount"))
             const formatted = new Intl.NumberFormat("en-US", {
                 style: "currency",
                 currency: "USD",
             }).format(amount)
-            return <span className="font-medium">{formatted}</span>
+            return <span>{formatted}</span>
         },
     },
     {
@@ -87,6 +102,7 @@ export const orderColumns: ColumnDef<OrderSchemaType>[] = [
     },
     {
         id: "actions",
+        enableHiding: false,
         cell: ({ row }) => <OrderTableRowActions row={row} />
     },
 ]

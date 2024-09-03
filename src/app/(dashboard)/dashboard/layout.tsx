@@ -34,7 +34,7 @@ export default async function DashboardStoreLayout({
         </DashboardHeader>
 
         {/* main content */}
-        <main className="flex-1 overflow-hidden px-6 pt-6">{children}</main>
+        <main className="flex-1 overflow-hidden p-6">{children}</main>
       </div>
     </div>
   )
