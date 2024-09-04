@@ -138,7 +138,7 @@ export async function getProductsByCategory(category: string, params: ProductSea
     await connectDb();
 
     const { page, limit } = params;
-    const { matchStage, sortStage, paginationStage } = await filterProducts({...params, category});
+    const { matchStage, sortStage, paginationStage } = await filterProducts({ ...params, category });
 
     const pipeline = [
         { $match: matchStage },
@@ -209,7 +209,7 @@ export async function getFeaturedProducts() {
 
     return await cache(
         async () => {
-            return ProductModel.find({}).limit(8).sort({ createdAt: -1 });
+            return ProductModel.find().limit(8).sort({ createdAt: -1 }).lean<IProduct[]>();
         },
         ["featured-products"],
         {
@@ -290,7 +290,7 @@ export async function getProductById(productId: string) {
 
     return await cache(
         async () => {
-            return ProductModel.findById(productId);
+            return ProductModel.findById(productId).lean<IProduct>();
         },
         [`product-${productId}`],
         {

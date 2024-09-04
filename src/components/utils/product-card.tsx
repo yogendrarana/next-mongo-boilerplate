@@ -15,8 +15,9 @@ import useCartStore from "@/store/use-cart-store"
 import { motion, AnimatePresence } from "framer-motion"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { IProduct } from "@/server/db/models/product-model"
-import { Check, EyeIcon, ShoppingCart } from "lucide-react"
+import { Check, EyeIcon, Maximize2, ShoppingCart } from "lucide-react"
 import { PlaceholderImage } from "@/components/utils/placeholder-image"
+import { ProductPreview } from "../product/product-preview"
 
 interface ProductCardProps {
     product: IProduct;
@@ -67,14 +68,12 @@ export function ProductCard({
                     <AspectRatio ratio={5 / 4}>
                         {product.images?.length ? (
                             <Image
-                                src={
-                                    product.images[0] ?? "/images/product-placeholder.webp"
-                                }
                                 fill
+                                loading="lazy"
+                                src={product.images[0] ?? "/images/product-placeholder.webp"}
                                 alt={product.name ?? product.name}
                                 className="object-cover group-hover:scale-[1.1] duration-500"
                                 sizes="(min-width: 1024px) 20vw, (min-width: 768px) 25vw, (min-width: 640px) 33vw, (min-width: 475px) 50vw, 100vw"
-                                loading="lazy"
                             />
                         ) : (
                             <PlaceholderImage className="rounded-none" asChild />
@@ -83,6 +82,12 @@ export function ProductCard({
                 </CardHeader>
                 <span className="sr-only">{product.name}</span>
             </Link>
+
+            {/* name and price */}
+            <motion.div className="px-3 py-4 flex justify-between items-center">
+                <div className="text-md">{product.name}</div>
+                <div className="text-md font-semibold"> {formatPrice(product.price, { currency: "NRS" })} </div>
+            </motion.div>
 
             {/* icons */}
             <AnimatePresence>
@@ -123,19 +128,23 @@ export function ProductCard({
                         <motion.button
                             variants={secondButtonVariants}
                             className="p-2 rounded-md bg-white border"
-                            onClick={() => router.push(`/product/${product.id}`)}
+                            onClick={() => router.push(`/product/${product._id}`)}
                         >
                             <EyeIcon size={14} />
                         </motion.button>
+
+                        <ProductPreview product={product}>
+                            <motion.button
+                                variants={secondButtonVariants}
+                                className="p-2 rounded-md bg-white border"
+                            >
+                                <Maximize2 size={14} />
+                                <span className="sr-only">Preview</span>
+                            </motion.button>
+                        </ProductPreview>
                     </motion.div>
                 )}
             </AnimatePresence>
-
-            {/* name and price */}
-            <motion.div className="px-3 py-4 flex justify-between items-center">
-                <div className="text-md">{product.name}</div>
-                <div className="text-md font-semibold"> {formatPrice(product.price, { currency: "NRS" })} </div>
-            </motion.div>
         </Card>
     )
 }
