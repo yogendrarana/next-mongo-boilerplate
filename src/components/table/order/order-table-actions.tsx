@@ -14,9 +14,13 @@ import { Book, MoreHorizontal, Pencil, Trash, Truck } from 'lucide-react'
 
 interface DataTableRowActionsProps<T> {
     row: Row<T>
+    onOpenDetail: () => void
 }
 
-function OrderTableRowActions<T extends OrderSchemaType>({ row }: DataTableRowActionsProps<T>) {
+function OrderTableRowActions<T extends OrderSchemaType>({
+    row,
+    onOpenDetail
+}: DataTableRowActionsProps<T>) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -26,7 +30,10 @@ function OrderTableRowActions<T extends OrderSchemaType>({ row }: DataTableRowAc
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className='p-2'>
-                <DropdownMenuItem className='flex gap-2 items-center cursor-pointer'>
+                <DropdownMenuItem
+                    onSelect={onOpenDetail}
+                    className='flex gap-2 items-center cursor-pointer'
+                >
                     <Book className='h-3.5 w-3.5' />
                     Detail
                 </DropdownMenuItem>

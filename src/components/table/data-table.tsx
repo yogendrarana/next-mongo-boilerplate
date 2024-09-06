@@ -14,7 +14,6 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { Pagination } from "./pagination"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface DataTableProps<TData, TValue> {
@@ -71,11 +70,6 @@ export default function DataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </ScrollArea>
-
-            {/* pagination */}
-            <div className="mt-2 bg-white border rounded-md sticky bottom-0">
-                <Pagination table={table} />
-            </div>
         </div>
     )
 }

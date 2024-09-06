@@ -6,7 +6,6 @@ import { OrderStatus } from "@/constants";
 import OrderTableRowActions from "./order-table-actions";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
-import { Checkbox } from "@/components/ui/checkbox";
 
 // Define the columns for the orders table
 export const orderTableColumns: ColumnDef<OrderSchemaType>[] = [
@@ -103,6 +102,6 @@ export const orderTableColumns: ColumnDef<OrderSchemaType>[] = [
     {
         id: "actions",
         enableHiding: false,
-        cell: ({ row }) => <OrderTableRowActions row={row} />
+        cell: ({ row }) => <OrderTableRowActions row={row} onOpenDetail={() => {}} />
     },
 ]

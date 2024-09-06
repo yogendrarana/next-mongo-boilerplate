@@ -18,6 +18,9 @@ import { OrderSchemaType } from '@/constants/types'
 import { orderTableColumns } from './order-table-columns'
 import DataTable from '@/components/table/data-table'
 import { OrderTableToolbar } from './order-table-toolbar'
+import OrderTableRowActions from './order-table-actions'
+import { Pagination } from '../pagination'
+import { OrderDetail } from '@/app/(dashboard)/dashboard/orders/_components/order-detail-sheet'
 
 interface OrderTableProps {
     data: OrderSchemaType[]
@@ -28,9 +31,29 @@ const OrderTable = ({ data }: OrderTableProps) => {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
 
+    const [order, setOrder] = React.useState(null)
+
+    const memoizedColumns = React.useMemo(() => {
+        return orderTableColumns.map(col => {
+            if (col.id === "actions") {
+                return {
+                    ...col,
+                    cell: ({ row }: { row: any }) => (
+                        <OrderTableRowActions
+                            row={row}
+                            onOpenDetail={() => setOrder(row.original)}
+                        />
+                    )
+                }
+            }
+
+            return col;
+        })
+    }, [])
+
     const table = useReactTable({
         data,
-        columns: orderTableColumns,
+        columns: memoizedColumns,
         initialState: {
             pagination: {
                 pageIndex: 0,
@@ -55,6 +78,14 @@ const OrderTable = ({ data }: OrderTableProps) => {
         <div className='flex flex-col gap-2'>
             <OrderTableToolbar table={table} />
             <DataTable table={table} columns={orderTableColumns} />
+            <Pagination table={table} />
+
+            {/* order detail sheet */}
+            <OrderDetail
+                open={!!order}
+                onOpenChange={() => setOrder(null)}
+                order={order}
+            />
         </div>
     )
 }
