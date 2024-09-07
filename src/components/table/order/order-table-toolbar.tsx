@@ -1,14 +1,17 @@
 "use client"
 import * as React from "react"
-import { Filter, X } from "lucide-react"
+import { ChevronDown, X } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Table } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
 import { OrderStatusData } from "./order-table-data"
+import {
+    DropdownMenu,
+    DropdownMenuCheckboxItem,
+    DropdownMenuContent,
+    DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu"
 import { OrderTableFacetedFilter } from "./order-table-faceted-filter"
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { cn } from "@/lib/utils"
-import { SliderIcon } from "@radix-ui/react-icons"
 
 interface DataTableToolbarProps<TData> {
     table: Table<TData>,
@@ -53,23 +56,18 @@ export function OrderTableToolbar<TData>({
                     </Button>
                 )}
             </div>
+
             {/* show/hide column */}
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button
-                        variant="outline"
-                        className="ml-auto focus-visible:ring-0 focus-visible:outline-none focus-visible:ring-inset-0"
-                    >
-                        <SliderIcon className="mr-2" />
-                        View
+                    <Button variant="outline" className="ml-auto">
+                        Columns <ChevronDown className="ml-2 h-4 w-4" />
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     {table
                         .getAllColumns()
-                        .filter(
-                            (column) => column.getCanHide()
-                        )
+                        .filter((column) => column.getCanHide())
                         .map((column) => {
                             return (
                                 <DropdownMenuCheckboxItem

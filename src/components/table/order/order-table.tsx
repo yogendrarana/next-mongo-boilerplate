@@ -20,7 +20,7 @@ import DataTable from '@/components/table/data-table'
 import { OrderTableToolbar } from './order-table-toolbar'
 import OrderTableRowActions from './order-table-actions'
 import { Pagination } from '../pagination'
-import { OrderDetail } from '@/app/(dashboard)/dashboard/orders/_components/order-detail-sheet'
+import { OrderDetailSheet } from '@/app/(dashboard)/dashboard/orders/_components/order-detail-sheet'
 
 interface OrderTableProps {
     data: OrderSchemaType[]
@@ -30,8 +30,7 @@ const OrderTable = ({ data }: OrderTableProps) => {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
-
-    const [order, setOrder] = React.useState(null)
+    const [selectedRow, setSelectedRow] = React.useState<OrderSchemaType | null>(null)
 
     const memoizedColumns = React.useMemo(() => {
         return orderTableColumns.map(col => {
@@ -41,7 +40,7 @@ const OrderTable = ({ data }: OrderTableProps) => {
                     cell: ({ row }: { row: any }) => (
                         <OrderTableRowActions
                             row={row}
-                            onOpenDetail={() => setOrder(row.original)}
+                            onOpenDetail={() => setSelectedRow(row.original)}
                         />
                     )
                 }
@@ -77,15 +76,11 @@ const OrderTable = ({ data }: OrderTableProps) => {
     return (
         <div className='flex flex-col gap-2'>
             <OrderTableToolbar table={table} />
-            <DataTable table={table} columns={orderTableColumns} />
+            <DataTable table={table} columns={memoizedColumns} />
             <Pagination table={table} />
 
             {/* order detail sheet */}
-            <OrderDetail
-                open={!!order}
-                onOpenChange={() => setOrder(null)}
-                order={order}
-            />
+            <OrderDetailSheet open={!!selectedRow} onOpenChange={() => setSelectedRow(null)} order={selectedRow} />
         </div>
     )
 }

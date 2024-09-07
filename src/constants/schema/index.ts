@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+// order schema
 export const OrderSchema = z.object({
     id: z.string(),
     customerName: z.string(),

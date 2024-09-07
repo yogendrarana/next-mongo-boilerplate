@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import { connectDb } from "@/server/db";
 import { v4 as uuid } from "uuid";
 import { auth, signOut } from "@/auth";
-import UserModel, { IUser } from "@/server/db/models/user-model";
+import UserModel, { IUser } from "@/server/db/models/customer-model";
 
 
 // create user with google provider

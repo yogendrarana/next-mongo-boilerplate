@@ -1,7 +1,7 @@
-import { Icons } from "@/components/utils/icons"
-import { OrderStatus, PaymentMethod } from ".."
-import { OrderSchema } from "../schema"
 import { z } from "zod"
+import { OrderSchema } from "../schema"
+import { OrderStatus, PaymentMethod } from ".."
+import { Icons } from "@/components/utils/icons"
 
 // nav types
 export interface NavItem {

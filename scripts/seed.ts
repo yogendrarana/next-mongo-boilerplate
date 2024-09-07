@@ -1,6 +1,6 @@
 import { generateId } from '@/lib/id';
 import { connectDb } from '../src/server/db';
-import UserModel from '../src/server/db/models/user-model';
+import CustomerModel from '../src/server/db/models/customer-model';
 import ProductModel from '../src/server/db/models/product-model';
 import CategoryModel from '../src/server/db/models/category-model';
 import SubcategoryModel from '../src/server/db/models/subcategory-model';
@@ -15,10 +15,10 @@ async function seed() {
         await CategoryModel.deleteMany({});
         await SubcategoryModel.deleteMany({});
         await ProductModel.deleteMany({});
-        await UserModel.deleteMany({});
+        await CustomerModel.deleteMany({});
 
         // Seed Users (unchanged from previous version)
-        await UserModel.create([
+        await CustomerModel.create([
             {
                 name: 'John Doe',
                 email: 'john@example.com',

@@ -9,18 +9,18 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Row } from '@tanstack/react-table'
 import { Button } from '@/components/ui/button'
-import { OrderSchemaType } from '@/constants/types'
-import { Book, MoreHorizontal, Pencil, Trash, Truck } from 'lucide-react'
+import { Book, MoreHorizontal, Pencil, Trash } from 'lucide-react'
+import { ICustomerBase } from '@/server/db/models/customer-model'
 
-interface DataTableRowActionsProps<T> {
+interface CustomerTableRowActionsProps<T> {
     row: Row<T>
     onOpenDetail: () => void
 }
 
-function OrderTableRowActions<T extends OrderSchemaType>({
+export default function CustomerRowActions<T extends Partial<ICustomerBase>>({
     row,
     onOpenDetail
-}: DataTableRowActionsProps<T>) {
+}: CustomerTableRowActionsProps<T>) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -38,12 +38,14 @@ function OrderTableRowActions<T extends OrderSchemaType>({
                     Detail
                 </DropdownMenuItem>
                 <DropdownMenuItem className='flex gap-2 items-center cursor-pointer'>
+                    <Pencil className='h-3.5 w-3.5' />
+                    Update User
+                </DropdownMenuItem>
+                <DropdownMenuItem className='flex gap-2 items-center cursor-pointer'>
                     <Trash className='h-3.5 w-3.5' />
-                    Delete Order
+                    Delete User
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     )
 }
-
-export default OrderTableRowActions

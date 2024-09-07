@@ -19,6 +19,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     table: TableType<TData>
+    setSelectedRow?: React.Dispatch<React.SetStateAction<TData | null>>
 }
 
 export default function DataTable<TData, TValue>({

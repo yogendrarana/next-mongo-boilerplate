@@ -51,7 +51,7 @@ const orderData = {
     ]
 }
 
-export function OrderDetail({ open, onOpenChange, order }: SlideInProps) {
+export function OrderDetailSheet({ open, onOpenChange, order }: SlideInProps) {
 
     const [status, setStatus] = useState(orderData.status)
     const [newStatus, setNewStatus] = useState(status)
