@@ -3,7 +3,6 @@ import { Toaster } from "sonner"
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/provider/theme-provider";
-import BackgroundProvider from "@/components/provider/background-provider";
 
 
 export const metadata: Metadata = {
@@ -46,10 +45,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           enableSystem
           disableTransitionOnChange
         >
-          <BackgroundProvider>
-            {children}
-            <Toaster richColors />
-          </BackgroundProvider>
+          {children}
+          <Toaster richColors />
         </ThemeProvider>
       </body>
       <Toaster />

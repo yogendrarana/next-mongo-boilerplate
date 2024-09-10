@@ -26,7 +26,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
 
     return (
         <Link href={`/category/${category.slug}`}>
-            <Card className="h-full rounded-lg transition-colors hover:bg-muted/25">
+            <Card className="h-full rounded-lg transition-colors hover:bg-gray-50">
                 <CardHeader className="flex-1">
                     <CardTitle className="capitalize">{category.name}</CardTitle>
                     <CardDescription className="line-clamp-3 text-balance">
