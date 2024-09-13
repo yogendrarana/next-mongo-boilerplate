@@ -2,6 +2,7 @@ import { ProductGenderEnum } from '@/constants/enum';
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IProductBase {
+    productId: string;
     name: string;
     description: string;
     price: number;
@@ -25,6 +26,11 @@ export interface IProductDocument extends IProductBase, Document { }
 
 // Schema definition for the Product
 const ProductSchema: Schema = new Schema({
+    productId: {
+        type: String,
+        required: true,
+        unique: true
+    },
     name: {
         type: String,
         required: true,

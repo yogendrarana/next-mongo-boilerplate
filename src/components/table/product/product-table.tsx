@@ -12,33 +12,31 @@ import {
     useReactTable,
     VisibilityState,
 } from "@tanstack/react-table"
-import { Pagination } from '../pagination'
 import DataTable from '@/components/table/data-table'
-import { customerColumns } from './customer-columns'
-import { ICustomerBase } from '@/server/db/models/customer-model'
-import { CustomerDetailSheet } from '@/app/(dashboard)/dashboard/customers/_components/customer-detail-sheet'
-import CustomerRowActions from './customer-row-actions'
-import { CustomerToolbar } from './customer-toolbar'
+import { Pagination } from '../pagination'
+import { OrderDetailSheet } from '@/app/(dashboard)/dashboard/orders/_components/order-detail-sheet'
+import { ProductToolbar } from './product-toolbar'
+import { productColumns } from './product-columns'
+import ProductRowActions from './product-row-actions'
+import { IProductBase } from '@/server/db/models/product-model'
 
-interface CustomerTableProps {
-    data: ICustomerBase[]
+interface ProductTableProps {
+    data: IProductBase[]
 }
 
-const CustomerTable = ({ data }: CustomerTableProps) => {
-    const [customer, setCustomer] = React.useState<Partial<ICustomerBase> | null>(null)
-    const [rowSelection, setRowSelection] = React.useState({})
-    const [sorting, setSorting] = React.useState<SortingState>([])
+const ProductTable = ({ data }: ProductTableProps) => {
+    const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
-    const [selectedRow, setSelectedRow] = React.useState<ICustomerBase | null>(null)
+    const [selectedRow, setSelectedRow] = React.useState<IProductBase | null>(null)
 
     const memoizedColumns = React.useMemo(() => {
-        return customerColumns.map(col => {
+        return productColumns.map(col => {
             if (col.id === "actions") {
                 return {
                     ...col,
                     cell: ({ row }: { row: any }) => (
-                        <CustomerRowActions
+                        <ProductRowActions
                             row={row}
                             onOpenDetail={() => setSelectedRow(row.original)}
                         />
@@ -50,42 +48,39 @@ const CustomerTable = ({ data }: CustomerTableProps) => {
         })
     }, [])
 
-
     const table = useReactTable({
         data,
         columns: memoizedColumns,
-        state: {
-            sorting,
-            columnFilters,
-            columnVisibility,
-            rowSelection,
-        },
         initialState: {
             pagination: {
                 pageIndex: 0,
                 pageSize: 20,
             },
         },
-        onSortingChange: setSorting,
-        onColumnFiltersChange: setColumnFilters,
+        state: {
+            sorting,
+            columnFilters,
+            columnVisibility,
+        },
         getCoreRowModel: getCoreRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
+        onSortingChange: setSorting,
+        onColumnFiltersChange: setColumnFilters,
         onColumnVisibilityChange: setColumnVisibility,
-        onRowSelectionChange: setRowSelection,
     })
 
     return (
-        <div className='w-full flex flex-col gap-2'>
-            <CustomerToolbar table={table} />
+        <div className='flex flex-col gap-2'>
+            <ProductToolbar table={table} />
             <DataTable table={table} columns={memoizedColumns} />
             <Pagination table={table} />
 
-            {/* sheets */}
-            <CustomerDetailSheet open={!!selectedRow} onOpenChange={() => setSelectedRow(null)} customer={selectedRow} />
+            {/* order detail sheet */}
+            <OrderDetailSheet open={!!selectedRow} onOpenChange={() => setSelectedRow(null)} order={selectedRow} />
         </div>
     )
 }
 
-export default CustomerTable
+export default ProductTable
