@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import GeneralSetting from "./_components/general-setting";
 
-const SettingsPage = () => {
+const DefaultSettingPage = () => {
   return (
-    <div>SettingsPage</div>
-  )
-}
+    <div>
+        <GeneralSetting />
+    </div>
+  );
+};
 
-export default SettingsPage
+export default DefaultSettingPage;

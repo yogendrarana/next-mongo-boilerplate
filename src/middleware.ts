@@ -51,7 +51,7 @@ export default auth(async (req) => {
         }
         const encodedCallbackUrl = encodeURIComponent(callbackUrl);
 
-        // check if is loggedin and role is admin
+        // check if user is loggedin and role is admin
         if (!isLoggedIn && req.auth?.user.role !== UserRoleEnum.ADMIN) {
             return NextResponse.redirect(
                 new URL(`/login?callbackUrl=${encodedCallbackUrl}`, nextUrl),

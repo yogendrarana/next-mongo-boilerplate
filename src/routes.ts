@@ -32,7 +32,8 @@ export const ADMIN_ROUTES = [
   "/dashboard/summary",
   "/dashboard/users",
   "/dashboard/products",
-  "/dashboard/settings",
   "/dashboard/orders",
   "/dashboard/categories",
+  "/dashboard/settings",
+  "/dashboard/settings/[slug]",
 ];
