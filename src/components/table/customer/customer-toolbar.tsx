@@ -1,16 +1,9 @@
 "use client"
 import * as React from "react"
-import { ChevronDown, X } from "lucide-react"
+import { X } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Table } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
-import { SliderIcon } from "@radix-ui/react-icons"
-import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu"
 
 interface DataTableToolbarProps<TData> {
     table: Table<TData>,

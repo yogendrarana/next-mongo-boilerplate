@@ -1,21 +1,16 @@
-import { ApiResponse } from "@/helpers/api-response";
 import { connectDb } from "../db";
-import ProductModel from "../db/models/product-model";
+import { ApiResponse } from "@/helpers/api-response";
 import { getErrorMessage } from "@/lib/handle-error";
+import { IProductBase } from "../db/models/product-model";
 
-// search products
-export const searchProduct = async ({ query }: { query: string }): Promise<ApiResponse> => {
-    await connectDb()
-
-    if (query.length === 0) {
-        return ApiResponse.failure("Query is empty");
-    }
+// create product
+export const createProduct = async (product: IProductBase) => {
+    await connectDb();
 
     try {
-        // const products = await ProductModel.find({ $text: { $search: query } }).limit(5);
-
-        return ApiResponse.success("Products found", []);
+        return { success: true, message: "Product created successfully!", data: product }
     } catch (err: any) {
-        return ApiResponse.failure(getErrorMessage(err));
+        const errMsg = getErrorMessage(err)
+        return { success: false, message: errMsg, data: null }
     }
-};
+}

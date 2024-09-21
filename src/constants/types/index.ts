@@ -22,7 +22,6 @@ export interface NavItemWithChildren extends NavItem {
 export type MainNavItem = NavItemWithChildren
 export type SidebarNavItem = NavItemWithChildren
 
-
 // footer types
 export interface FooterItem {
     title: string
@@ -68,3 +67,29 @@ export type ProductSearchParams = {
 export type OrderSchemaType = z.infer<typeof OrderSchema>
 export type OrderStatusType = typeof OrderStatus[keyof typeof OrderStatus];
 export type PaymentMethodType = typeof PaymentMethod[keyof typeof PaymentMethod];
+
+
+// data table
+export interface Option {
+    label: string
+    value: string
+    icon?: React.ComponentType<{ className?: string }>
+    withCount?: boolean
+}
+
+export interface DataTableFilterField<TData> {
+    label: string
+    value: keyof TData
+    placeholder?: string
+    options?: Option[]
+  }
+  
+  export interface DataTableFilterOption<TData> {
+    id: string
+    label: string
+    value: keyof TData
+    options: Option[]
+    filterValues?: string[]
+    filterOperator?: string
+    isMulti?: boolean
+  }
