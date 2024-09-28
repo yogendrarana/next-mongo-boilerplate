@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { useDebounce } from "@/hooks/use-debounce"
 import { Skeleton } from "@/components/ui/skeleton"
-import { searchProduct } from "@/server/actions/product"
+import { searchProduct } from "@/server/queries/product"
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons"
 
 export function ProductsCombobox() {

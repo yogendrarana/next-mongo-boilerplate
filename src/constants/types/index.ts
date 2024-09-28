@@ -1,5 +1,4 @@
 import { z } from "zod"
-import { OrderSchema } from "../schema"
 import { OrderStatus, PaymentMethod } from ".."
 import { Icons } from "@/components/utils/icons"
 
@@ -64,7 +63,6 @@ export type ProductSearchParams = {
 
 
 // order types
-export type OrderSchemaType = z.infer<typeof OrderSchema>
 export type OrderStatusType = typeof OrderStatus[keyof typeof OrderStatus];
 export type PaymentMethodType = typeof PaymentMethod[keyof typeof PaymentMethod];
 

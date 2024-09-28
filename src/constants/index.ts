@@ -28,3 +28,17 @@ export const PaymentMethod = {
     BANK_TRANSFER: 'bank_transfer',
     CASH_ON_DELIVERY: 'cash_on_delivery',
 } as const
+
+
+// category
+export const ProductCategory = {
+    CLOTHING: 'clothing',
+    SHOES: 'shoes',
+    ACCESSORIES: 'accessories',
+}
+
+export const ProductGender = {
+    MALE: 'male',
+    FEMALE: 'female',
+    UNISEX: 'unisex',
+}

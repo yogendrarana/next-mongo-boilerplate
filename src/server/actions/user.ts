@@ -5,8 +5,7 @@ import mongoose from "mongoose";
 import { connectDb } from "@/server/db";
 import { v4 as uuid } from "uuid";
 import { auth, signOut } from "@/auth";
-import UserModel, { IUser } from "@/server/db/models/customer-model";
-
+import UserModel, { ICustomer } from "@/server/db/models/customer-model";
 
 // create user with google provider
 export async function createUser({
@@ -14,7 +13,7 @@ export async function createUser({
     email,
     authProvider,
     providerAccountId
-}: Partial<IUser>) {
+}: Partial<ICustomer>) {
     try {
         await connectDb();
         const user = await UserModel.create({

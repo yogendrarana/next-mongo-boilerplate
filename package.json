@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seed": "tsx --tsconfig tsconfig.seed.json scripts/seed.ts"
+    "seed": "tsx --tsconfig tsconfig.seed.json scripts/seed/seed.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",

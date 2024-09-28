@@ -1,12 +1,17 @@
 {
-    "extends": "./tsconfig.json",
-    "compilerOptions": {
-      "module": "ESNext",
-      "moduleResolution": "node",
-      "noEmit": true,
-      "isolatedModules": true,
-      "esModuleInterop": true
-    },
-    "include": ["scripts/**/*.ts"],
-    "exclude": ["node_modules"]
-  }
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ES2020",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+  },
+  "include": [
+    "scripts/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

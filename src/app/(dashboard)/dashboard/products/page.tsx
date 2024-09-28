@@ -1,12 +1,21 @@
-import { ProductsTable } from "./_components/products-table"
-import { data } from "./_lib/data"
-import { getProducts } from "./_lib/queries"
+import { SearchParams } from "@/constants/types";
+import { ProductsTable } from "./_components/products-table";
+import { searchProductsParamsSchema } from "./_lib/validations";
+import { getProducts, getCategories, getSubcategories } from "./_lib/queries";
 
-const ProductsPage = () => {
-
-  return (
-    <ProductsTable getProductsPromise={getProducts()} />
-  )
+export interface ProductsPageProps {
+    searchParams: SearchParams;
 }
 
-export default ProductsPage
+const ProductsPage = ({ searchParams }: ProductsPageProps) => {
+    const search = searchProductsParamsSchema.parse(searchParams);
+    return (
+        <ProductsTable
+            getProductsPromise={getProducts(search)}
+            getCategoriesPromise={getCategories()}
+            getSubcategoriesPromise={getSubcategories()}
+        />
+    );
+};
+
+export default ProductsPage;

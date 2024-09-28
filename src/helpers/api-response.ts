@@ -10,10 +10,10 @@ export class ApiResponse<T = any> {
     }
 
     static success<T = any>(message: string, data: T | null = null): ApiResponse<T> {
-        return new ApiResponse(true, message || "Operation successful!", data);
+        return new ApiResponse(true, message, data);
     }
 
     static failure(message: string): ApiResponse<null> {
-        return new ApiResponse(false, message || "Operation failed!", null);
+        return new ApiResponse(false, message, null);
     }
 }
