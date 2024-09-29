@@ -10,29 +10,20 @@ import { ProductsTableToolbar } from "./products-table-toolbar";
 import { getProductsTableColumns } from "./products-table-columns";
 import { ISubcategory } from "@/server/db/models/subcategory-model";
 import { DataTableToolbar } from "@/components/data-table/data-table-toolbar";
-import { getProducts, getCategories, getSubcategories } from "../_lib/queries";
 
 interface ProductsTableProps {
-    getProductsPromise: ReturnType<typeof getProducts>;
-    getCategoriesPromise: ReturnType<typeof getCategories>;
-    getSubcategoriesPromise: ReturnType<typeof getSubcategories>;
+    tableData: IProduct[];
+    categories: ICategory[] | null;
+    subcategories: ISubcategory[] | null;
+    pageCount: number;
 }
 
 export function ProductsTable({
-    getProductsPromise,
-    getCategoriesPromise,
-    getSubcategoriesPromise
+    tableData,
+    categories, 
+    subcategories,
+    pageCount
 }: ProductsTableProps) {
-    const { data } = React.use(getProductsPromise);
-    let products = data?.products || [];
-    products = JSON.parse(JSON.stringify(products));
-
- 
-    const pageCount = data?.pageCount || 0;
-
-    const { data: categoriesData } = React.use(getCategoriesPromise);
-    const { data: subcategoriesData } = React.use(getSubcategoriesPromise);
-
     const columns = React.useMemo(() => getProductsTableColumns(), []);
 
     const filterFields: DataTableFilterField<IProduct>[] = [
@@ -44,7 +35,7 @@ export function ProductsTable({
         {
             label: "Category",
             value: "category",
-            options: categoriesData?.map((category: ICategory) => ({
+            options: categories?.map((category: ICategory) => ({
                 label: category?.slug?.toUpperCase() || "",
                 value: category.slug,
                 withCount: true
@@ -53,7 +44,7 @@ export function ProductsTable({
         {
             label: "Subcategory",
             value: "subcategory",
-            options: subcategoriesData?.map((subcat: ISubcategory) => ({
+            options: subcategories?.map((subcat: ISubcategory) => ({
                 label: subcat?.slug?.toUpperCase() || "",
                 value: subcat.slug,
                 withCount: true
@@ -62,7 +53,7 @@ export function ProductsTable({
     ];
 
     const { table } = useDataTable({
-        data: products,
+        data: tableData,
         columns,
         pageCount,
         filterFields,

@@ -276,9 +276,11 @@ export function CreateProductForm({ form, onSubmit, children }: CreateProductFor
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
                             {previews.map((preview, index) => (
                                 <div key={index} className="relative group">
-                                    <img
+                                    <Image
                                         src={preview}
                                         alt={`Preview ${index + 1}`}
+                                        width={80}
+                                        height={80}
                                         className="h-20 w-full border-2 object-cover rounded-md group-hover:opacity-50 transition-opacity"
                                     />
                                     <Button

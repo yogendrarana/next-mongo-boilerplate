@@ -6,8 +6,8 @@ import { type Table } from "@tanstack/react-table";
 import { exportTableToCSV } from "@/lib/csv/export";
 import { Button } from "@/components/ui/button";
 import { IProduct } from "@/server/db/models/product-model";
-import { DeleteProductsDialog } from "./delete-products-dialog";
-import { CreateProductDialog } from "./create-product-dialog";
+import { DeleteProductsDialog } from "../delete-products-dialog";
+import { CreateProductDialog } from "../create-product-dialog";
 
 interface ProductsTableToolbarProps {
     table: Table<IProduct>;

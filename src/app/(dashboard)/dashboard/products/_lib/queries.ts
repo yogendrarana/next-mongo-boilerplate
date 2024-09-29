@@ -10,7 +10,7 @@ import { SortOrder } from "mongoose";
 export async function getCategories(): Promise<{
     success: boolean;
     message: string;
-    data: ICategory[] | null;
+    data: ICategory[];
 }> {
     await connectDb();
 
@@ -22,7 +22,7 @@ export async function getCategories(): Promise<{
             data: categories as ICategory[]
         };
     } catch (err: any) {
-        return { success: false, message: "Failed to fetch categories!", data: null };
+        return { success: false, message: "Failed to fetch categories!", data: [] };
     }
 }
 
@@ -30,7 +30,7 @@ export async function getCategories(): Promise<{
 export async function getSubcategories(): Promise<{
     success: boolean;
     message: string;
-    data: ISubcategory[] | null;
+    data: ISubcategory[];
 }> {
     await connectDb();
 
@@ -42,13 +42,12 @@ export async function getSubcategories(): Promise<{
             data: categories as ISubcategory[]
         };
     } catch (err: any) {
-        return { success: false, message: "Failed to fetch subcatecories!", data: null };
+        return { success: false, message: "Failed to fetch subcatecories!", data: [] };
     }
 }
 
 
 // get products
-// get all products
 export const getProducts = async (
     input: GetProductsSchemaType
 ): Promise<{

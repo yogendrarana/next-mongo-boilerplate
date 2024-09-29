@@ -1,6 +1,6 @@
 import { generateId } from "@/lib/id";
 import { ProductGenderEnum } from "@/constants/enum";
-import mongoose, { Date, Document, Schema } from "mongoose";
+import mongoose, { Date, Document, ObjectId, Schema } from "mongoose";
 
 export interface IProductBase {
     productId: string;
@@ -23,10 +23,11 @@ export interface IProductBase {
 
 // Interface extending Mongoose Document for use with the model
 export interface IProduct extends IProductBase {
-    _id: string;
+    _id: ObjectId;
     createdAt: Date;
     updatedAt: Date;
 }
+
 export interface IProductDocument extends IProductBase, Document {}
 
 // Schema definition for the Product
