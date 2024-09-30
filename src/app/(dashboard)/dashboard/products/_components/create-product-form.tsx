@@ -122,8 +122,8 @@ export function CreateProductForm({ form, onSubmit, children }: CreateProductFor
                                         <SelectGroup>
                                             {categories?.map((category: ICategory) => (
                                                 <SelectItem
-                                                    key={category._id}
-                                                    value={category._id}
+                                                    key={(category._id).toString()}
+                                                    value={(category._id.toString())}
                                                     className="capitalize"
                                                 >
                                                     {category.slug}
@@ -153,8 +153,8 @@ export function CreateProductForm({ form, onSubmit, children }: CreateProductFor
                                         <SelectGroup>
                                             {subcategories?.map((subcat: ISubcategory) => (
                                                 <SelectItem
-                                                    key={subcat._id}
-                                                    value={subcat._id}
+                                                    key={(subcat._id).toString()}
+                                                    value={(subcat._id).toString()}
                                                     className="capitalize"
                                                 >
                                                     {subcat.slug}

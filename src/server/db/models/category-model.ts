@@ -1,5 +1,5 @@
 import { generateId } from "@/lib/id";
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document, ObjectId, Schema } from "mongoose";
 
 // Interface to define the structure of a Category document
 export interface ICategoryBase {
@@ -12,7 +12,7 @@ export interface ICategoryBase {
 
 // Interface extending Mongoose Document for use with the model
 export interface ICategory extends ICategoryBase {
-    _id: string;
+    _id: ObjectId;
     createdAt: Date;
     updatedAt: Date;
 }

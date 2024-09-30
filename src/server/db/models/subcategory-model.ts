@@ -1,5 +1,5 @@
 import { generateId } from "@/lib/id";
-import mongoose, { Schema, Document, Date } from "mongoose";
+import mongoose, { Schema, Document, Date, ObjectId } from "mongoose";
 
 export interface ISubcategoryBase {
     subcategoryId: string;
@@ -15,7 +15,7 @@ export interface ISubcategoryBase {
 
 // Interface extending Mongoose Document for use with the model
 export interface ISubcategory extends ISubcategoryBase {
-    _id: string;
+    _id: ObjectId;
     createdAt: Date;
     updatedAt: Date;
 }

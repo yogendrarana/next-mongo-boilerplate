@@ -7,7 +7,6 @@ import CategoryModel from "@/server/db/models/category-model";
 import SubcategoryModel from "@/server/db/models/subcategory-model";
 
 export const createProduct = async (product: CreateProductSchemaType) => {
-    console.log("Creating product");
     await connectDb();
     try {
         const category = await CategoryModel.findById(product.category);
@@ -21,8 +20,8 @@ export const createProduct = async (product: CreateProductSchemaType) => {
 
         await ProductModel.create(productData);
         return { success: true, message: "Product created successfully!" };
-    } catch (error) {
-        return { success: false, message: "Failed to create product" };
+    } catch (error: any) {
+        return { success: false, message: error.message || "Failed to create product" };
     }
 };
 

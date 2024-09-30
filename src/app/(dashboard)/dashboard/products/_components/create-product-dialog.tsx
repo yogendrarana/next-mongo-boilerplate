@@ -48,10 +48,23 @@ export function CreateProductDialog() {
     function onSubmit(input: CreateProductSchemaType) {
         startCreateTransition(async () => {
             try {
-                console.log("Creating product", input);
-                const { success, message } = await createProduct(input);
+                const formData = new FormData();
+                for (const key in input) {
+                    if (key !== "images") {
+                        formData.append(key, (input as any)[key]);
+                    }
+                }
 
-                console.log(success, message);
+                input.images.forEach((image) => {
+                    formData.append("images", image);
+                });
+
+                const res = await fetch("/api/products", {
+                    method: "POST",
+                    body: formData,
+                });
+    
+                const { success, message } = await res.json();
 
                 if (!success) {
                     toast.error(message);
@@ -60,9 +73,9 @@ export function CreateProductDialog() {
 
                 form.reset();
                 setOpen(false);
-                toast.success("Product created successfully!");
-            } catch (error) {
-                toast.error("Failed to create product");
+                toast.success(message || "Product created successfully!");
+            } catch (error: any) {
+                toast.error(error.message || "Failed to create product");
             }
         });
     }
