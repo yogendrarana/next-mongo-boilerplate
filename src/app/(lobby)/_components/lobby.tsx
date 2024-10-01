@@ -9,6 +9,7 @@ import { CategoryCard } from "./category-card"
 import { ProductCard } from "@/components/utils/product-card"
 import { ContentSection } from "@/components/utils/content-section"
 import type { getAllCategories, getFeaturedProducts } from "@/server/queries/product"
+import { formatMongoData } from "@/helpers"
 
 interface LobbyProps {
     productsPromise: ReturnType<typeof getFeaturedProducts>
@@ -70,7 +71,7 @@ export async function Lobby({ productsPromise, categoriesPromise }: LobbyProps) 
                 id="featured-products"
             >
                 {products.map((product) => (
-                    <ProductCard key={product._id} product={product} />
+                    <ProductCard key={product._id.toString()} product={formatMongoData(product)} />
                 ))}
             </ContentSection>
         </Shell>

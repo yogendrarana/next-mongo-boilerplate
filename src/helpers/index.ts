@@ -1,29 +1,32 @@
-import { Document, ObjectId } from "mongodb";
-
-// Utility function to serialize MongoDB data
-export const serializeMongoData = <T extends Document>(documents: T[]): Omit<T, keyof Document>[] =>
-    documents.map((document) => document.toObject({ flattenObjectIds: true }));
+import { ObjectId } from "mongodb";
 
 // Utility function to flatten MongoDB data
-export const formatMongoData = (documents: any[]): any[] => {
-    return documents.map((doc) => {
-        // Create a new object to store the formatted fields
+export const formatMongoData = (data: any | any[]): any | any[] => {
+    const formatDocument = (doc: any): any => {
+        if (doc === null || typeof doc !== 'object') {
+            return doc;
+        }
+
+        if (doc instanceof ObjectId) {
+            return doc.toString();
+        }
+
+        if (doc instanceof Date) {
+            return doc.toISOString();
+        }
+
+        if (Array.isArray(doc)) {
+            return doc.map(formatDocument);
+        }
+
         const formattedDoc: any = {};
 
-        // Iterate through each key in the document
         for (const [key, value] of Object.entries(doc)) {
-            if (value instanceof ObjectId) {
-                // If the value is an ObjectId, convert it to a string
-                formattedDoc[key] = value.toString();
-            } else if (key === "createdAt" || key === "updatedAt") {
-                // Format dates as needed (e.g., ISO string, or keep as Date)
-                formattedDoc[key] = value instanceof Date ? value.toISOString() : value;
-            } else {
-                // Otherwise, just copy the value over
-                formattedDoc[key] = value;
-            }
+            formattedDoc[key] = formatDocument(value);
         }
 
         return formattedDoc;
-    });
+    };
+
+    return Array.isArray(data) ? data.map(formatDocument) : formatDocument(data);
 };

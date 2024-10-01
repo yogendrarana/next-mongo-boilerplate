@@ -32,6 +32,7 @@ import { createProduct } from "../_lib/actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreateProductForm } from "./create-product-form";
 import { createProductSchema, CreateProductSchemaType } from "../_lib/validations";
+import { generateId } from "@/lib/id";
 
 export function CreateProductDialog() {
     const [open, setOpen] = React.useState(false);

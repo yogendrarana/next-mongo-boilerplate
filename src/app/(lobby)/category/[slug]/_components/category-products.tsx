@@ -11,6 +11,7 @@ import { Shell } from '@/components/utils/shell';
 import { ProductCard } from '@/components/utils/product-card';
 import ProductFilterDropdown from '@/components/utils/product-filter-dropdown';
 import { getProductsByCategory, getSubcategoriesOfCategory } from '@/server/queries/product';
+import { formatMongoData } from '@/helpers';
 
 interface CategoryProductsProps {
     slug: string;
@@ -52,7 +53,7 @@ export default async function CategoryProducts({
             <Suspense fallback={<div>Loading products...</div>}>
                 <div className="grid gap-4 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     {products?.data?.products.map((product) => (
-                        <ProductCard key={product.id} product={product} />
+                        <ProductCard key={product._id.toString()} product={formatMongoData(product)} />
                     ))}
                 </div>
             </Suspense>

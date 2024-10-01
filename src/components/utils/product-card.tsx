@@ -70,7 +70,7 @@ export function ProductCard({
                             <Image
                                 fill
                                 loading="lazy"
-                                src={product.images[0] ?? "/images/product-placeholder.webp"}
+                                src={product.images[0].url ?? "/images/product-placeholder.webp"}
                                 alt={product.name ?? product.name}
                                 className="object-cover group-hover:scale-[1.1] duration-500"
                                 sizes="(min-width: 1024px) 20vw, (min-width: 768px) 25vw, (min-width: 640px) 33vw, (min-width: 475px) 50vw, 100vw"
@@ -103,23 +103,23 @@ export function ProductCard({
                             variants={firstButtonVariants}
                             className="p-2 rounded-md bg-white border"
                             onClick={() => {
-                                if (cartItems.find(item => item.id === product._id)) {
-                                    removeFromCart(product._id)
+                                if (cartItems.find(item => item.id.toString() === product._id.toString())) {
+                                    removeFromCart(product._id.toString())
                                     toast.error("Removed from cart.");
                                 } else {
                                     addToCart({
-                                        id: product._id,
+                                        id: product._id.toString(),
                                         name: product.name,
                                         price: product.price,
                                         quantity: 1,
-                                        image: product.images?.[0] ?? "/images/product-placeholder.webp",
+                                        image: product.images?.[0].url ?? "/images/product-placeholder.webp",
                                     })
                                     toast.success("Added to cart.");
                                 }
                             }}
                         >
                             {
-                                cartItems.find(item => item.id === product._id)
+                                cartItems.find(item => item.id.toString() === product._id.toString())
                                     ? <Check size={14} />
                                     : <ShoppingCart size={14} />
                             }

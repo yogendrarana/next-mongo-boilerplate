@@ -1,6 +1,5 @@
 "use server";
 
-import type { z } from "zod";
 import mongoose from "mongoose";
 import { connectDb } from "@/server/db";
 import { v4 as uuid } from "uuid";

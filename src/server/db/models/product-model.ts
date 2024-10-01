@@ -17,7 +17,10 @@ export interface IProductBase {
     };
     sku: string;
     inventory: number;
-    images: string[];
+    images: [{
+        url: string;
+        public_id: string;
+    }];
     gender: string;
 }
 
@@ -35,7 +38,7 @@ const ProductSchema: Schema = new Schema(
     {
         productId: {
             type: String,
-            default: generateId("category"),
+            default: generateId("product"),
             required: true,
             unique: true
         },
@@ -91,7 +94,10 @@ const ProductSchema: Schema = new Schema(
             enum: Object.values(ProductGenderEnum),
             required: true
         },
-        images: [{ type: String }]
+        images: [{
+            url: { type: String, required: true },
+            public_id: { type: String, required: true },
+        }],    
     },
     {
         timestamps: true

@@ -66,7 +66,9 @@ export function getProductsTableColumns(): ColumnDef<IProduct>[] {
             cell: ({ row }) => {
                 return (
                     <Image
-                        src={(row.getValue("images") as string[])[0]}
+                        src={
+                            (row.getValue("images") as { url: string; public_id: string }[])[0].url
+                        }
                         height={80}
                         width={30}
                         className=""

@@ -15,6 +15,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { ProductImageCarousel } from "./_components/product-image-carousel"
 import { getProductById, getRelatedProducts } from "@/server/queries/product"
 import CartItemAddRemove from "@/app/(lobby)/product/[productId]/_components/product-actions"
+import { formatMongoData } from "@/helpers"
 
 interface ProductPageProps {
   params: {
@@ -97,8 +98,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div className="flex gap-4">
               {relatedProducts.map((product) => (
                 <ProductCard
-                  key={product.id}
-                  product={product}
+                  key={product._id.toString()}
+                  product={formatMongoData(product)}
                   className="min-w-[260px] max-w-[260px]"
                 />
               ))}

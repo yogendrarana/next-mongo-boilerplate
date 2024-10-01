@@ -1,24 +1,21 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Image from "next/image"
-import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons"
-import useEmblaCarousel, {
-    type UseEmblaCarouselType,
-} from "embla-carousel-react"
+import * as React from "react";
+import Image from "next/image";
+import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
+import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-react";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Icons } from "@/components/utils/icons"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/utils/icons";
 
-type CarouselApi = UseEmblaCarouselType["1"]
-type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
-type CarouselOptions = UseCarouselParameters["0"]
+type CarouselApi = UseEmblaCarouselType["1"];
+type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
+type CarouselOptions = UseCarouselParameters["0"];
 
-interface ProductImageCarouselProps
-    extends React.HTMLAttributes<HTMLDivElement> {
-    images: string[]
-    options?: CarouselOptions
+interface ProductImageCarouselProps extends React.HTMLAttributes<HTMLDivElement> {
+    images: { url: string; public_id: string }[];
+    options?: CarouselOptions;
 }
 
 export function ProductImageCarousel({
@@ -27,52 +24,46 @@ export function ProductImageCarousel({
     options,
     ...props
 }: ProductImageCarouselProps) {
-    const [emblaRef, emblaApi] = useEmblaCarousel(options)
+    const [emblaRef, emblaApi] = useEmblaCarousel(options);
 
-    const [selectedIndex, setSelectedIndex] = React.useState(0)
-    const [prevBtnDisabled, setPrevBtnDisabled] = React.useState(true)
-    const [nextBtnDisabled, setNextBtnDisabled] = React.useState(true)
+    const [selectedIndex, setSelectedIndex] = React.useState(0);
+    const [prevBtnDisabled, setPrevBtnDisabled] = React.useState(true);
+    const [nextBtnDisabled, setNextBtnDisabled] = React.useState(true);
 
-    const scrollPrev = React.useCallback(
-        () => emblaApi && emblaApi.scrollPrev(),
-        [emblaApi]
-    )
-    const scrollNext = React.useCallback(
-        () => emblaApi && emblaApi.scrollNext(),
-        [emblaApi]
-    )
+    const scrollPrev = React.useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
+    const scrollNext = React.useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
 
     const scrollTo = React.useCallback(
         (index: number) => emblaApi && emblaApi.scrollTo(index),
         [emblaApi]
-    )
+    );
 
     const handleKeyDown = React.useCallback(
         (event: React.KeyboardEvent<HTMLButtonElement>) => {
             if (event.key === "ArrowLeft") {
-                scrollPrev()
+                scrollPrev();
             } else if (event.key === "ArrowRight") {
-                scrollNext()
+                scrollNext();
             }
         },
         [scrollNext, scrollPrev]
-    )
+    );
 
     const onSelect = React.useCallback((emblaApi: CarouselApi) => {
-        if (!emblaApi) return
+        if (!emblaApi) return;
 
-        setSelectedIndex(emblaApi.selectedScrollSnap())
-        setPrevBtnDisabled(!emblaApi.canScrollPrev())
-        setNextBtnDisabled(!emblaApi.canScrollNext())
-    }, [])
+        setSelectedIndex(emblaApi.selectedScrollSnap());
+        setPrevBtnDisabled(!emblaApi.canScrollPrev());
+        setNextBtnDisabled(!emblaApi.canScrollNext());
+    }, []);
 
     React.useEffect(() => {
-        if (!emblaApi) return
+        if (!emblaApi) return;
 
-        onSelect(emblaApi)
-        emblaApi.on("reInit", onSelect)
-        emblaApi.on("select", onSelect)
-    }, [emblaApi, onSelect])
+        onSelect(emblaApi);
+        emblaApi.on("reInit", onSelect);
+        emblaApi.on("select", onSelect);
+    }, [emblaApi, onSelect]);
 
     if (images.length === 0) {
         return (
@@ -82,12 +73,9 @@ export function ProductImageCarousel({
                 aria-roledescription="placeholder"
                 className="flex aspect-square size-full flex-1 items-center justify-center bg-secondary"
             >
-                <Icons.placeholder
-                    className="size-9 text-muted-foreground"
-                    aria-hidden="true"
-                />
+                <Icons.placeholder className="size-9 text-muted-foreground" aria-hidden="true" />
             </div>
-        )
+        );
     }
 
     return (
@@ -100,7 +88,7 @@ export function ProductImageCarousel({
                 <div
                     className="-ml-4 flex touch-pan-y"
                     style={{
-                        backfaceVisibility: "hidden",
+                        backfaceVisibility: "hidden"
                     }}
                 >
                     {images.map((image, index) => (
@@ -113,8 +101,8 @@ export function ProductImageCarousel({
                                 role="group"
                                 key={index}
                                 aria-roledescription="slide"
-                                src={image}
-                                alt={image}
+                                src={image?.url}
+                                alt="product image"
                                 fill
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 className="object-cover"
@@ -150,7 +138,7 @@ export function ProductImageCarousel({
                         >
                             <div className="absolute inset-0 z-10 bg-zinc-950/20 group-hover:bg-zinc-950/40" />
                             <Image
-                                src={image}
+                                src={image.url}
                                 alt={"product image"}
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 fill
@@ -174,5 +162,5 @@ export function ProductImageCarousel({
                 </div>
             ) : null}
         </div>
-    )
+    );
 }

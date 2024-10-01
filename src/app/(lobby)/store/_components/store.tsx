@@ -11,6 +11,7 @@ import { getAllCategories, getAllSubcategories, getStoreProducts } from '@/serve
 import { Shell } from '@/components/utils/shell'
 import ProductFilterDropdown from '@/components/utils/product-filter-dropdown'
 import { ProductCard } from '@/components/utils/product-card'
+import { formatMongoData } from '@/helpers'
 
 interface StoreProps {
     productsPromise: ReturnType<typeof getStoreProducts>
@@ -51,7 +52,7 @@ export default async function Store({
             <Suspense fallback={<div>Loading products...</div>}>
                 <div className="grid gap-4 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     {products?.data?.products.map((product: IProduct) => (
-                        <ProductCard key={product.id} product={product} />
+                        <ProductCard key={product._id.toString()} product={formatMongoData(product)} />
                     ))}
                 </div>
             </Suspense>
