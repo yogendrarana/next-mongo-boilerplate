@@ -80,7 +80,6 @@ export function CreateProductForm({ form, onSubmit, children }: CreateProductFor
                                 <FormControl>
                                     <Input
                                         autoComplete="off"
-                                        placeholder="Name of the product"
                                         className="focus-visible:ring-1 focus-visible:ring-offset-0"
                                         {...field}
                                     />
@@ -97,7 +96,6 @@ export function CreateProductForm({ form, onSubmit, children }: CreateProductFor
                                 <FormLabel>Price</FormLabel>
                                 <FormControl>
                                     <Input
-                                        placeholder="Price of the product"
                                         className="focus-visible:ring-1 focus-visible:ring-offset-0"
                                         {...field}
                                     />
@@ -176,7 +174,6 @@ export function CreateProductForm({ form, onSubmit, children }: CreateProductFor
                                 <FormControl>
                                     <Input
                                         type="number"
-                                        placeholder="Stock of the product"
                                         className="focus-visible:ring-1 focus-visible:ring-offset-0"
                                         {...field}
                                     />
@@ -225,7 +222,6 @@ export function CreateProductForm({ form, onSubmit, children }: CreateProductFor
                             <FormLabel>Description</FormLabel>
                             <FormControl>
                                 <Textarea
-                                    placeholder="Description of the product"
                                     className="focus-visible:ring-1 focus-visible:ring-offset-0"
                                     {...field}
                                 />

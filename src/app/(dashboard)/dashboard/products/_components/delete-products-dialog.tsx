@@ -1,147 +1,112 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { TrashIcon } from "@radix-ui/react-icons"
-import { type Row } from "@tanstack/react-table"
-import { toast } from "sonner"
+import * as React from "react";
+import { toast } from "sonner";
+import { type Row } from "@tanstack/react-table";
+import { TrashIcon } from "@radix-ui/react-icons";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
-import { useMediaQuery } from "@/hooks/use-media-query"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "@/components/ui/dialog";
 import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer"
-import { deleteProducts } from "../_lib/actions"
-import { IProduct } from "@/server/db/models/product-model"
-import { Icons } from "@/components/utils/icons"
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger
+} from "@/components/ui/drawer";
+import { Icons } from "@/components/utils/icons";
+import { deleteProducts } from "../_lib/actions";
+import { IProduct } from "@/server/db/models/product-model";
+import { cn } from "@/lib/utils";
+import { LoaderIcon, Trash } from "lucide-react";
 
-
-interface DeleteProductsDialogProps
-  extends React.ComponentPropsWithoutRef<typeof Dialog> {
-  products: Row<IProduct>["original"][]
-  showTrigger?: boolean
-  onSuccess?: () => void
+interface DeleteProductsDialogProps extends React.ComponentPropsWithoutRef<typeof Dialog> {
+    products: Row<IProduct>["original"][];
+    showTrigger?: boolean;
+    showTriggerText?: boolean;
+    onSuccess?: () => void;
+    onOpenChange?: (open: boolean) => void;
+    open: boolean;
 }
 
 export function DeleteProductsDialog({
-  products,
-  showTrigger = true,
-  onSuccess,
-  ...props
+    products,
+    showTrigger = true,
+    showTriggerText = true,
+    onSuccess,
+    open,
+    onOpenChange
 }: DeleteProductsDialogProps) {
-  const [isDeletePending, startDeleteTransition] = React.useTransition()
-  const isDesktop = useMediaQuery("(min-width: 640px)")
+    const [isDeletePending, startDeleteTransition] = React.useTransition();
 
-  function onDelete() {
-    startDeleteTransition(async () => {
-      const ids = products.map((p) => p.productId)
-      await deleteProducts(ids)
+    function onDelete() {
+        startDeleteTransition(async () => {
+            const ids = products.map((p) => p._id.toString());
+            await deleteProducts(ids);
 
-      props.onOpenChange?.(false)
-      toast.success("Tasks deleted")
-      onSuccess?.()
-    })
-  }
+            onOpenChange?.(false);
+            toast.success("Product deleted");
+            onSuccess?.();
+        });
+    }
 
-  if (isDesktop) {
     return (
-      <Dialog {...props}>
-        {showTrigger ? (
-          <DialogTrigger asChild>
-            <Button variant="outline" size="sm">
-              <TrashIcon className="mr-2 size-4" aria-hidden="true" />
-              Delete ({products.length})
-            </Button>
-          </DialogTrigger>
-        ) : null}
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Are you absolutely sure?</DialogTitle>
-            <DialogDescription>
-              This action cannot be undone. This will permanently delete your{" "}
-              <span className="font-medium">{products.length}</span>
-              {products.length === 1 ? " task" : " tasks"} from our servers.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="gap-2 sm:space-x-0">
-            <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DialogClose>
-            <Button
-              aria-label="Delete selected rows"
-              variant="destructive"
-              onClick={onDelete}
-              disabled={isDeletePending}
-            >
-              {isDeletePending && (
-                <Icons.spinner
-                  className="mr-2 size-4 animate-spin"
-                  aria-hidden="true"
-                />
-              )}
-              Delete
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    )
-  }
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            {showTrigger ? (
+                <DialogTrigger asChild>
+                    <Button variant="outline" size="icon">
+                        <Trash
+                            size={16}
+                            className={cn(showTriggerText && "mr-2")}
+                            aria-hidden="true"
+                        />
+                        {showTriggerText && `Delete (${products.length})`}
+                    </Button>
+                </DialogTrigger>
+            ) : null}
 
-  return (
-    <Drawer {...props}>
-      {showTrigger ? (
-        <DrawerTrigger asChild>
-          <Button variant="outline" size="sm">
-            <TrashIcon className="mr-2 size-4" aria-hidden="true" />
-            Delete ({products.length})
-          </Button>
-        </DrawerTrigger>
-      ) : null}
-      <DrawerContent>
-        <DrawerHeader>
-          <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-          <DrawerDescription>
-            This action cannot be undone. This will permanently delete your{" "}
-            <span className="font-medium">{products.length}</span>
-            {products.length === 1 ? " task" : " tasks"} from our servers.
-          </DrawerDescription>
-        </DrawerHeader>
-        <DrawerFooter className="gap-2 sm:space-x-0">
-          <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
-          <Button
-            aria-label="Delete selected rows"
-            variant="destructive"
-            onClick={onDelete}
-            disabled={isDeletePending}
-          >
-            {isDeletePending && (
-              <Icons.spinner
-                className="mr-2 size-4 animate-spin"
-                aria-hidden="true"
-              />
-            )}
-            Delete
-          </Button>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
-  )
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Are you absolutely sure?</DialogTitle>
+                    <DialogDescription>
+                        This action cannot be undone. This will permanently delete your{" "}
+                        <span className="font-medium">{products.length}</span>
+                        {products.length === 1 ? " product" : " products"} from the database.
+                    </DialogDescription>
+                </DialogHeader>
+                <DialogFooter className="gap-2 sm:space-x-0">
+                    <DialogClose asChild>
+                        <Button variant="outline">Cancel</Button>
+                    </DialogClose>
+                    <Button
+                        aria-label="Delete selected rows"
+                        variant="destructive"
+                        onClick={onDelete}
+                        disabled={isDeletePending}
+                    >
+                        {isDeletePending ? (
+                            <LoaderIcon size={14} className="animate-spin" />
+                        ) : (
+                            <Trash size={14} />
+                        )}
+
+                        <span className="ml-2">Delete</span>
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    );
 }

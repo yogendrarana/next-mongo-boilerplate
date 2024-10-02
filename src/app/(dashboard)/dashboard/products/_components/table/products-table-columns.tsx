@@ -28,6 +28,8 @@ import { DataTableColumnHeader } from "@/components/data-table/data-table-column
 import { ArrowUpDown } from "lucide-react";
 import { IProduct } from "@/server/db/models/product-model";
 import Image from "next/image";
+import ProductsTableRowActions from "./products-table-row-actions";
+import { DeleteProductsDialog } from "../delete-products-dialog";
 
 export function getProductsTableColumns(): ColumnDef<IProduct>[] {
     return [
@@ -136,48 +138,8 @@ export function getProductsTableColumns(): ColumnDef<IProduct>[] {
         },
         {
             id: "actions",
-            cell: function Cell({ row }) {
-                const [isUpdatePending, startUpdateTransition] = React.useTransition();
-                const [showUpdateTaskSheet, setShowUpdateTaskSheet] = React.useState(false);
-                const [showDeleteTaskDialog, setShowDeleteTaskDialog] = React.useState(false);
-
-                return (
-                    <>
-                        {/* <UpdateTaskSheet
-              open={showUpdateTaskSheet}
-              onOpenChange={setShowUpdateTaskSheet}
-              task={row.original}
-            /> */}
-                        {/* <DeleteTasksDialog
-              open={showDeleteTaskDialog}
-              onOpenChange={setShowDeleteTaskDialog}
-              tasks={[row.original]}
-              showTrigger={false}
-              onSuccess={() => row.toggleSelected(false)}
-            /> */}
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button
-                                    aria-label="Open menu"
-                                    variant="ghost"
-                                    className="flex size-8 p-0 data-[state=open]:bg-muted"
-                                >
-                                    <DotsHorizontalIcon className="size-4" aria-hidden="true" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-40">
-                                <DropdownMenuItem onSelect={() => setShowUpdateTaskSheet(true)}>
-                                    Edit
-                                </DropdownMenuItem>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem onSelect={() => setShowDeleteTaskDialog(true)}>
-                                    Delete
-                                    <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </>
-                );
+            cell: function Cell({ row }: { row: any }) {
+                return <ProductsTableRowActions row={row} />;
             },
             size: 40
         }
