@@ -54,12 +54,21 @@ export function DeleteProductsDialog({
 
     function onDelete() {
         startDeleteTransition(async () => {
-            const ids = products.map((p) => p._id.toString());
-            await deleteProducts(ids);
-
-            onOpenChange?.(false);
-            toast.success("Product deleted");
-            onSuccess?.();
+            try {
+                const ids = products.map((p) => p._id.toString());
+                const { success, message } = await deleteProducts(ids);
+    
+                if (success) {
+                    toast.success(message || "Product deleted");
+                    onSuccess?.();
+                } else {
+                    toast.error(message || "Failed to delete product");
+                }
+            } catch (err: any) {
+                toast.error(err.message || "Failed to delete product");
+            } finally {
+                onOpenChange?.(false);
+            }
         });
     }
 
@@ -98,12 +107,12 @@ export function DeleteProductsDialog({
                         disabled={isDeletePending}
                     >
                         {isDeletePending ? (
-                            <LoaderIcon size={14} className="animate-spin" />
+                            <LoaderIcon size={14} className="mr-2 animate-spin" />
                         ) : (
-                            <Trash size={14} />
+                            <Trash size={14} className="mr-2" />
                         )}
 
-                        <span className="ml-2">Delete</span>
+                        <span>Delete</span>
                     </Button>
                 </DialogFooter>
             </DialogContent>

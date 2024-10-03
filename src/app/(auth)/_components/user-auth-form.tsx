@@ -1,56 +1,64 @@
-"use client"
+"use client";
 
-import * as z from "zod"
-import * as React from "react"
-import { toast } from "sonner"
-import { signIn } from "next-auth/react"
-import { useForm } from "react-hook-form"
-import { useSearchParams } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod";
+import * as React from "react";
+import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import { useSearchParams } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { cn } from "@/lib/utils"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Icons } from "@/components/utils/icons"
-import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
-import { userAuthSchema } from "@/lib/validations/auth"
-import { buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { LoaderIcon } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Icons } from "@/components/utils/icons";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { userAuthSchema } from "@/lib/validations/auth";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { signIn } from "next-auth/react";
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-type FormData = z.infer<typeof userAuthSchema>
+type FormData = z.infer<typeof userAuthSchema>;
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: { errors }
     } = useForm<FormData>({
-        resolver: zodResolver(userAuthSchema),
-    })
-    const searchParams = useSearchParams()
-    const [isLoading, setIsLoading] = React.useState<boolean>(false)
+        resolver: zodResolver(userAuthSchema)
+    });
+    const searchParams = useSearchParams();
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
     async function onSubmit(data: FormData) {
-        setIsLoading(true)
+        setIsLoading(true);
 
-        const signInResult = await signIn("email", {
-            email: data.email.toLowerCase(),
-            redirect: false,
-            callbackUrl: searchParams?.get("from") || "/dashboard",
-        })
+        try {
+            const result = await signIn("credentials", {
+                email: data.email.toLowerCase(),
+                password: data.password,
+                redirect: false,
+                callbackUrl: searchParams?.get("from") || "/dashboard/analytics"
+            });
 
-        setIsLoading(false)
+            if (result?.error || !result?.ok) {
+                return toast.message("Something went wrong.", {
+                    description: "Your sign in request failed. Please try again."
+                });
+            }
 
-        if (!signInResult?.ok) {
-            return toast.message('Something went wrong.', {
-                description: 'Your sign in request failed. Please try again.',
-            })
+            return toast("Check your email", {
+                description: "We sent you a login link. Be sure to check your spam too."
+            });
+        } catch (err: any) {
+            toast.message("Something went wrong.", {
+                description: err.message || "Your sign in request failed. Please try again."
+            });
+        } finally {
+            setIsLoading(false);
         }
-
-        return toast('Check your email', {
-            description: "We sent you a login link. Be sure to check your spam too.",
-        })
     }
 
     return (
@@ -72,9 +80,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                             {...register("email")}
                         />
                         {errors?.email && (
-                            <p className="px-1 text-xs text-red-600">
-                                {errors.email.message}
-                            </p>
+                            <p className="px-1 text-xs text-red-600">{errors.email.message}</p>
                         )}
                     </div>
                     <div className="grid gap-1">
@@ -89,18 +95,14 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                             autoComplete="password"
                             autoCorrect="off"
                             disabled={isLoading}
-                            {...register("email")}
+                            {...register("password")}
                         />
                         {errors?.password && (
-                            <p className="px-1 text-xs text-red-600">
-                                {errors.password.message}
-                            </p>
+                            <p className="px-1 text-xs text-red-600">{errors.password.message}</p>
                         )}
                     </div>
                     <button className={cn(buttonVariants())} disabled={isLoading}>
-                        {isLoading && (
-                            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                        )}
+                        {isLoading ? <LoaderIcon size={14} className="animate-spin mr-2" /> : ""}
                         Sign In with Email
                     </button>
                 </div>
@@ -115,17 +117,15 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                     </span>
                 </div>
             </div>
-            <button
+            <Button
                 type="button"
-                className={cn(buttonVariants({ variant: "outline" }), "bg-gray-100")}
+                variant="outline"
+                className="bg-gray-100"
                 onClick={() => signIn("google", { callbackUrl: DEFAULT_LOGIN_REDIRECT })}
                 disabled={isLoading}
             >
-
-                <Icons.google className="mr-2 h-4 w-4" />
-                {" "}
-                Google
-            </button>
+                <Icons.google className="mr-2 h-4 w-4" /> Google
+            </Button>
         </div>
-    )
+    );
 }

@@ -1,11 +1,11 @@
 import { connectDb } from "../db";
-import CustomerModel from "../db/models/customer-model";
+import UserModel from "../db/models/user-model";
 
 // get user by email
 export async function getUserByEmail(email: string) {
     try {
         await connectDb();
-        const user = await CustomerModel.findOne({ email });
+        const user = await UserModel.findOne({ email });
 
         if (!user) {
             return { success: false, message: "User not found", user: null };

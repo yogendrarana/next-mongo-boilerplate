@@ -1,8 +1,8 @@
-import bcrypt from "bcrypt";
+import { hash, compare } from "bcryptjs";
 import mongoose, { Date, Document, Schema } from "mongoose";
 import { AuthProviderEnum, UserRoleEnum } from "@/constants/enum";
 
-export interface ICustomerBase {
+export interface IUserBase {
     name?: string;
     email: string;
     password?: string;
@@ -22,15 +22,15 @@ export interface ICustomerBase {
 }
 
 // Interface extending Mongoose Document for use with the model
-export interface ICustomer extends ICustomerBase {
+export interface IUser extends IUserBase {
     _id: string;
     createdAt: Date;
     updagerAt: Date;
     isValidPassword(password: string): Promise<boolean>;
 }
-export interface ICustomerDocument extends ICustomerBase, Document {}
+export interface IUserDocument extends IUserBase, Document {}
 
-const CustomerSchema: Schema = new Schema(
+const UserSchema: Schema = new Schema(
     {
         name: {
             type: Schema.Types.String
@@ -58,7 +58,7 @@ const CustomerSchema: Schema = new Schema(
             type: Schema.Types.String,
             required: true,
             enum: Object.values(UserRoleEnum),
-            default: UserRoleEnum.USER
+            default: UserRoleEnum.CUSTOMER
         },
 
         city: {
@@ -82,12 +82,22 @@ const CustomerSchema: Schema = new Schema(
     }
 );
 
+// pre-save hook
+UserSchema.pre<IUserDocument>("save", async function (next) {
+    if (this.isModified("password")) {
+        if (this.password) {
+            const hashedPassword = await hash(this.password, 12);
+            this.password = hashedPassword;
+        }
+    }
+    next();
+});
+
 // static methods
-CustomerSchema.methods.isValidPassword = async function (password: string) {
-    return this.password ? await bcrypt.compare(password, this.password) : false;
+UserSchema.methods.isValidPassword = async function (password: string) {
+    return this.password ? await compare(password, this.password) : false;
 };
 
 // export model
-const CustomerModel =
-    mongoose.models?.Customer || mongoose.model<ICustomerDocument>("Customer", CustomerSchema);
-export default CustomerModel;
+const UserModel = mongoose.models?.User || mongoose.model<IUserDocument>("User", UserSchema);
+export default UserModel;

@@ -8,6 +8,7 @@ import SubcategoryModel from "@/server/db/models/subcategory-model";
 import { auth } from "@/auth";
 import { UserRoleEnum } from "@/constants/enum";
 import cloudinary from "@/config/cloudinary";
+import { revalidatePath } from "next/cache";
 
 export const createProduct = async (product: CreateProductSchemaType) => {
     await connectDb();
@@ -22,6 +23,10 @@ export const createProduct = async (product: CreateProductSchemaType) => {
         };
 
         await ProductModel.create(productData);
+
+        // revalidate the path
+        revalidatePath("/dashboard/products");
+
         return { success: true, message: "Product created successfully!" };
     } catch (error: any) {
         return { success: false, message: error.message || "Failed to create product" };
@@ -56,6 +61,9 @@ export const deleteProducts = async (ids: string[] | number[]) => {
 
                 // delete the product
                 await ProductModel.deleteOne({ _id: id });
+
+                // revalidate the path
+                revalidatePath("/dashboard/products");
             })
         );
 

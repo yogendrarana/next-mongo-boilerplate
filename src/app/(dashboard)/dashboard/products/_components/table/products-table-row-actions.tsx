@@ -1,18 +1,8 @@
 import React from "react";
 
-import {
-    DropdownMenu,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-    DropdownMenuSeparator,
-    DropdownMenuContent,
-    DropdownMenuShortcut
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { DeleteProductsDialog } from "../delete-products-dialog";
 import { Row } from "@tanstack/react-table";
 import { IProduct } from "@/server/db/models/product-model";
+import { DeleteProductsDialog } from "../delete-products-dialog";
 
 interface ProductsTableRowActionsProps {
     row: Row<IProduct>;

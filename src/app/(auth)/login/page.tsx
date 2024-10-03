@@ -1,10 +1,12 @@
+import React from "react"
+
 import Link from "next/link"
 import { Metadata } from "next"
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/utils/icons"
 import { buttonVariants } from "@/components/ui/button"
-import { UserAuthForm } from "@/app/(auth)/_components/user-auth-form"
 import { ComponentBooleanIcon } from "@radix-ui/react-icons"
+import { UserAuthForm } from "@/app/(auth)/_components/user-auth-form"
 
 export const metadata: Metadata = {
     title: "Login",
@@ -21,10 +23,10 @@ export default function LoginPage() {
                     "absolute left-4 top-4 md:left-8 md:top-8"
                 )}
             >
-                <>
+                <React.Fragment>
                     <Icons.chevronLeft className="mr-2 h-4 w-4" />
                     Back
-                </>
+                </React.Fragment>
             </Link>
             <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
                 <div className="flex flex-col space-y-2 text-center">

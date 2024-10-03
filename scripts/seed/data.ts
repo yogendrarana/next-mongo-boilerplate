@@ -1,18 +1,37 @@
+import { IUserBase } from "@/server/db/models/user-model";
 import { AuthProviderEnum, ProductGenderEnum, UserRoleEnum } from "@/constants/enum";
 
-export const seed_users = [
+export const users: Partial<IUserBase>[] = [
+    {
+        name: "Yogendra Rana",
+        email: "yogendrarana4321@gmail.com",
+        password: "password123",
+        phone: "+977 9825159891",
+        address: "Baidam, Pokhara",
+        role: UserRoleEnum.ADMIN,
+        authProvider: AuthProviderEnum.GOOGLE
+    },
+    {
+        name: "Jane Doe",
+        email: "jane@gmail.com",
+        password: "password123",
+        phone: "+977 9825159891",
+        address: "Baidam, Pokhara",
+        role: UserRoleEnum.EMPLOYEE,
+        authProvider: AuthProviderEnum.GOOGLE
+    },
     {
         name: "John Doe",
         email: "john@example.com",
         password: "password123",
-        role: UserRoleEnum.USER,
+        role: UserRoleEnum.CUSTOMER,
         authProvider: AuthProviderEnum.CREDENTIALS
     },
     {
         name: "Jane Smith",
         email: "jane@example.com",
         password: "password456",
-        role: UserRoleEnum.ADMIN,
+        role: UserRoleEnum.CUSTOMER,
         authProvider: AuthProviderEnum.CREDENTIALS
     },
     {
@@ -20,7 +39,7 @@ export const seed_users = [
         email: "bob@example.com",
         providerAccountId: "12345",
         authProvider: AuthProviderEnum.GOOGLE,
-        role: UserRoleEnum.USER
+        role: UserRoleEnum.CUSTOMER
     }
 ];
 

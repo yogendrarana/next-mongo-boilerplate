@@ -4,15 +4,10 @@ import mongoose from "mongoose";
 import { connectDb } from "@/server/db";
 import { v4 as uuid } from "uuid";
 import { auth, signOut } from "@/auth";
-import UserModel, { ICustomer } from "@/server/db/models/customer-model";
+import UserModel, { IUser } from "@/server/db/models/user-model";
 
 // create user with google provider
-export async function createUser({
-    name,
-    email,
-    authProvider,
-    providerAccountId
-}: Partial<ICustomer>) {
+export async function createUser({ name, email, authProvider, providerAccountId }: Partial<IUser>) {
     try {
         await connectDb();
         const user = await UserModel.create({
@@ -34,7 +29,6 @@ export async function createUser({
         return { success: false, message: err.message || "Internal server error" };
     }
 }
-
 
 // delete user account
 export async function deleteUser() {

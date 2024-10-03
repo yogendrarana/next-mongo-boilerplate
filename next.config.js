@@ -1,17 +1,17 @@
-const withMDX = require('@next/mdx')()
+const withMDX = require("@next/mdx")();
 
 module.exports = withMDX({
-    pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
+    pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
     experimental: {
-        mdxRs: true,
+        mdxRs: true
     },
     images: {
         remotePatterns: [
             {
                 protocol: "https",
-                hostname: "images.unsplash.com",
-            },
+                hostname: "images.unsplash.com"
+            }
         ],
-        unoptimized: true,
-    },
-})
+        unoptimized: true
+    }
+});

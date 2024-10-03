@@ -9,7 +9,9 @@ export enum ProductGenderEnum {
 // user enums
 export enum UserRoleEnum {
     ADMIN = 'admin',
-    USER = 'user'
+    USER = 'user',
+    CUSTOMER = 'customer',
+    EMPLOYEE = 'employee'
 }
 
 // auth enums

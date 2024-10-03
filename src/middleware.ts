@@ -23,8 +23,8 @@ export default auth(async (req) => {
     const isAdminRoutes = ADMIN_ROUTES.includes(nextUrl.pathname);
     const isPublicRouteHandlers = PUBLIC_ROUTE_HANDLERS.includes(nextUrl.pathname);
 
-    const isPublicRoute = PUBLIC_ROUTES.some(route => {
-        const regexPattern = new RegExp(`^${route.replace(/\[.*?\]/g, '([^/]*)')}$`);
+    const isPublicRoute = PUBLIC_ROUTES.some((route) => {
+        const regexPattern = new RegExp(`^${route.replace(/\[.*?\]/g, "([^/]*)")}$`);
         return regexPattern.test(nextUrl.pathname);
     });
 
@@ -36,9 +36,7 @@ export default auth(async (req) => {
     // Is Auth Route. First, check is authenticated:
     if (isAuthRoute) {
         if (isLoggedIn) {
-            return NextResponse.redirect(
-                new URL(DEFAULT_LOGIN_REDIRECT, nextUrl),
-            );
+            return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
         }
         return;
     }
@@ -54,7 +52,7 @@ export default auth(async (req) => {
         // check if user is loggedin and role is admin
         if (!isLoggedIn && req.auth?.user.role !== UserRoleEnum.ADMIN) {
             return NextResponse.redirect(
-                new URL(`/login?callbackUrl=${encodedCallbackUrl}`, nextUrl),
+                new URL(`/login?callbackUrl=${encodedCallbackUrl}`, nextUrl)
             );
         }
         return;
@@ -69,5 +67,5 @@ export default auth(async (req) => {
 });
 
 export const config = {
-    matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
+    matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"]
 };

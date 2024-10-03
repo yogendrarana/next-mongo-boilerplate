@@ -96,6 +96,7 @@ export function CreateProductForm({ form, onSubmit, children }: CreateProductFor
                                 <FormLabel>Price</FormLabel>
                                 <FormControl>
                                     <Input
+                                        type="number"
                                         className="focus-visible:ring-1 focus-visible:ring-offset-0"
                                         {...field}
                                     />

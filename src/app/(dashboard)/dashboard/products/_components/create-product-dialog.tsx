@@ -3,8 +3,8 @@
 import * as React from "react";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
+import { PlusIcon } from "@radix-ui/react-icons";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { PlusIcon, ReloadIcon } from "@radix-ui/react-icons";
 
 import {
     Dialog,
@@ -27,12 +27,10 @@ import {
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 
-import { RocketIcon } from "lucide-react";
-import { createProduct } from "../_lib/actions";
+import { LoaderIcon, RocketIcon } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreateProductForm } from "./create-product-form";
 import { createProductSchema, CreateProductSchemaType } from "../_lib/validations";
-import { generateId } from "@/lib/id";
 
 export function CreateProductDialog() {
     const [open, setOpen] = React.useState(false);
@@ -62,9 +60,9 @@ export function CreateProductDialog() {
 
                 const res = await fetch("/api/products", {
                     method: "POST",
-                    body: formData,
+                    body: formData
                 });
-    
+
                 const { success, message } = await res.json();
 
                 if (!success) {
@@ -103,10 +101,7 @@ export function CreateProductDialog() {
                         <DialogFooter className="sm:space-x-0">
                             <Button type="submit" disabled={isCreatePending}>
                                 {isCreatePending ? (
-                                    <ReloadIcon
-                                        className="mr-2 size-4 animate-spin"
-                                        aria-hidden="true"
-                                    />
+                                    <LoaderIcon size={14} className="mr-2 animate-spin" />
                                 ) : (
                                     <RocketIcon className="mr-2 size-4" aria-hidden="true" />
                                 )}
@@ -140,7 +135,7 @@ export function CreateProductDialog() {
                     </DrawerClose>
                     <Button type="submit" disabled={isCreatePending}>
                         {isCreatePending ? (
-                            <ReloadIcon className="mr-2 size-4 animate-spin" aria-hidden="true" />
+                            <LoaderIcon size={14} className="animate-spin" />
                         ) : (
                             <RocketIcon className="mr-2 size-4" aria-hidden="true" />
                         )}
