@@ -4,7 +4,7 @@ import { AuthProviderEnum, ProductGenderEnum, UserRoleEnum } from "@/constants/e
 export const users: Partial<IUserBase>[] = [
     {
         name: "Yogendra Rana",
-        email: "yogendrarana4321@gmail.com",
+        email: "yogendrarana9595@gmail.com",
         password: "password123",
         phone: "+977 9825159891",
         address: "Baidam, Pokhara",
