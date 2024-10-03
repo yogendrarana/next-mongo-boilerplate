@@ -127,6 +127,11 @@ export function getProductsTableColumns(): ColumnDef<IProduct>[] {
             }
         },
         {
+            accessorKey: "gender",
+            header: "Gender",
+            cell: ({ row }) => <span>{(row.getValue("gender"))}</span>
+        },
+        {
             accessorKey: "category",
             header: "Category",
             cell: ({ row }) => <span>{(row.getValue("category") as { slug: string }).slug}</span>

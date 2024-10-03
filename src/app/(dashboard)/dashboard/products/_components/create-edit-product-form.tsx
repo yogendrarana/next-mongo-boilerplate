@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useFieldArray, type UseFormReturn } from "react-hook-form";
+import { type UseFormReturn } from "react-hook-form";
 
 import {
     Form,
@@ -19,26 +19,33 @@ import {
     SelectTrigger,
     SelectValue
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { ProductGender } from "@/constants";
-import { ICategory } from "@/server/db/models/category-model";
-import { toast } from "sonner";
-import { ISubcategory } from "@/server/db/models/subcategory-model";
-import { CreateProductSchemaType } from "../_lib/validations";
-import { Button } from "@/components/ui/button";
-import { Upload, X } from "lucide-react";
 import Image from "next/image";
+import { X } from "lucide-react";
+import { ProductGender } from "@/constants";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { ICategory } from "@/server/db/models/category-model";
+import { CreateProductSchemaType } from "../_lib/validations";
+import { ISubcategory } from "@/server/db/models/subcategory-model";
+import { CreateEditModeEnum } from "@/constants/enum";
+import { toast } from "sonner";
 
-interface CreateProductFormProps extends Omit<React.ComponentPropsWithRef<"form">, "onSubmit"> {
+interface CreateEditProductFormProps extends Omit<React.ComponentPropsWithRef<"form">, "onSubmit"> {
     children: React.ReactNode;
     form: UseFormReturn<CreateProductSchemaType>;
     onSubmit: (data: CreateProductSchemaType) => void;
+    mode: CreateEditModeEnum;
 }
 
-export function CreateProductForm({ form, onSubmit, children }: CreateProductFormProps) {
-    const [previews, setPreviews] = React.useState<string[]>([]);
+export function CreateEditProductForm({
+    form,
+    onSubmit,
+    children,
+    mode
+}: CreateEditProductFormProps) {
     const fileInputRef = React.useRef<HTMLInputElement>(null);
+    const [previews, setPreviews] = React.useState<string[]>([]);
     const [categories, setCategories] = React.useState<ICategory[] | null>(null);
     const [subcategories, setSubcategories] = React.useState<ISubcategory[] | null>(null);
 
@@ -79,9 +86,9 @@ export function CreateProductForm({ form, onSubmit, children }: CreateProductFor
                                 <FormLabel>Name</FormLabel>
                                 <FormControl>
                                     <Input
+                                        {...field}
                                         autoComplete="off"
                                         className="focus-visible:ring-1 focus-visible:ring-offset-0"
-                                        {...field}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -96,11 +103,64 @@ export function CreateProductForm({ form, onSubmit, children }: CreateProductFor
                                 <FormLabel>Price</FormLabel>
                                 <FormControl>
                                     <Input
-                                        type="number"
-                                        className="focus-visible:ring-1 focus-visible:ring-offset-0"
                                         {...field}
+                                        type="number"
+                                        onFocus={(e) => e.target.select()}
+                                        onChange={(e) => {
+                                            const value = e.target.value;
+                                            field.onChange(value === "" ? "" : Number(value));
+                                        }}
+                                        className="focus-visible:ring-1 focus-visible:ring-offset-0"
                                     />
                                 </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="inventory"
+                        render={({ field }) => (
+                            <FormItem className="w-full">
+                                <FormLabel>Inventory</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        {...field}
+                                        type="number"
+                                        onFocus={(e) => e.target.select()}
+                                        onChange={(e) => {
+                                            const value = e.target.value;
+                                            field.onChange(value === "" ? "" : Number(value));
+                                        }}
+                                        className="focus-visible:ring-1 focus-visible:ring-offset-0"
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="gender"
+                        render={({ field }) => (
+                            <FormItem className="w-full">
+                                <FormLabel>Gender</FormLabel>
+                                <Select value={field.value} onValueChange={field.onChange}>
+                                    <FormControl>
+                                        <SelectTrigger className="focus:ring-0 focus:ring-offset-0">
+                                            <SelectValue placeholder="Select a gender" />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            {Object.values(ProductGender).map((gender: string) => (
+                                                <SelectItem key={gender} value={gender}>
+                                                    {gender}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -111,7 +171,7 @@ export function CreateProductForm({ form, onSubmit, children }: CreateProductFor
                         render={({ field }) => (
                             <FormItem className="w-full">
                                 <FormLabel>Category</FormLabel>
-                                <Select onValueChange={field.onChange}>
+                                <Select value={field.value} onValueChange={field.onChange}>
                                     <FormControl>
                                         <SelectTrigger className="focus:ring-0 focus:ring-offset-0">
                                             <SelectValue placeholder="Select a category" />
@@ -121,9 +181,8 @@ export function CreateProductForm({ form, onSubmit, children }: CreateProductFor
                                         <SelectGroup>
                                             {categories?.map((category: ICategory) => (
                                                 <SelectItem
-                                                    key={(category._id).toString()}
-                                                    value={(category._id.toString())}
-                                                    className="capitalize"
+                                                    key={category._id.toString()}
+                                                    value={category._id.toString()}
                                                 >
                                                     {category.slug}
                                                 </SelectItem>
@@ -142,7 +201,7 @@ export function CreateProductForm({ form, onSubmit, children }: CreateProductFor
                         render={({ field }) => (
                             <FormItem className="w-full">
                                 <FormLabel>Sub Category</FormLabel>
-                                <Select onValueChange={field.onChange}>
+                                <Select value={field.value} onValueChange={field.onChange}>
                                     <FormControl>
                                         <SelectTrigger className="focus:ring-0 focus:ring-offset-0">
                                             <SelectValue placeholder="Select a sub category" />
@@ -152,58 +211,10 @@ export function CreateProductForm({ form, onSubmit, children }: CreateProductFor
                                         <SelectGroup>
                                             {subcategories?.map((subcat: ISubcategory) => (
                                                 <SelectItem
-                                                    key={(subcat._id).toString()}
-                                                    value={(subcat._id).toString()}
-                                                    className="capitalize"
+                                                    key={subcat._id.toString()}
+                                                    value={subcat._id.toString()}
                                                 >
                                                     {subcat.slug}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectGroup>
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="inventory"
-                        render={({ field }) => (
-                            <FormItem className="w-full">
-                                <FormLabel>Inventory</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        type="number"
-                                        className="focus-visible:ring-1 focus-visible:ring-offset-0"
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="gender"
-                        render={({ field }) => (
-                            <FormItem className="w-full">
-                                <FormLabel>Gender</FormLabel>
-                                <Select onValueChange={field.onChange}>
-                                    <FormControl>
-                                        <SelectTrigger className="focus:ring-0 focus:ring-offset-0">
-                                            <SelectValue placeholder="Select a gender" />
-                                        </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                        <SelectGroup>
-                                            {Object.values(ProductGender).map((gender: string) => (
-                                                <SelectItem
-                                                    key={gender}
-                                                    value={gender}
-                                                    className="capitalize"
-                                                >
-                                                    {gender}
                                                 </SelectItem>
                                             ))}
                                         </SelectGroup>
@@ -233,41 +244,45 @@ export function CreateProductForm({ form, onSubmit, children }: CreateProductFor
                 />
 
                 {/* image input */}
-
                 <div className="space-y-2">
-                    <FormField
-                        control={form.control}
-                        name="images"
-                        render={() => (
-                            <FormItem>
-                                <FormLabel>Upload Images</FormLabel>
-                                <FormControl>
-                                    <div className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors duration-200">
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            multiple
-                                            onChange={handleImageChange}
-                                            ref={fileInputRef}
-                                            className="hidden"
-                                            id="image-upload"
-                                        />
-                                        <label htmlFor="image-upload" className="cursor-pointer">
-                                            <div className="flex flex-col items-center justify-center">
-                                                <p className="text-md font-medium">
-                                                    Click to select images
-                                                </p>
-                                                <p className="text-xs text-muted-foreground mt-2">
-                                                    Supports multiple images
-                                                </p>
-                                            </div>
-                                        </label>
-                                    </div>
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                    {mode === CreateEditModeEnum.CREATE && (
+                        <FormField
+                            control={form.control}
+                            name="images"
+                            render={() => (
+                                <FormItem>
+                                    <FormLabel>Upload Images</FormLabel>
+                                    <FormControl>
+                                        <div className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors duration-200">
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                multiple
+                                                onChange={handleImageChange}
+                                                ref={fileInputRef}
+                                                className="hidden"
+                                                id="image-upload"
+                                            />
+                                            <label
+                                                htmlFor="image-upload"
+                                                className="cursor-pointer"
+                                            >
+                                                <div className="flex flex-col items-center justify-center">
+                                                    <p className="text-md font-medium">
+                                                        Click to select images
+                                                    </p>
+                                                    <p className="text-xs text-muted-foreground mt-2">
+                                                        Supports multiple images
+                                                    </p>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    )}
 
                     {previews.length > 0 && (
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
@@ -284,6 +299,7 @@ export function CreateProductForm({ form, onSubmit, children }: CreateProductFor
                                         type="button"
                                         variant="destructive"
                                         size="icon"
+                                        disabled={form.formState.isSubmitting}
                                         className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
                                         onClick={() => removeImage(index)}
                                         aria-label={`Remove image ${index + 1}`}

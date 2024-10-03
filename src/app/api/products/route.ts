@@ -1,5 +1,3 @@
-// app/upload/route.ts
-import mongoose from "mongoose";
 import cloudinary from "@/config/cloudinary";
 import { NextRequest, NextResponse } from "next/server";
 import ProductModel from "@/server/db/models/product-model";
@@ -8,6 +6,7 @@ import SubcategoryModel from "@/server/db/models/subcategory-model";
 import { generateId } from "@/lib/id";
 import { revalidatePath } from "next/cache";
 
+// POST: app/products
 export async function POST(req: NextRequest): Promise<NextResponse> {
     const formData = await req.formData();
 

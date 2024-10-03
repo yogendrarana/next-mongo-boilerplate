@@ -41,3 +41,9 @@ export enum PaymentMethodEnum {
     BANK_TRANSFER = 'bank_transfer',
     CASH_ON_DELIVERY = 'cash_on_delivery'
 }
+
+// create edit product enums
+export enum CreateEditModeEnum {
+    CREATE = 'create',
+    EDIT = 'edit'
+}

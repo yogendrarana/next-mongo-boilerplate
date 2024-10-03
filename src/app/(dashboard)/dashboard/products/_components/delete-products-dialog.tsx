@@ -3,8 +3,6 @@
 import * as React from "react";
 import { toast } from "sonner";
 import { type Row } from "@tanstack/react-table";
-import { TrashIcon } from "@radix-ui/react-icons";
-import { useMediaQuery } from "@/hooks/use-media-query";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,21 +15,10 @@ import {
     DialogTitle,
     DialogTrigger
 } from "@/components/ui/dialog";
-import {
-    Drawer,
-    DrawerClose,
-    DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-    DrawerTrigger
-} from "@/components/ui/drawer";
-import { Icons } from "@/components/utils/icons";
-import { deleteProducts } from "../_lib/actions";
-import { IProduct } from "@/server/db/models/product-model";
 import { cn } from "@/lib/utils";
 import { LoaderIcon, Trash } from "lucide-react";
+import { deleteProducts } from "../_lib/actions";
+import { IProduct } from "@/server/db/models/product-model";
 
 interface DeleteProductsDialogProps extends React.ComponentPropsWithoutRef<typeof Dialog> {
     products: Row<IProduct>["original"][];
@@ -39,7 +26,7 @@ interface DeleteProductsDialogProps extends React.ComponentPropsWithoutRef<typeo
     showTriggerText?: boolean;
     onSuccess?: () => void;
     onOpenChange?: (open: boolean) => void;
-    open: boolean;
+    open?: boolean;
 }
 
 export function DeleteProductsDialog({

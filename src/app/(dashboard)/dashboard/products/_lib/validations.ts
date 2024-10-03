@@ -14,12 +14,12 @@ export const searchProductsParamsSchema = z.object({
 
 export const createProductSchema = z.object({
     name: z.string().min(2, { message: "Name must be at least 2 characters long" }),
-    price: z.string().refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
+    price: z.number().refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
         message: "Price must be a positive number"
     }),
     category: z.string({ message: "Category is required" }),
     subcategory: z.string({ message: "Subcategory is required" }),
-    inventory: z.string().refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
+    inventory: z.number().refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
         message: "Inventory must be a positive number"
     }),
     gender: z.string({
@@ -28,7 +28,7 @@ export const createProductSchema = z.object({
     description: z.string({
         message: "Description is required"
     }),
-    images: z.array(z.instanceof(File)).min(1, "At least one image is required")
+    images: z.array(z.instanceof(File))
 });
 
 // type definition for above schemas
