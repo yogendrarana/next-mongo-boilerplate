@@ -49,7 +49,8 @@ const UserSchema: Schema = new Schema(
         authProvider: {
             type: Schema.Types.String,
             required: true,
-            enum: AuthProviderEnum
+            enum: AuthProviderEnum,
+            default: AuthProviderEnum.CREDENTIALS
         },
         providerAccountId: {
             type: Schema.Types.String

@@ -16,7 +16,7 @@ import { Pagination } from '../pagination'
 import DataTable from '@/components/table/data-table'
 import { customerColumns } from './customer-columns'
 import { ICustomerBase } from '@/server/db/models/customer-model'
-import { CustomerDetailSheet } from '@/app/(dashboard)/dashboard/customers/_components/customer-detail-sheet'
+import { CustomerDetailSheet } from '@/app/(dashboard)/dashboard/users/_components/customer-detail-sheet'
 import CustomerRowActions from './customer-row-actions'
 import { CustomerToolbar } from './customer-toolbar'
 

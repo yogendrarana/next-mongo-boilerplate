@@ -19,9 +19,9 @@ export const dashboardConfig: DashboardConfig = {
             external: false,
         },
         {
-            title: "Customers",
-            href: "/dashboard/customers",
-            icon: "customers",
+            title: "Users",
+            href: "/dashboard/users",
+            icon: "users",
             external: false,
         },
         {

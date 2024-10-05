@@ -26,69 +26,54 @@ import {
 } from "@/components/ui/drawer";
 
 import { Row } from "@tanstack/react-table";
+import { createUser, updateUser } from "../_lib/actions";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { IUser } from "@/server/db/models/user-model";
 import { CreateEditModeEnum } from "@/constants/enum";
-import { IProduct } from "@/server/db/models/product-model";
+import { CreateEditUserForm } from "./create-edit-user-form";
 import { LoaderIcon, Pencil, PlusIcon, RocketIcon } from "lucide-react";
-import { CreateEditProductForm } from "./create-edit-product-form";
-import { createProductSchema, CreateProductSchemaType } from "../_lib/validations";
+import { createUserSchema, CreateUserSchemaType } from "../_lib/validations";
 
-interface CreateEditProductDialogProps {
+interface PropsType {
     mode: CreateEditModeEnum;
-    product?: Row<IProduct>["original"];
+    user?: Row<IUser>["original"];
 }
 
-export function CreateEditProductDialog({
-    mode = CreateEditModeEnum.EDIT,
-    product
-}: CreateEditProductDialogProps) {
+export function CreateEdituserDialog({ mode = CreateEditModeEnum.EDIT, user }: PropsType) {
     const [open, setOpen] = React.useState(false);
     const isDesktop = useMediaQuery("(min-width: 640px)");
     const [isCreatePending, startCreateTransition] = React.useTransition();
 
-
-    const form = useForm<CreateProductSchemaType>({
-        resolver: zodResolver(createProductSchema),
+    const form = useForm<CreateUserSchemaType>({
+        resolver: zodResolver(createUserSchema),
         defaultValues: {
-            images: [],
-            name: product?.name || "",
-            price: product?.price || 0,
-            category: product?.category.id || "",
-            subcategory: product?.subcategory.id || "",
-            inventory: product?.inventory || 0,
-            gender: product?.gender || "",
-            description: product?.description || ""
+            name: user?.name || "",
+            email: user?.email || "",
+            password: "",
+            role: user?.role || "",
+            phone: user?.phone || "",
+            city: user?.city || "",
+            state: user?.state || ""
         }
     });
 
-    function onSubmit(input: CreateProductSchemaType) {
+    function onSubmit(input: CreateUserSchemaType) {
         startCreateTransition(async () => {
             try {
-                const formData = new FormData();
-                for (const key in input) {
-                    if (key !== "images") {
-                        formData.append(key, (input as any)[key]);
-                    }
+                let operationPromise;
+
+                if (mode === CreateEditModeEnum.CREATE) {
+                    operationPromise = createUser(input);
+                } else if (mode === CreateEditModeEnum.EDIT) {
+                    operationPromise = updateUser(input, user?._id.toString()!);
+                }
+                if (!operationPromise) {
+                    throw new Error("Invalid operation mode");
                 }
 
-                input.images.forEach((image) => {
-                    formData.append("images", image);
-                });
-
-                // Set API method and URL based on mode
-                const method = mode === CreateEditModeEnum.CREATE ? "POST" : "PATCH";
-                const url =
-                    mode === CreateEditModeEnum.CREATE
-                        ? "/api/products"
-                        : `/api/products/${product?._id}`;
-
-                const res = await fetch(url, {
-                    method,
-                    body: formData
-                });
-
-                const { success, message } = await res.json();
+                // Wait for the operation (create or update) to complete
+                const { success, message } = await operationPromise;
 
                 // check if the request was successful
                 if (!success) {
@@ -98,10 +83,10 @@ export function CreateEditProductDialog({
 
                 // Handle success feedback
                 toast.success(
-                    mode === CreateEditModeEnum.CREATE ? "Product created!" : "Product updated!"
+                    mode === CreateEditModeEnum.CREATE ? "User created!" : "User updated!"
                 );
             } catch (error: any) {
-                toast.error(error.message || "Failed to create product");
+                toast.error(error.message || "Failed to create user");
             } finally {
                 form.reset();
                 setOpen(false);
@@ -127,21 +112,16 @@ export function CreateEditProductDialog({
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>
-                            {mode === CreateEditModeEnum.CREATE ? "Create" : "Edit"} Product
+                            {mode === CreateEditModeEnum.CREATE ? "Create" : "Edit"} user
                         </DialogTitle>
                         <DialogDescription>
                             Fill in the details below to{" "}
-                            {mode === CreateEditModeEnum.CREATE ? "create" : "update"} a new
-                            product.
+                            {mode === CreateEditModeEnum.CREATE ? "create" : "update"} a new user.
                         </DialogDescription>
                     </DialogHeader>
 
                     {/* form */}
-                    <CreateEditProductForm
-                        form={form}
-                        onSubmit={onSubmit}
-                        mode={mode}
-                    >
+                    <CreateEditUserForm form={form} onSubmit={onSubmit} mode={mode}>
                         <DialogFooter className="sm:space-x-0">
                             <Button type="submit" disabled={isCreatePending}>
                                 {isCreatePending ? (
@@ -152,7 +132,7 @@ export function CreateEditProductDialog({
                                 {mode === CreateEditModeEnum.CREATE ? "Create" : "Update"}
                             </Button>
                         </DialogFooter>
-                    </CreateEditProductForm>
+                    </CreateEditUserForm>
                 </DialogContent>
             </Dialog>
         );
@@ -167,9 +147,9 @@ export function CreateEditProductDialog({
 
             <DrawerContent>
                 <DrawerHeader>
-                    <DrawerTitle>Create product</DrawerTitle>
+                    <DrawerTitle>Create user</DrawerTitle>
                     <DrawerDescription>
-                        Fill in the details below to create a new product.
+                        Fill in the details below to create a new user.
                     </DrawerDescription>
                 </DrawerHeader>
                 <DrawerFooter className="gap-2 sm:space-x-0">
