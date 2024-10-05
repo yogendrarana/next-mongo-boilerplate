@@ -63,7 +63,7 @@ export function DeleteProductsDialog({
         <Dialog open={open} onOpenChange={onOpenChange}>
             {showTrigger ? (
                 <DialogTrigger asChild>
-                    <Button variant="outline" size="icon">
+                    <Button variant="outline">
                         <Trash
                             size={16}
                             className={cn(showTriggerText && "mr-2")}

@@ -115,7 +115,8 @@ export function CreateEditProductDialog({
                 <DialogTrigger asChild>
                     {mode === CreateEditModeEnum.CREATE ? (
                         <Button variant="outline" size="sm">
-                            <PlusIcon size={16} aria-hidden="true" />
+                            <PlusIcon size={16} aria-hidden="true" className="mr-2" />
+                            Create
                         </Button>
                     ) : (
                         <Button variant="outline" size="icon">

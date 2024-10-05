@@ -15,29 +15,27 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     // Parse form data
     for (const [key, value] of formData.entries()) {
-        if (key === "images") {
-            const images = formData.getAll("images");
-
-            for (const img of images) {
-                const file = img as File;
-                const imageBuffer = await file.arrayBuffer();
-                const mimeType = file.type;
-
-                // Convert to base64
-                const base64Image = btoa(
-                    new Uint8Array(imageBuffer).reduce(
-                        (data, byte) => data + String.fromCharCode(byte),
-                        ""
-                    )
-                );
-
-                // Create data URI
-                const dataUri = `data:${mimeType};base64,${base64Image}`;
-                imageUris.push(dataUri);
-            }
-        } else {
+        if (key !== "images") {
             fields[key] = value;
         }
+    }
+
+    // Handle images separately
+    const images = formData.getAll("images");
+
+    for (const img of images) {
+        const file = img as File;
+        const imageBuffer = await file.arrayBuffer();
+        const mimeType = file.type;
+
+        // Convert to base64
+        const base64Image = btoa(
+            new Uint8Array(imageBuffer).reduce((data, byte) => data + String.fromCharCode(byte), "")
+        );
+
+        // Create data URI
+        const dataUri = `data:${mimeType};base64,${base64Image}`;
+        imageUris.push(dataUri);
     }
 
     try {
