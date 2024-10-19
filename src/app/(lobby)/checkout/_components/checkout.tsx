@@ -50,11 +50,7 @@ const checkoutFormSchema = z.object({
         PaymentMethod.ESEWA,
         PaymentMethod.KHALTI,
         PaymentMethod.CASH_ON_DELIVERY
-    ]),
-    subtotal: z.number().optional(),
-    tax: z.number().optional(),
-    deliveryFee: z.number().optional(),
-    total: z.number().optional()
+    ])
 });
 
 export default function CheckoutPage() {
@@ -89,11 +85,14 @@ export default function CheckoutPage() {
     async function onSubmit(values: z.infer<typeof checkoutFormSchema>) {
         setIsSubmitting(true);
 
-        // add other info to values object like subtotal, tax, delivery, total, etc.
-        values["subtotal"] = subtotal;
-        values["tax"] = tax;
-        values["deliveryFee"] = deliveryFee;
-        values["total"] = total;
+        const extendedValues = {
+            ...values,
+            subtotal,
+            tax,
+            deliveryFee,
+            total,
+            orderItems: cartItems
+        };
 
         try {
             const res = await fetch("/api/order", {
@@ -101,7 +100,7 @@ export default function CheckoutPage() {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(values)
+                body: JSON.stringify(extendedValues)
             });
 
             const { success, message } = await res.json();

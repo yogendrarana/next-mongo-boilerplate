@@ -1,12 +1,12 @@
 // app/api/order/route.ts
 
 import { auth } from "@/auth";
-import { v4 as uuidv4 } from "uuid";
-import { connectDb } from "@/server/db";
+import { generateId } from "@/lib/id";
 import OrderModel from "@/server/db/models/order-model";
 import { NextRequest, NextResponse } from "next/server";
 import { PaymentMethod, PaymentStatus } from "@/constants";
-import { generateId } from "@/lib/id";
+import { TCartItem } from "@/store/use-cart-store";
+import ProductModel from "@/server/db/models/product-model";
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
     const authSession = await auth();
@@ -24,7 +24,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const body = await req.json();
 
     try {
-        await connectDb();
+        // TODO: add transaction
+        // start transaction
+        // const session = await mongoose.startSession();
+        // session.startTransaction();
 
         const newOrder = await OrderModel.create({
             orderId: generateId("order"),
@@ -48,11 +51,24 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
                     body.paymentMethod === PaymentMethod.CASH_ON_DELIVERY
                         ? PaymentStatus.PENDING
                         : PaymentStatus.PAID
-            }
+            },
+            orderItems: body.orderItems
         });
 
+        // update stock of products
+        await Promise.all(
+            body.orderItems.map(async (item: TCartItem) => {
+                const product = await ProductModel.findById(item.id);
+                product.inventory = product.inventory - item.quantity;
+                await product.save();
+            })
+        );
+
         // TODO: send sms/email to customer about the order and set notification for admin as well as customer
-        
+
+        // await session.commitTransaction();
+        // session.endSession();
+
         return NextResponse.json(
             {
                 success: true,

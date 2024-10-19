@@ -1,5 +1,6 @@
 import { OrderStatusEnum } from "@/constants/enum";
 import mongoose, { Date, Document, Schema } from "mongoose";
+import { IProduct } from "./product-model";
 
 export interface IOrderBase {
     orderId: string;
@@ -27,7 +28,7 @@ export interface IOrderBase {
         status: string;
     };
 
-    paymentStatus: string;
+    orderItems: Partial<IProduct>[];
 }
 
 // Interface extending Mongoose Document for use with the model
@@ -68,7 +69,9 @@ const OrderSchema: Schema = new Schema(
         paymentInfo: {
             paymentMethod: { type: String, required: true },
             status: { type: String, required: true }
-        }
+        },
+
+        orderItems: []
     },
     {
         timestamps: true

@@ -3,7 +3,7 @@ import { connectDb } from "../../src/server/db";
 import UserModel from "@/server/db/models/user-model";
 import ProductModel from "../../src/server/db/models/product-model";
 import CategoryModel from "../../src/server/db/models/category-model";
-import { seed_categories, seed_products, users } from "./data";
+import { seedCategories, seedProducts, users } from "./data";
 import SubcategoryModel from "../../src/server/db/models/subcategory-model";
 
 async function seed() {
@@ -21,7 +21,7 @@ async function seed() {
         await UserModel.create(users);
 
         // Seed Categories and Subcategories
-        for (const category of seed_categories) {
+        for (const category of seedCategories) {
             const newCategory = await CategoryModel.create({
                 categoryId: generateId("category"),
                 name: category.name,
@@ -46,7 +46,7 @@ async function seed() {
         // Seed some example products (you may want to expand this in future)
         console.log("Seeding products..........");
         const productsWithId = await Promise.all(
-            seed_products.map(async (product, index) => {
+            seedProducts.map(async (product, index) => {
                 const category = await CategoryModel.findOne({ name: product.categoryName });
                 const subcategory = await SubcategoryModel.findOne({
                     name: product.subcategoryName

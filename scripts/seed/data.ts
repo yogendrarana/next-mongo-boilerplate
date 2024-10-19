@@ -43,7 +43,7 @@ export const users: Partial<IUserBase>[] = [
     }
 ];
 
-export const seed_categories = [
+export const seedCategories = [
     {
         name: "Clothing",
         slug: "clothing",
@@ -167,7 +167,7 @@ export const seed_categories = [
 ];
 
 // products
-export const seed_products = [
+export const seedProducts = [
     {
         name: "Cool Skater Tee",
         description: "Comfortable cotton t-shirt for skaters",

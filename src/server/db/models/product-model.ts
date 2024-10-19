@@ -17,10 +17,12 @@ export interface IProductBase {
     };
     sku: string;
     inventory: number;
-    images: [{
-        url: string;
-        public_id: string;
-    }];
+    images: [
+        {
+            url: string;
+            public_id: string;
+        }
+    ];
     gender: string;
 }
 
@@ -94,10 +96,12 @@ const ProductSchema: Schema = new Schema(
             enum: Object.values(ProductGenderEnum),
             required: true
         },
-        images: [{
-            url: { type: String, required: true },
-            public_id: { type: String, required: true },
-        }],    
+        images: [
+            {
+                url: { type: String, required: true },
+                public_id: { type: String, required: true }
+            }
+        ]
     },
     {
         timestamps: true
