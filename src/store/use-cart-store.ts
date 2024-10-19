@@ -1,6 +1,6 @@
-import { create } from 'zustand';
-import { CartItemQuantityOperation } from '@/constants/enum';
-import { createJSONStorage, persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { CartItemQuantityOperation } from "@/constants/enum";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 export type TCartItem = {
     id: string;
@@ -22,13 +22,14 @@ const useCartStore = create<CartStoreType>()(
         (set) => ({
             cartItems: [],
             addToCart: (item) => set((state) => ({ cartItems: [...state.cartItems, item] })),
-            removeFromCart: (id) => set((state) => ({ cartItems: state.cartItems.filter((item) => item.id !== id) })),
+            removeFromCart: (id) =>
+                set((state) => ({ cartItems: state.cartItems.filter((item) => item.id !== id) })),
             updateQuantity: (id, operation, quantity) => {
                 if (operation === CartItemQuantityOperation.ADD) {
                     set((state) => ({
                         cartItems: state.cartItems.map((item) =>
                             item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-                        ),
+                        )
                     }));
                 } else if (operation === CartItemQuantityOperation.SUBTRACT) {
                     set((state) => ({
@@ -38,22 +39,20 @@ const useCartStore = create<CartStoreType>()(
                                     ? { ...item, quantity: item.quantity - 1 }
                                     : item
                                 : item
-                        ),
+                        )
                     }));
                 } else if (operation === CartItemQuantityOperation.SET && quantity) {
                     set((state) => ({
                         cartItems: state.cartItems.map((item) =>
-                            item.id === id
-                                ? { ...item, quantity }
-                                : item
-                        ),
+                            item.id === id ? { ...item, quantity } : item
+                        )
                     }));
                 }
-            },
+            }
         }),
         {
-            name: 'cart-items',
-            storage: createJSONStorage(() => localStorage),
+            name: "cart-items",
+            storage: createJSONStorage(() => localStorage)
         }
     )
 );

@@ -1,36 +1,45 @@
 import { customAlphabet } from "nanoid";
 
 const prefixes = {
-    store: "str",
-    product: "prd",
-    category: "cat",
-    cart: "crt",
-    subscription: "sub",
-    payment: "pay",
-    address: "adr",
-    order: "ord",
-    notification: "not",
-    subcategory: "subcat"
+    store: "STR",
+    product: "PRD",
+    category: "CAT",
+    payment: "PAY",
+    order: "ORD",
+    subcategory: "SUBCAT"
 };
 
 interface GenerateIdOptions {
     length?: number;
     separator?: string;
     includeTimestamp?: boolean;
+    excludeSeparator?: boolean; // New option to exclude separator
 }
 
 export function generateId(
     prefix?: keyof typeof prefixes,
-    { length = 20, separator = "_", includeTimestamp = true }: GenerateIdOptions = {}
+    {
+        length = 20,
+        separator = "_",
+        includeTimestamp = true,
+        excludeSeparator = false
+    }: GenerateIdOptions = {}
 ) {
     const nanoid = customAlphabet(
         "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
         length
     );
 
-    // Use Date.now() to get the timestamp (works in both client and server)
+    // Validate prefix
+    if (prefix && !prefixes[prefix]) {
+        throw new Error(
+            `Invalid prefix: ${prefix}. Valid prefixes are: ${Object.keys(prefixes).join(", ")}`
+        );
+    }
+
+    // Use Date.now() to get the timestamp in milliseconds (works in both client and server)
     const timestamp = includeTimestamp
-        ? `${Math.floor(Date.now() / 1000).toString(36)}${separator}` // Using seconds in base 36
+        ? `${Math.floor(Date.now()).toString(36)}${excludeSeparator ? "" : separator}`
         : "";
 
     // Return the ID with prefix if available

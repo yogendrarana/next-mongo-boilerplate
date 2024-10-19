@@ -28,6 +28,12 @@ export const PaymentMethod = {
     CASH_ON_DELIVERY: "cod"
 } as const;
 
+export const PaymentStatus = {
+    PENDING: "pending",
+    PAID: "paid",
+    FAILED: "failed"
+} as const;
+
 // category
 export const ProductCategory = {
     CLOTHING: "clothing",

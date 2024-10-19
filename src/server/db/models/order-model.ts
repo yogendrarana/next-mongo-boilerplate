@@ -6,7 +6,7 @@ export interface IOrderBase {
     customerId: string;
     subtotal: number;
     tax: number;
-    delivery: number;
+    deliveryFee: number;
     total: number;
 
     deliveredOn?: Date;
@@ -23,9 +23,11 @@ export interface IOrderBase {
     };
 
     paymentInfo: {
-        id: string;
+        paymentMethod: string;
         status: string;
     };
+
+    paymentStatus: string;
 }
 
 // Interface extending Mongoose Document for use with the model
@@ -42,7 +44,7 @@ const OrderSchema: Schema = new Schema(
         customerId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
         subtotal: { type: Schema.Types.Number, required: true, default: 0 },
         tax: { type: Schema.Types.Number, required: true, default: 0 },
-        delivery: { type: Schema.Types.Number, required: true, default: 0 },
+        deliveryFee: { type: Schema.Types.Number, required: true, default: 0 },
         total: { type: Schema.Types.Number, required: true, default: 0 },
 
         deliveredOn: { type: Schema.Types.Date },
@@ -64,7 +66,7 @@ const OrderSchema: Schema = new Schema(
         },
 
         paymentInfo: {
-            id: { type: String, required: true },
+            paymentMethod: { type: String, required: true },
             status: { type: String, required: true }
         }
     },

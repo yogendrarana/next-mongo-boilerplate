@@ -79,7 +79,7 @@ export async function PATCH(
                 id: fields.subcategory,
                 slug: subcategorySlug
             }
-        }
+        };
 
         await ProductModel.findByIdAndUpdate({ _id: productId }, data, { new: true }).exec();
 

@@ -1,10 +1,11 @@
 "use client";
 
 import * as z from "zod";
+import { toast } from "sonner";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Truck, Wallet } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LoaderIcon, ShoppingBag, Truck, Wallet } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -24,7 +25,6 @@ import {
     CardHeader,
     CardTitle
 } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import {
     Select,
     SelectContent,
@@ -32,63 +32,96 @@ import {
     SelectTrigger,
     SelectValue
 } from "@/components/ui/select";
+import { formatPrice } from "@/lib/utils";
 import { PaymentMethod } from "@/constants";
 import useCartStore from "@/store/use-cart-store";
-import { formatPrice } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
+import { useRouter } from "next/navigation";
 
-const formSchema = z.object({
+const checkoutFormSchema = z.object({
     name: z.string().min(2, "Full name must be at least 2 characters"),
+    phone: z.string().min(10, "Phone number must be at least 10 characters"),
     email: z.string().email("Invalid email address"),
-    address: z.string().min(5, "Address must be at least 5 characters"),
     city: z.string().min(2, "City must be at least 2 characters"),
     province: z.string().min(2, "Province must be at least 2 characters"),
-    postalCode: z.string().min(5, "Postal code must be at least 5 characters"),
+    address: z.string().min(5, "Address must be at least 5 characters"),
+    postalCode: z.string(),
     paymentMethod: z.enum([
         PaymentMethod.ESEWA,
         PaymentMethod.KHALTI,
         PaymentMethod.CASH_ON_DELIVERY
-    ])
+    ]),
+    subtotal: z.number().optional(),
+    tax: z.number().optional(),
+    deliveryFee: z.number().optional(),
+    total: z.number().optional()
 });
 
 export default function CheckoutPage() {
+    const router = useRouter();
+    const { cartItems } = useCartStore();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<z.infer<typeof checkoutFormSchema>>({
+        resolver: zodResolver(checkoutFormSchema),
         defaultValues: {
             name: "",
             email: "",
+            phone: "",
             address: "",
             city: "",
             province: "",
             postalCode: "",
-            paymentMethod: PaymentMethod.ESEWA
+            paymentMethod: PaymentMethod.CASH_ON_DELIVERY
         }
     });
 
     const watchPaymentMethod = form.watch("paymentMethod");
+    const subtotal = cartItems.reduce(
+        (total, item) => total + item.quantity * Number(item.price),
+        0
+    );
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    const tax = subtotal * 0.13;
+    const deliveryFee = subtotal > 1000 ? 0 : 50;
+    const total = subtotal + tax + deliveryFee;
+
+    async function onSubmit(values: z.infer<typeof checkoutFormSchema>) {
         setIsSubmitting(true);
-        // Simulate API call
-        setTimeout(() => {
-            console.log(values);
+
+        // add other info to values object like subtotal, tax, delivery, total, etc.
+        values["subtotal"] = subtotal;
+        values["tax"] = tax;
+        values["deliveryFee"] = deliveryFee;
+        values["total"] = total;
+
+        try {
+            const res = await fetch("/api/order", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(values)
+            });
+
+            const { success, message } = await res.json();
+
+            if (!success) {
+                return toast.error(message || "Failed to place order");
+            }
+
+            // clear the cart and redirect to home page
+            useCartStore.setState({ cartItems: [] });
+            localStorage.removeItem("cart-items");
+            router.push("/");
+
+            toast.success("Order placed successfully!");
+        } catch (err: any) {
+            toast.error(err.message || "Failed to place order");
+        } finally {
             setIsSubmitting(false);
-            // Here you would typically handle the checkout process
-            alert("Order placed successfully!");
-        }, 2000);
+        }
     }
-
-    const { cartItems } = useCartStore();
-    const subTotal =
-        cartItems.reduce(
-            (total, item) => total + item.quantity * Math.round(Number(item.price) * 100),
-            0
-        ) / 100;
-
-    const tax = subTotal * 0.13;
-    const shippingFee = subTotal > 1000 ? 0 : 50;
-    const total = subTotal + tax + shippingFee;
 
     return (
         <div>
@@ -116,6 +149,23 @@ export default function CheckoutPage() {
                                                 <FormLabel>Full Name</FormLabel>
                                                 <FormControl>
                                                     <Input placeholder="John Doe" {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="phone"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Phone</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        type="text"
+                                                        placeholder="9812345678"
+                                                        {...field}
+                                                    />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -259,6 +309,18 @@ export default function CheckoutPage() {
                                         className="w-full"
                                         disabled={isSubmitting}
                                     >
+                                        {isSubmitting ? (
+                                            <LoaderIcon
+                                                size={14}
+                                                aria-hidden="true"
+                                                className="mr-2 size-4 animate-spin"
+                                            />
+                                        ) : (
+                                            <ShoppingBag
+                                                className="mr-2 size-4"
+                                                aria-hidden="true"
+                                            />
+                                        )}
                                         {isSubmitting
                                             ? "Processing..."
                                             : `Place Order${
@@ -292,21 +354,25 @@ export default function CheckoutPage() {
                             ))}
                         </ul>
                         <Separator className="my-4" />
-                        <div className="flex justify-between font-medium">
-                            <span>Sub Total</span>
-                            <span>{formatPrice(subTotal.toFixed(2), { currency: "NPR" })}</span>
-                        </div>
-                        <div className="flex justify-between font-medium">
-                            <span>Tax Amount</span>
-                            <span>{formatPrice(tax.toFixed(2), { currency: "NPR" })}</span>
-                        </div>
-                        <div className="flex justify-between font-medium">
-                            <span>Shipping Fee</span>
-                            <span>{formatPrice(shippingFee.toFixed(2), { currency: "NPR" })}</span>
-                        </div>
-                        <div className="flex justify-between font-medium">
-                            <span>Grand Total</span>
-                            <span>{formatPrice(total.toFixed(2), { currency: "NPR" })}</span>
+                        <div className="space-y-2">
+                            <div className="flex justify-between text-sm">
+                                <span>Sub Total</span>
+                                <span>{formatPrice(subtotal.toFixed(2), { currency: "NPR" })}</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                                <span>Tax Amount</span>
+                                <span>{formatPrice(tax.toFixed(2), { currency: "NPR" })}</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                                <span>Shipping Fee</span>
+                                <span>
+                                    {formatPrice(deliveryFee.toFixed(2), { currency: "NPR" })}
+                                </span>
+                            </div>
+                            <div className="flex justify-between text-sm font-bold">
+                                <span>Grand Total</span>
+                                <span>{formatPrice(total.toFixed(2), { currency: "NPR" })}</span>
+                            </div>
                         </div>
                     </CardContent>
                     <CardFooter>
