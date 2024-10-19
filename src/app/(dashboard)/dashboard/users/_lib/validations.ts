@@ -20,5 +20,5 @@ export const createUserSchema = z.object({
     password: z.string({ message: "Password is required" })
 });
 
-export type GetUsersInputType = z.infer<typeof searchUsersParamsSchema>;
 export type CreateUserSchemaType = z.infer<typeof createUserSchema>;
+export type GetUsersInputType = z.infer<typeof searchUsersParamsSchema>;

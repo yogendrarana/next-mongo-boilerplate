@@ -1,17 +1,17 @@
 "use client";
 
-import React, { useState } from 'react'
-import SlideIn from '@/components/motion/slide-in'
-import { Badge } from '@/components/ui/badge';
-import { CreditCard, Truck, User } from 'lucide-react';
-import { Separator } from '@/components/ui/separator';
+import React, { useState } from "react";
+import SlideIn from "@/components/motion/slide-in";
+import { Badge } from "@/components/ui/badge";
+import { CreditCard, Truck, User } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 import {
     Select,
     SelectTrigger,
     SelectItem,
     SelectValue,
     SelectContent
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
     AlertDialog,
     AlertDialogDescription,
@@ -21,12 +21,12 @@ import {
     AlertDialogTitle,
     AlertDialogCancel,
     AlertDialogAction
-} from '@/components/ui/alert-dialog';
+} from "@/components/ui/alert-dialog";
 
 interface SlideInProps {
-    open: boolean
-    onOpenChange: () => void
-    order: any
+    open: boolean;
+    onOpenChange: () => void;
+    order: any;
 }
 
 // Mock data for the example
@@ -49,42 +49,39 @@ const orderData = {
         { id: 1, name: "Widget A", quantity: 2, price: 19.99 },
         { id: 2, name: "Gadget B", quantity: 1, price: 49.99 }
     ]
-}
+};
 
 export function OrderDetailSheet({ open, onOpenChange, order }: SlideInProps) {
-
-    const [status, setStatus] = useState(orderData.status)
-    const [newStatus, setNewStatus] = useState(status)
-    const [showStatusConfirmation, setShowStatusConfirmation] = useState(false)
+    const [status, setStatus] = useState(orderData.status);
+    const [newStatus, setNewStatus] = useState(status);
+    const [showStatusConfirmation, setShowStatusConfirmation] = useState(false);
 
     const handleStatusChange = (selectedStatus: string) => {
-        setNewStatus(selectedStatus)
-        setShowStatusConfirmation(true)
-    }
+        setNewStatus(selectedStatus);
+        setShowStatusConfirmation(true);
+    };
 
     const confirmStatusChange = () => {
-        setStatus(newStatus)
-        setShowStatusConfirmation(false)
-    }
+        setStatus(newStatus);
+        setShowStatusConfirmation(false);
+    };
 
     if (!order) return null;
 
     return (
-        <SlideIn
-            isOpen={open}
-            onClose={onOpenChange}
-            title='Order Details'
-        >
-            <div className='h-full'>
+        <SlideIn isOpen={open} onClose={onOpenChange} title="Order Details">
+            <div className="h-full">
                 <div className="space-y-6">
                     {/* Order ID and Tracking */}
                     <div className="space-y-2">
                         <div className="flex justify-between items-center">
                             <h3 className="text-md font-medium">Order {orderData.id}</h3>
                             <Select onValueChange={handleStatusChange} value={status}>
-                            <SelectTrigger className="h-8 w-[100px] text-xs focus:ring-0 focus:ring-offset-0 focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-none">                                    <SelectValue placeholder={status} />
+                                <SelectTrigger className="h-8 w-[100px] text-xs focus:ring-0 focus:ring-offset-0 focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-none">
+                                    {" "}
+                                    <SelectValue placeholder={status} />
                                 </SelectTrigger>
-                                <SelectContent align='end'>
+                                <SelectContent align="end">
                                     <SelectItem value="Pending">Pending</SelectItem>
                                     <SelectItem value="In Transit">In Transit</SelectItem>
                                     <SelectItem value="Delivered">Delivered</SelectItem>
@@ -92,11 +89,10 @@ export function OrderDetailSheet({ open, onOpenChange, order }: SlideInProps) {
                             </Select>
                         </div>
                         <div className="flex justify-between items-center">
-                            <div className='flex items-center text-sm text-muted-foreground'>
+                            <div className="flex items-center text-sm text-muted-foreground">
                                 <Truck className="mr-2 h-4 w-4" />
                                 Tracking: {orderData.trackingNumber}
                             </div>
-
                         </div>
                     </div>
 
@@ -179,11 +175,13 @@ export function OrderDetailSheet({ open, onOpenChange, order }: SlideInProps) {
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction onClick={confirmStatusChange}>Confirm</AlertDialogAction>
+                            <AlertDialogAction onClick={confirmStatusChange}>
+                                Confirm
+                            </AlertDialogAction>
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
             </div>
         </SlideIn>
-    )
+    );
 }

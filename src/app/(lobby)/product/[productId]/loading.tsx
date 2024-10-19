@@ -1,14 +1,13 @@
-import { cn } from "@/lib/utils"
-import { Shell } from "@/components/utils/shell"
-import { Icons } from "@/components/utils/icons"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Separator } from "@/components/ui/separator"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { ProductCardSkeleton } from "@/components/utils/product-card-skeleton"
+import { cn } from "@/lib/utils";
+import { Icons } from "@/components/utils/icons";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@/components/ui/separator";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { ProductCardSkeleton } from "@/components/utils/product-card-skeleton";
 
 export default function ProductLoading() {
     return (
-        <Shell>
+        <div>
             <div className="flex items-center space-x-2">
                 <Skeleton className="h-6 w-14" />
                 <Skeleton className="h-6 w-14" />
@@ -85,6 +84,6 @@ export default function ProductLoading() {
                     </div>
                 </ScrollArea>
             </div>
-        </Shell>
-    )
+        </div>
+    );
 }

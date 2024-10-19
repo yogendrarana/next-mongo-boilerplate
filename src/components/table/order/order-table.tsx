@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import React from 'react'
+import React from "react";
 
 import {
     ColumnDef,
@@ -12,28 +12,27 @@ import {
     getSortedRowModel,
     SortingState,
     useReactTable,
-    VisibilityState,
-} from "@tanstack/react-table"
-import { OrderSchemaType } from '@/constants/types'
-import { orderTableColumns } from './order-table-columns'
-import DataTable from '@/components/table/data-table'
-import { OrderTableToolbar } from './order-table-toolbar'
-import OrderTableRowActions from './order-table-actions'
-import { Pagination } from '../pagination'
-import { OrderDetailSheet } from '@/app/(dashboard)/dashboard/orders/_components/order-detail-sheet'
+    VisibilityState
+} from "@tanstack/react-table";
+import { orderTableColumns } from "./order-table-columns";
+import DataTable from "@/components/table/data-table";
+import { OrderTableToolbar } from "./order-table-toolbar";
+import OrderTableRowActions from "./order-table-actions";
+import { Pagination } from "../pagination";
+import { OrderDetailSheet } from "@/app/(dashboard)/dashboard/orders/_components/order-detail-sheet";
 
 interface OrderTableProps {
-    data: OrderSchemaType[]
+    data: any[];
 }
 
 const OrderTable = ({ data }: OrderTableProps) => {
     const [sorting, setSorting] = React.useState<SortingState>([]);
-    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
-    const [selectedRow, setSelectedRow] = React.useState<OrderSchemaType | null>(null)
+    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+    const [selectedRow, setSelectedRow] = React.useState<any | null>(null);
 
     const memoizedColumns = React.useMemo(() => {
-        return orderTableColumns.map(col => {
+        return orderTableColumns.map((col) => {
             if (col.id === "actions") {
                 return {
                     ...col,
@@ -43,12 +42,12 @@ const OrderTable = ({ data }: OrderTableProps) => {
                             onOpenDetail={() => setSelectedRow(row.original)}
                         />
                     )
-                }
+                };
             }
 
             return col;
-        })
-    }, [])
+        });
+    }, []);
 
     const table = useReactTable({
         data,
@@ -56,13 +55,13 @@ const OrderTable = ({ data }: OrderTableProps) => {
         initialState: {
             pagination: {
                 pageIndex: 0,
-                pageSize: 20,
-            },
+                pageSize: 20
+            }
         },
         state: {
             sorting,
             columnFilters,
-            columnVisibility,
+            columnVisibility
         },
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
@@ -70,19 +69,23 @@ const OrderTable = ({ data }: OrderTableProps) => {
         getSortedRowModel: getSortedRowModel(),
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
-        onColumnVisibilityChange: setColumnVisibility,
-    })
+        onColumnVisibilityChange: setColumnVisibility
+    });
 
     return (
-        <div className='flex flex-col gap-2'>
+        <div className="flex flex-col gap-2">
             <OrderTableToolbar table={table} />
             <DataTable table={table} columns={memoizedColumns} />
             <Pagination table={table} />
 
             {/* order detail sheet */}
-            <OrderDetailSheet open={!!selectedRow} onOpenChange={() => setSelectedRow(null)} order={selectedRow} />
+            {/* <OrderDetailSheet
+                open={!!selectedRow}
+                onOpenChange={() => setSelectedRow(null)}
+                order={selectedRow}
+            /> */}
         </div>
-    )
-}
+    );
+};
 
-export default OrderTable
+export default OrderTable;

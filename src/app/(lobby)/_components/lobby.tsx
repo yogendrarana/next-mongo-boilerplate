@@ -1,34 +1,28 @@
+import React from "react";
+
 import {
     PageHeader,
     PageHeaderDescription,
-    PageHeaderHeading,
-} from "@/components/utils/page-header"
-import Link from "next/link"
-import { Shell } from "@/components/utils/shell"
-import { CategoryCard } from "./category-card"
-import { ProductCard } from "@/components/utils/product-card"
-import { ContentSection } from "@/components/utils/content-section"
-import type { getAllCategories, getFeaturedProducts } from "@/server/queries/product"
-import { formatMongoData } from "@/helpers"
+    PageHeaderHeading
+} from "@/components/utils/page-header";
+import Link from "next/link";
+import { formatMongoData } from "@/helpers";
+import { CategoryCard } from "./category-card";
+import { ProductCard } from "@/components/utils/product-card";
+import { ContentSection } from "@/components/utils/content-section";
+import type { getAllCategories, getFeaturedProducts } from "@/server/queries/product";
 
 interface LobbyProps {
-    productsPromise: ReturnType<typeof getFeaturedProducts>
-    categoriesPromise: ReturnType<typeof getAllCategories>
+    productsPromise: ReturnType<typeof getFeaturedProducts>;
+    categoriesPromise: ReturnType<typeof getAllCategories>;
 }
 
 export async function Lobby({ productsPromise, categoriesPromise }: LobbyProps) {
-    const [products, categories] = await Promise.all([
-        productsPromise,
-        categoriesPromise,
-    ])
+    const [products, categories] = await Promise.all([productsPromise, categoriesPromise]);
 
     return (
-        <Shell>
-            <PageHeader
-                as="section"
-                className="mx-auto items-center gap-2 text-center"
-                withPadding
-            >
+        <div>
+            <PageHeader as="section" className="mx-auto items-center gap-2 text-center" withPadding>
                 <PageHeaderHeading
                     className="animate-fade-up"
                     style={{ animationDelay: "0.20s", animationFillMode: "both" }}
@@ -39,10 +33,14 @@ export async function Lobby({ productsPromise, categoriesPromise }: LobbyProps) 
                     className="max-w-[46.875rem] animate-fade-up"
                     style={{ animationDelay: "0.30s", animationFillMode: "both" }}
                 >
-                    In Fashion house you can find the trendiest fashion items, apparel, and accessories.
+                    In Fashion house you can find the trendiest fashion items, apparel, and
+                    accessories.
                 </PageHeaderDescription>
                 <div className="mt-6 flex items-center gap-3">
-                    <Link href="#featured-products" className="px-4 py-2 border rounded-md hover:bg-gray-100 duration-200">
+                    <Link
+                        href="#featured-products"
+                        className="px-4 py-2 border rounded-md hover:bg-gray-100 duration-200"
+                    >
                         Featured Products
                     </Link>
                     <Link href="/store" className="px-4 py-2 bg-black text-white rounded-md ">
@@ -74,6 +72,6 @@ export async function Lobby({ productsPromise, categoriesPromise }: LobbyProps) 
                     <ProductCard key={product._id.toString()} product={formatMongoData(product)} />
                 ))}
             </ContentSection>
-        </Shell>
-    )
+        </div>
+    );
 }

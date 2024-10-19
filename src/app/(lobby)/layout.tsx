@@ -1,20 +1,21 @@
-import SiteFooter from "@/components/layout/site-footer"
-import { SiteHeader } from "@/components/layout/site-header"
+import { Shell } from "@/components/utils/shell";
+import SiteFooter from "@/components/layout/site-footer";
+import { SiteHeader } from "@/components/layout/site-header";
 
 interface LobyLayoutProps
     extends React.PropsWithChildren<{
-        modal: React.ReactNode
-    }> { }
+        modal: React.ReactNode;
+    }> {}
 
 export default async function LobbyLayout({ children, modal }: LobyLayoutProps) {
     return (
-        <div className="relative flex min-h-screen flex-col">
+        <Shell>
             <SiteHeader />
             <main className="flex-1">
                 {children}
                 {modal}
             </main>
             <SiteFooter />
-        </div>
-    )
+        </Shell>
+    );
 }

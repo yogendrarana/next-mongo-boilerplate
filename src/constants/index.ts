@@ -1,4 +1,4 @@
-export const unknownError = "An unknown error occurred. Please try again later."
+export const unknownError = "An unknown error occurred. Please try again later.";
 
 export const redirects = {
     toLogin: "/signin",
@@ -6,39 +6,37 @@ export const redirects = {
     afterLogin: "/dashboard/stores",
     afterLogout: "/",
     toVerify: "/verify-email",
-    afterVerify: "/dashboard/stores",
-} as const
+    afterVerify: "/dashboard/stores"
+} as const;
 
 export const authProviders = {
-    google: 'google',
-    credentials: 'credentials',
-}
+    google: "google",
+    credentials: "credentials"
+};
 
 // order objects
 export const OrderStatus = {
-    PROCESSING: 'processing',
-    PENDING: 'pending',
-    SUCCESS: 'success',
-    FAILED: 'failed',
-} as const
+    PROCESSING: "processing",
+    PENDING: "pending",
+    SUCCESS: "success",
+    FAILED: "failed"
+} as const;
 
 export const PaymentMethod = {
-    CREDIT_CARD: 'credit_card',
-    PAYPAL: 'paypal',
-    BANK_TRANSFER: 'bank_transfer',
-    CASH_ON_DELIVERY: 'cash_on_delivery',
-} as const
-
+    ESEWA: "esewa",
+    KHALTI: "khalti",
+    CASH_ON_DELIVERY: "cod"
+} as const;
 
 // category
 export const ProductCategory = {
-    CLOTHING: 'clothing',
-    SHOES: 'shoes',
-    ACCESSORIES: 'accessories',
-}
+    CLOTHING: "clothing",
+    SHOES: "shoes",
+    ACCESSORIES: "accessories"
+};
 
 export const ProductGender = {
-    MALE: 'male',
-    FEMALE: 'female',
-    UNISEX: 'unisex',
-}
+    MALE: "male",
+    FEMALE: "female",
+    UNISEX: "unisex"
+};

@@ -1,3 +1,4 @@
+import React, { Suspense } from 'react'
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -5,13 +6,11 @@ import {
     BreadcrumbList,
     BreadcrumbSeparator
 } from '@/components/ui/breadcrumb'
-import React, { Suspense } from 'react'
-import { IProduct } from '@/server/db/models/product-model'
-import { getAllCategories, getAllSubcategories, getStoreProducts } from '@/server/queries/product'
-import { Shell } from '@/components/utils/shell'
-import ProductFilterDropdown from '@/components/utils/product-filter-dropdown'
-import { ProductCard } from '@/components/utils/product-card'
 import { formatMongoData } from '@/helpers'
+import { IProduct } from '@/server/db/models/product-model'
+import { ProductCard } from '@/components/utils/product-card'
+import ProductFilterDropdown from '@/components/utils/product-filter-dropdown'
+import { getAllCategories, getAllSubcategories, getStoreProducts } from '@/server/queries/product'
 
 interface StoreProps {
     productsPromise: ReturnType<typeof getStoreProducts>
@@ -31,7 +30,7 @@ export default async function Store({
     ])
 
     return (
-        <Shell>
+        <div>
             <header className='flex items-center justify-between'>
                 <Breadcrumb>
                     <BreadcrumbList>
@@ -56,6 +55,6 @@ export default async function Store({
                     ))}
                 </div>
             </Suspense>
-        </Shell>
+        </div>
     )
 }

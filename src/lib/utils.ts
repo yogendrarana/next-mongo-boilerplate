@@ -13,7 +13,8 @@ export function formatPrice(price: number | string, opts: Intl.NumberFormatOptio
     return new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: opts.currency ?? "USD",
-        notation: opts.notation ?? "compact",
+        minimumFractionDigits: 2, // Ensure two decimal places
+        maximumFractionDigits: 2, // Avoid rounding large numbers
         ...opts
     }).format(Number(price));
 }

@@ -14,7 +14,7 @@ import { OrderDetailDrawer } from '@/app/(dashboard)/dashboard/orders/_component
 
 interface DataTableRowActionsProps<T> {
     row: Row<T>
-    onOpenDetail: () => void
+    onOpenDetail?: () => void
 }
 
 function OrderTableRowActions<T extends any>({
@@ -35,7 +35,8 @@ function OrderTableRowActions<T extends any>({
                     className='flex gap-2 items-center cursor-pointer'
                 >
                     <Book className='h-3.5 w-3.5' />
-                    <OrderDetailDrawer order={row.original} open />
+                    Order Detail
+                    {/* <OrderDetailDrawer order={row.original} open /> */}
                 </DropdownMenuItem>
                 <DropdownMenuItem className='flex gap-2 items-center cursor-pointer'>
                     <Trash className='h-3.5 w-3.5' />

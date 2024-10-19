@@ -1,10 +1,9 @@
-import { Shell } from "@/components/utils/shell"
 import { Skeleton } from "@/components/ui/skeleton"
 import { ProductCardSkeleton } from "@/components/utils/product-card-skeleton"
 
 export default function ProductsLoading() {
     return (
-        <Shell>
+        <div>
             <div className="space-y-2">
                 <Skeleton className="h-10 w-28" />
                 <Skeleton className="h-4 w-48" />
@@ -20,6 +19,6 @@ export default function ProductsLoading() {
                     ))}
                 </div>
             </div>
-        </Shell>
+        </div>
     )
 }

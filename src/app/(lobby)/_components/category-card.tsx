@@ -1,28 +1,17 @@
-import * as React from "react"
-import Link from "next/link"
-
-import {
-    getProductCountByCategory,
-    type getAllCategories,
-} from "@/server/queries/product"
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
-import { Icons } from "@/components/utils/icons"
-import { Skeleton } from "@/components/ui/skeleton"
-import { ICategory } from "@/server/db/models/category-model"
-
+import React from "react";
+import Link from "next/link";
+import { Icons } from "@/components/utils/icons";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ICategory } from "@/server/db/models/category-model";
+import { getProductCountByCategory } from "@/server/queries/product";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface CategoryCardProps {
-    category: ICategory
+    category: ICategory;
 }
 
 export function CategoryCard({ category }: CategoryCardProps) {
-    const productCountPromise = getProductCountByCategory({ categoryId: category.id })
+    const productCountPromise = getProductCountByCategory({ categoryId: category._id.toString() });
 
     return (
         <Link href={`/category/${category.slug}`}>
@@ -40,20 +29,20 @@ export function CategoryCard({ category }: CategoryCardProps) {
                 </CardContent>
             </Card>
         </Link>
-    )
+    );
 }
 
 interface ProductCountProps {
-    productCountPromise: ReturnType<typeof getProductCountByCategory>
+    productCountPromise: ReturnType<typeof getProductCountByCategory>;
 }
 
 async function ProductCount({ productCountPromise }: ProductCountProps) {
-    const count = await productCountPromise
+    const count = await productCountPromise;
 
     return (
         <div className="flex w-fit items-center text-[0.8rem] text-muted-foreground">
             <Icons.product className="mr-1.5 size-3.5" aria-hidden="true" />
             {count} products
         </div>
-    )
+    );
 }

@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import Link from "next/link"
+import Link from "next/link";
 
 import {
     Sheet,
@@ -8,30 +8,28 @@ import {
     SheetFooter,
     SheetHeader,
     SheetTitle,
-    SheetTrigger,
-} from "@/components/ui/sheet"
-import { cn, formatPrice } from "@/lib/utils"
-import { Badge } from "@/components/ui/badge"
-import { Icons } from "@/components/utils/icons"
-import { Separator } from "@/components/ui/separator"
-import { Button, buttonVariants } from "@/components/ui/button"
-import { CartLineItems } from "@/components/checkout/cart-line-items"
-import useCartStore from "@/store/use-cart-store"
+    SheetTrigger
+} from "@/components/ui/sheet";
+import { cn, formatPrice } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { Icons } from "@/components/utils/icons";
+import useCartStore from "@/store/use-cart-store";
+import { Separator } from "@/components/ui/separator";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { CartLineItems } from "@/components/checkout/cart-line-items";
 
 export function CartSheet() {
     const { cartItems } = useCartStore();
-    const itemCount = cartItems.reduce((total, item) => total + Number(item.quantity), 0)
-    const cartTotal = cartItems.reduce((total, item) => total + item.quantity * Number(item.price), 0)
+    const itemCount = cartItems.reduce((total, item) => total + Number(item.quantity), 0);
+    const cartTotal = cartItems.reduce(
+        (total, item) => total + item.quantity * Number(item.price),
+        0
+    );
 
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <Button
-                    aria-label="Open cart"
-                    variant="outline"
-                    size="icon"
-                    className="relative"
-                >
+                <Button aria-label="Open cart" variant="outline" size="icon" className="relative">
                     {itemCount > 0 && (
                         <Badge
                             variant="secondary"
@@ -55,26 +53,25 @@ export function CartSheet() {
                             <Separator />
                             <div className="space-y-1.5 text-sm">
                                 <div className="flex">
-                                    <span className="flex-1">Shipping</span>
-                                    <span>Free</span>
-                                </div>
-                                <div className="flex">
                                     <span className="flex-1">Taxes</span>
                                     <span>Calculated at checkout</span>
                                 </div>
                                 <div className="flex">
                                     <span className="flex-1">Total</span>
-                                    <span>{formatPrice(cartTotal.toFixed(2), { currency: "NPR" })}</span>
+                                    <span>
+                                        {formatPrice(cartTotal.toFixed(2), { currency: "NPR" })}
+                                        
+                                    </span>
                                 </div>
                             </div>
                             <SheetFooter>
                                 <SheetTrigger asChild>
                                     <Link
                                         aria-label="View your cart"
-                                        href="/cart"
+                                        href="/checkout"
                                         className={buttonVariants({
                                             size: "sm",
-                                            className: "w-full",
+                                            className: "w-full"
                                         })}
                                     >
                                         Continue to checkout
@@ -100,7 +97,7 @@ export function CartSheet() {
                                     buttonVariants({
                                         variant: "link",
                                         size: "sm",
-                                        className: "text-sm text-muted-foreground",
+                                        className: "text-sm text-muted-foreground"
                                     })
                                 )}
                             >
@@ -111,5 +108,5 @@ export function CartSheet() {
                 )}
             </SheetContent>
         </Sheet>
-    )
+    );
 }
