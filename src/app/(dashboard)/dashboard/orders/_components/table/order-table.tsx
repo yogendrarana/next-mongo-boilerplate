@@ -1,14 +1,14 @@
 "use client";
 
 import * as React from "react";
+import { OrderStatusEnum } from "@/constants/enum";
 import { useDataTable } from "@/hooks/use-data-table";
 import { IOrder } from "@/server/db/models/order-model";
+import { OrderTableToolbar } from "./order-table-toolbar";
 import { type DataTableFilterField } from "@/constants/types";
 import { DataTable } from "@/components/data-table/data-table";
-import { OrderTableToolbar } from "./order-table-toolbar";
 import { getOrderTableColumns } from "./order-table-columns";
 import { DataTableToolbar } from "@/components/data-table/data-table-toolbar";
-import { OrderStatusEnum } from "@/constants/enum";
 
 interface OrderTableProps {
     tableData: IOrder[];
@@ -20,13 +20,8 @@ export function OrderTable({ tableData, pageCount }: OrderTableProps) {
 
     const filterFields: DataTableFilterField<IOrder>[] = [
         {
-            label: "Name",
-            value: "name",
-            placeholder: "Search..."
-        },
-        {
-            label: "Category",
-            value: "category",
+            label: "Order Status",
+            value: "status",
             options: Object.values(OrderStatusEnum)?.map((status: string) => ({
                 label: status?.toUpperCase() || "",
                 value: status,

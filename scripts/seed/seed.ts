@@ -3,7 +3,7 @@ import { connectDb } from "../../src/server/db";
 import UserModel from "@/server/db/models/user-model";
 import ProductModel from "../../src/server/db/models/product-model";
 import CategoryModel from "../../src/server/db/models/category-model";
-import { seedCategories, seedProducts, users } from "./data";
+import { seedCategories, seedProducts, seedUsers } from "./data";
 import SubcategoryModel from "../../src/server/db/models/subcategory-model";
 
 async function seed() {
@@ -18,7 +18,7 @@ async function seed() {
         await SubcategoryModel.deleteMany({});
 
         // Seed admin users, and employees
-        await UserModel.create(users);
+        await UserModel.create(seedUsers);
 
         // Seed Categories and Subcategories
         for (const category of seedCategories) {

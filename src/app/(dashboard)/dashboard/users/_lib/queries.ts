@@ -13,9 +13,8 @@ export const getUsers = async (
     message: string;
     data: { users: IUser[]; pageCount: number };
 }> => {
-
     // TODO: check request can access this route
-    
+
     noStore();
     await connectDb();
 

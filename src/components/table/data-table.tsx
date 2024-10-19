@@ -1,32 +1,27 @@
-"use client"
+"use client";
 
-import React from "react"
-import {
-    ColumnDef,
-    flexRender,
-    Table as TableType,
-} from "@tanstack/react-table"
+import React from "react";
+import { ColumnDef, flexRender, Table as TableType } from "@tanstack/react-table";
 import {
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableHeader,
-    TableRow,
-} from "@/components/ui/table"
-import { ScrollArea } from "@/components/ui/scroll-area"
+    TableRow
+} from "@/components/ui/table";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface DataTableProps<TData, TValue> {
-    columns: ColumnDef<TData, TValue>[]
-    table: TableType<TData>
-    setSelectedRow?: React.Dispatch<React.SetStateAction<TData | null>>
+    columns: ColumnDef<TData, TValue>[];
+    table: TableType<TData>;
+    setSelectedRow?: React.Dispatch<React.SetStateAction<TData | null>>;
 }
 
 export default function DataTable<TData, TValue>({
     table,
-    columns,
+    columns
 }: DataTableProps<TData, TValue>) {
-
     return (
         <div className="flex flex-col">
             <ScrollArea className="border rounded-md overflow-hidden flex-1 overflow-y-auto">
@@ -39,9 +34,9 @@ export default function DataTable<TData, TValue>({
                                         {header.isPlaceholder
                                             ? null
                                             : flexRender(
-                                                header.column.columnDef.header,
-                                                header.getContext()
-                                            )}
+                                                  header.column.columnDef.header,
+                                                  header.getContext()
+                                              )}
                                     </TableHead>
                                 ))}
                             </TableRow>
@@ -56,7 +51,10 @@ export default function DataTable<TData, TValue>({
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
-                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                            {flexRender(
+                                                cell.column.columnDef.cell,
+                                                cell.getContext()
+                                            )}
                                         </TableCell>
                                     ))}
                                 </TableRow>
@@ -72,5 +70,5 @@ export default function DataTable<TData, TValue>({
                 </Table>
             </ScrollArea>
         </div>
-    )
+    );
 }

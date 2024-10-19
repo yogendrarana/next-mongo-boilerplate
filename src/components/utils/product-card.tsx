@@ -129,16 +129,6 @@ export function ProductCard({ product, className, ...props }: ProductCardProps) 
                         >
                             <EyeIcon size={14} />
                         </motion.button>
-
-                        <ProductPreview product={product}>
-                            <motion.button
-                                variants={secondButtonVariants}
-                                className="p-2 rounded-md bg-white border"
-                            >
-                                <Maximize2 size={14} />
-                                <span className="sr-only">Preview</span>
-                            </motion.button>
-                        </ProductPreview>
                     </motion.div>
                 )}
             </AnimatePresence>

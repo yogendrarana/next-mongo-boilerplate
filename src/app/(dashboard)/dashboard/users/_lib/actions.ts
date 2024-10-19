@@ -35,7 +35,6 @@ export async function createUser(input: CreateUserSchemaType): Promise<{
 }
 
 // delete users
-
 export const deleteUsers = async (ids: string[] | number[]) => {
     const session = await auth();
     if (!session?.user?.id || session?.user?.role !== UserRoleEnum.ADMIN) {

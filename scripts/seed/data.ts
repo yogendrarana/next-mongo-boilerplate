@@ -1,7 +1,7 @@
 import { IUserBase } from "@/server/db/models/user-model";
 import { AuthProviderEnum, ProductGenderEnum, UserRoleEnum } from "@/constants/enum";
 
-export const users: Partial<IUserBase>[] = [
+export const seedUsers: Partial<IUserBase>[] = [
     {
         name: "Yogendra Rana",
         email: "yogendrarana9595@gmail.com",

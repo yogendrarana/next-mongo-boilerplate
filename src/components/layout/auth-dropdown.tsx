@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from "react";
 
 import {
     DropdownMenu,
@@ -8,26 +8,23 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuShortcut,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import Link from "next/link"
-import { auth } from "@/auth"
-import { cn } from "@/lib/utils"
-import { Icons } from "@/components/utils/icons"
-import { Button, buttonVariants } from "@/components/ui/button"
-import { LayoutDashboard, Settings } from "lucide-react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { getNameInitials } from "@/helpers/user"
-import { SignOut } from "./sign-out"
+    DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
+import Link from "next/link";
+import { auth } from "@/auth";
+import { cn } from "@/lib/utils";
+import { SignOut } from "./sign-out";
+import { Icons } from "@/components/utils/icons";
+import { getNameInitials } from "@/helpers/user";
+import { LayoutDashboard, Settings } from "lucide-react";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface AuthDropdownProps {
-    className?: string
+    className?: string;
 }
 
-export async function AuthDropdown({
-    className,
-    ...props
-}: AuthDropdownProps) {
+export async function AuthDropdown({ className, ...props }: AuthDropdownProps) {
     const session = await auth();
 
     if (!session) {
@@ -44,7 +41,7 @@ export async function AuthDropdown({
                     <span className="sr-only">Login</span>
                 </Link>
             </Button>
-        )
+        );
     }
 
     return (
@@ -57,20 +54,24 @@ export async function AuthDropdown({
                     <Avatar
                         className={buttonVariants({
                             variant: "outline",
-                            className: "p-1",
+                            className: "p-1"
                         })}
                     >
-                        <AvatarImage src={session.user.image} alt="avatar" className="object-contain" />
-                        <AvatarFallback>{getNameInitials(session?.user?.name || "")}</AvatarFallback>
+                        <AvatarImage
+                            src={session.user.image}
+                            alt="avatar"
+                            className="object-contain"
+                        />
+                        <AvatarFallback>
+                            {getNameInitials(session?.user?.name || "")}
+                        </AvatarFallback>
                     </Avatar>
                 )}
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount >
+            <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">
-                            {session.user.name}
-                        </p>
+                        <p className="text-sm font-medium leading-none">{session.user.name}</p>
                         <p className="text-xs leading-none text-muted-foreground">
                             {session.user.email}
                         </p>
@@ -81,22 +82,19 @@ export async function AuthDropdown({
                     <DropdownMenuItem asChild>
                         <Link href="/dashboard/analytics">
                             <LayoutDashboard className="mr-2 size-4" aria-hidden="true" />
-                            Dashboard
-                            <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
+                            Admin Panel
                         </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                         <Link href="/dashboard/billing">
                             <Icons.credit className="mr-2 size-4" aria-hidden="true" />
                             Billing
-                            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
                         </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                         <Link href="/dashboard/settings">
                             <Settings className="mr-2 size-4" aria-hidden="true" />
                             Settings
-                            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
                         </Link>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
@@ -104,5 +102,5 @@ export async function AuthDropdown({
                 <SignOut />
             </DropdownMenuContent>
         </DropdownMenu>
-    )
+    );
 }

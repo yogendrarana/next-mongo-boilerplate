@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowUpDown } from "lucide-react";
 import { IOrder } from "@/server/db/models/order-model";
 import OrderTableRowActions from "./order-table-row-actions";
+import { format } from "date-fns";
 
 export function getOrderTableColumns(): ColumnDef<IOrder>[] {
     return [
@@ -67,7 +68,7 @@ export function getOrderTableColumns(): ColumnDef<IOrder>[] {
                     </Button>
                 );
             },
-            cell: ({ row }) => <span>{row.getValue("createdAt")}</span>
+            cell: ({ row }) => <span>{format(row.getValue("createdAt"), "dd MMMM, yyyy")}</span>
         },
         {
             id: "actions",

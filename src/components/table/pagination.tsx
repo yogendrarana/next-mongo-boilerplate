@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
-import * as React from "react"
-import { Table } from "@tanstack/react-table"
-import { Button } from "@/components/ui/button"
-import { ChevronsRight, ChevronsLeft, ChevronLeft, ChevronRight } from 'lucide-react';
+    SelectValue
+} from "@/components/ui/select";
+import * as React from "react";
+import { Table } from "@tanstack/react-table";
+import { Button } from "@/components/ui/button";
+import { ChevronsRight, ChevronsLeft, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface DataTablePaginationProps<T> {
-    table: Table<T>
+    table: Table<T>;
 }
 
 export function Pagination<T>({ table }: DataTablePaginationProps<T>) {
@@ -25,15 +25,23 @@ export function Pagination<T>({ table }: DataTablePaginationProps<T>) {
                     <Select
                         value={`${table.getState().pagination.pageSize}`}
                         onValueChange={(value) => {
-                            table.setPageSize(Number(value))
+                            table.setPageSize(Number(value));
                         }}
                     >
                         <SelectTrigger className="h-[--size-button] w-[80px]">
                             <SelectValue placeholder={table.getState().pagination.pageSize} />
                         </SelectTrigger>
-                        <SelectContent side="top" className="w-[80px] p-2 dark:bg-gray-800" sideOffset={5}>
+                        <SelectContent
+                            side="top"
+                            className="w-[80px] p-2 dark:bg-gray-800"
+                            sideOffset={5}
+                        >
                             {[20, 30, 40, 50].map((pageSize) => (
-                                <SelectItem key={pageSize} value={`${pageSize}`} className="cursor-pointer">
+                                <SelectItem
+                                    key={pageSize}
+                                    value={`${pageSize}`}
+                                    className="cursor-pointer"
+                                >
                                     {pageSize}
                                 </SelectItem>
                             ))}
@@ -44,8 +52,7 @@ export function Pagination<T>({ table }: DataTablePaginationProps<T>) {
 
             <div className="flex items-center space-x-6 lg:space-x-8">
                 <div className="hidden md:flex w-[100px] items-center justify-center text-sm font-medium">
-                    Page {table.getState().pagination.pageIndex + 1} of{" "}
-                    {table.getPageCount()}
+                    Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
                 </div>
                 <div className="flex items-center space-x-2">
                     <Button
@@ -87,5 +94,5 @@ export function Pagination<T>({ table }: DataTablePaginationProps<T>) {
                 </div>
             </div>
         </div>
-    )
+    );
 }

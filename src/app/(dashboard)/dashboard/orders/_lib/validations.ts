@@ -9,5 +9,3 @@ export const searchOrdersParamsSchema = z.object({
     from: z.string().optional(),
     to: z.string().optional()
 });
-
-export type SearchOrdersParamsType = z.infer<typeof searchOrdersParamsSchema>;
