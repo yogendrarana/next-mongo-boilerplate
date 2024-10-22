@@ -1,33 +1,26 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-
-import { cn } from "@/lib/utils"
-import { useMediaQuery } from "@/hooks/use-media-query"
-import { Button, type ButtonProps } from "@/components/ui/button"
-import {
-    Sheet,
-    SheetClose,
-    SheetContent,
-    SheetTrigger,
-} from "@/components/ui/sheet"
-import useDashboardStore from "@/store/use-dashboard-store"
-import { Icons } from "@/components/utils/icons"
-
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { Icons } from "@/components/utils/icons";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import useDashboardStore from "@/store/use-dashboard-store";
+import { Button, type ButtonProps } from "@/components/ui/button";
+import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export interface DashboardSidebarSheetProps
     extends React.ComponentPropsWithRef<typeof SheetTrigger>,
-    ButtonProps { }
+        ButtonProps {}
 
 export function DashboardSidebarSheet({
     children,
     className,
     ...props
 }: DashboardSidebarSheetProps) {
-    const isDesktop = useMediaQuery("(min-width: 1024px)")
-    const { isSidebarOpen, toggleSidebar } = useDashboardStore()
+    const isDesktop = useMediaQuery("(min-width: 1024px)");
+    const { isSidebarOpen, toggleSidebar } = useDashboardStore();
 
-    if (isDesktop) return null
+    if (isDesktop) return null;
 
     return (
         <Sheet open={isSidebarOpen} onOpenChange={toggleSidebar}>
@@ -60,5 +53,5 @@ export function DashboardSidebarSheet({
                 {children}
             </SheetContent>
         </Sheet>
-    )
+    );
 }

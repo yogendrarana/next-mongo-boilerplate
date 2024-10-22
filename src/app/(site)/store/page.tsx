@@ -1,8 +1,8 @@
 import React from "react"
 import { type Metadata } from "next"
-import Store from "@/app/(lobby)/store/_components/store"
 import { getAllCategories, getAllSubcategories, getStoreProducts } from "@/server/queries/product"
 import { ProductsSkeletion } from "@/components/utils/products-skeleton"
+import Store from "./_components/store"
 
 export const metadata: Metadata = {
     title: "Store",

@@ -7,7 +7,6 @@ import {
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
-    DropdownMenuShortcut,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
@@ -46,28 +45,22 @@ export async function AuthDropdown({ className, ...props }: AuthDropdownProps) {
 
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger
-                name={session.user.name ?? "User Menu"}
-                className={buttonVariants({ variant: "ghost", size: "icon" })}
-            >
-                {session.user.image && session.user.name && (
-                    <Avatar
-                        className={buttonVariants({
-                            variant: "outline",
-                            className: "p-1"
-                        })}
-                    >
-                        <AvatarImage
-                            src={session.user.image}
-                            alt="avatar"
-                            className="object-contain"
-                        />
-                        <AvatarFallback>
-                            {getNameInitials(session?.user?.name || "")}
-                        </AvatarFallback>
-                    </Avatar>
-                )}
-            </DropdownMenuTrigger>
+                <DropdownMenuTrigger
+                    name={session.user.name ?? "User Menu"}
+                    className={buttonVariants({ variant: "ghost", size: "icon" })}
+                >
+                    {session.user.image && session.user.name && (
+                        <Avatar
+                            className={buttonVariants({
+                                variant: "outline",
+                                className: "p-1",
+                            })}
+                        >
+                            <AvatarImage src={session.user.image} alt="avatar" className="object-contain" />
+                            <AvatarFallback>{getNameInitials(session.user.name)}</AvatarFallback>
+                        </Avatar>
+                    )}
+                </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">

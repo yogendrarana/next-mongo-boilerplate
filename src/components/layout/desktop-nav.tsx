@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import * as React from "react"
-import type { MainNavItem } from "@/constants/types"
+import Link from "next/link";
+import * as React from "react";
+import type { MainNavItem } from "@/constants/types";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -12,23 +12,22 @@ import {
     NavigationMenuLink,
     NavigationMenuList,
     NavigationMenuTrigger,
-    navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu"
-import { Icons } from "../utils/icons"
-import { siteConfig } from "@/config/site"
-import { ComponentBooleanIcon } from "@radix-ui/react-icons"
+    navigationMenuTriggerStyle
+} from "@/components/ui/navigation-menu";
+import { Icons } from "../utils/icons";
+import { siteConfig } from "@/config/site";
+import { getNameInitials } from "@/helpers/user";
 
 interface MainNavProps {
-    items?: MainNavItem[]
+    items?: MainNavItem[];
 }
 
 export function DesktopNav({ items }: MainNavProps) {
     return (
         <div className="hidden gap-6 lg:flex">
             <Link href="/" className="hidden items-center space-x-2 lg:flex">
-                <ComponentBooleanIcon className="size-7" aria-hidden={true} />
-                <span className="hidden font-bold lg:inline-block">
-                    {siteConfig.name}
+                <span className=" text-2xl font-bold lg:inline-block">
+                    {getNameInitials(siteConfig.name)}
                 </span>
                 <span className="sr-only">Home</span>
             </Link>
@@ -98,7 +97,10 @@ export function DesktopNav({ items }: MainNavProps) {
                                     <NavigationMenuItem key={item.title}>
                                         <Link href={item.href} legacyBehavior passHref>
                                             <NavigationMenuLink
-                                                className={cn(navigationMenuTriggerStyle(), "h-auto")}
+                                                className={cn(
+                                                    navigationMenuTriggerStyle(),
+                                                    "h-auto"
+                                                )}
                                             >
                                                 {item.title}
                                             </NavigationMenuLink>
@@ -110,33 +112,32 @@ export function DesktopNav({ items }: MainNavProps) {
                 </NavigationMenuList>
             </NavigationMenu>
         </div>
-    )
+    );
 }
 
-const ListItem = React.forwardRef<
-    React.ElementRef<"a">,
-    React.ComponentPropsWithoutRef<"a">
->(({ className, title, children, href, ...props }, ref) => {
-    return (
-        <li>
-            <NavigationMenuLink asChild>
-                <Link
-                    ref={ref}
-                    href={String(href)}
-                    className={cn(
-                        "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-                        className
-                    )}
-                    {...props}
-                >
-                    <div className="text-sm font-medium leading-none">{title}</div>
-                    <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                        {children}
-                    </p>
-                </Link>
-            </NavigationMenuLink>
-        </li>
-    )
-})
+const ListItem = React.forwardRef<React.ElementRef<"a">, React.ComponentPropsWithoutRef<"a">>(
+    ({ className, title, children, href, ...props }, ref) => {
+        return (
+            <li>
+                <NavigationMenuLink asChild>
+                    <Link
+                        ref={ref}
+                        href={String(href)}
+                        className={cn(
+                            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+                            className
+                        )}
+                        {...props}
+                    >
+                        <div className="text-sm font-medium leading-none">{title}</div>
+                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                            {children}
+                        </p>
+                    </Link>
+                </NavigationMenuLink>
+            </li>
+        );
+    }
+);
 
-ListItem.displayName = "ListItem"
+ListItem.displayName = "ListItem";

@@ -51,7 +51,7 @@ export function SidebarNav({ items, className, ...props }: SidebarNavProps) {
                     >
                         <span
                             className={cn(
-                                "group flex w-full items-center rounded-md border border-transparent px-2 py-1 hover:text-black",
+                                "group flex w-full items-center rounded-md border border-transparent py-1 hover:text-black",
                                 pathname === item.href
                                     ? "text-black"
                                     : "text-muted-foreground",

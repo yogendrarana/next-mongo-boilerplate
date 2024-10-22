@@ -11,10 +11,11 @@ export const metadata: Metadata = {
 
 // fonts
 import localFont from "next/font/local";
+import { Shell } from "@/components/utils/shell";
 
 const interVariable = localFont({
     variable: "--font-sans",
-    src: "../assets/fonts/InterVariable.woff2",
+    src: "../../assets/fonts/InterVariable.woff2",
     weight: "100 900",
     display: "swap",
     preload: true
@@ -22,7 +23,7 @@ const interVariable = localFont({
 
 const geistMonoVariable = localFont({
     variable: "--font-geist-mono",
-    src: "../assets/fonts/GeistMonoVF.woff2",
+    src: "../../assets/fonts/GeistMonoVF.woff2",
     weight: "100 900",
     display: "swap",
     preload: true
@@ -44,7 +45,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                     enableSystem
                     disableTransitionOnChange
                 >
-                    {children}
+                    <div>{children}</div>
                     <Toaster richColors />
                 </ThemeProvider>
             </body>

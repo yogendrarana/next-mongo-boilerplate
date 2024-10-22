@@ -2,7 +2,6 @@
 
 import * as React from "react";
 
-import { Card, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
 import { toast } from "sonner";
 import Image from "next/image";
@@ -10,11 +9,11 @@ import { useRouter } from "next/navigation";
 import { cn, formatPrice } from "@/lib/utils";
 import useCartStore from "@/store/use-cart-store";
 import { motion, AnimatePresence } from "framer-motion";
+import { Card, CardHeader } from "@/components/ui/card";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { IProduct } from "@/server/db/models/product-model";
-import { Check, EyeIcon, Maximize2, ShoppingCart } from "lucide-react";
+import { Check, EyeIcon, ShoppingCart } from "lucide-react";
 import { PlaceholderImage } from "@/components/utils/placeholder-image";
-import { ProductPreview } from "../product/product-preview";
 
 interface ProductCardProps {
     product: IProduct;

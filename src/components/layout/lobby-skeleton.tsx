@@ -8,8 +8,8 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { Skeleton } from "@/components/ui/skeleton"
 import { buttonVariants } from "@/components/ui/button"
-import { ContentSection } from "@/components/utils/content-section"
 import { CategoryCardSkeleton } from "./category-card-skeleton"
+import { ContentSection } from "@/components/layout/content-section"
 import { ProductCardSkeleton } from "@/components/utils/product-card-skeleton"
 
 

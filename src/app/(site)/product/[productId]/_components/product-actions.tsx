@@ -12,9 +12,6 @@ const ProductActions = ({ product }: { product: IProduct }) => {
 
     return (
         <div className="flex gap-4">
-            <Button variant="default" className="w-48 rounded-md bg-primary text-white">
-                Buy Now
-            </Button>
             <Button
                 variant="outline"
                 className="w-48 p-2 rounded-md bg-white border"
@@ -43,6 +40,10 @@ const ProductActions = ({ product }: { product: IProduct }) => {
                         <ShoppingCart size={14} /> Add To Cart
                     </div>
                 )}
+            </Button>
+
+            <Button variant="default" className="rounded-md bg-primary text-white">
+                Buy Now
             </Button>
         </div>
     );
