@@ -11,6 +11,7 @@ import {
     ProductsGenderFilter,
     ProductsSubcategoryFilter
 } from "@/components/products-filters";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 interface StoreProps {
     productsPromise: ReturnType<typeof getFilteredProducts>;
@@ -34,31 +35,34 @@ export default async function Store({
     const category = searchParams?.category || "Store";
 
     return (
-        <div className="">
-            <h3 className="py-16 text-center text-xl md:text-5xl font-semibold capitalize">{category}</h3>
+        <div className="w-full overflow-hidden">
+            <h3 className="py-16 text-center text-xl md:text-5xl font-semibold capitalize">
+                {category}
+            </h3>
 
             <div className="py-8 bg-gray-50 border-t border-b">
                 <Shell>
-                    <div className="flex justify-between items-center">
-                        <div className="flex justify-end">
-                            <button className="btn btn-primary">
-                                {products?.data?.pagination.totalItems || 0} Products
-                            </button>
-                        </div>
+                    <div className="w-full flex flex-col md:flex-row justify-between items-center">
+                        <p className="hidden md:flex">
+                            {products?.data?.pagination.totalItems || 0} Products
+                        </p>
 
-                        <div className="flex items-center gap-3">
-                            <ProductsCategoryFilter
-                                triggerClassName="bg-gray-50"
-                                categories={categories?.data}
-                            />
+                        <ScrollArea className="w-screen whitespace-nowrap">
+                            <div className="w-full flex items-center gap-2">
+                                <ProductsCategoryFilter
+                                    triggerClassName="bg-gray-50"
+                                    categories={categories?.data}
+                                />
 
-                            <ProductsSubcategoryFilter
-                                triggerClassName="bg-gray-50"
-                                subcategories={subcategories?.data}
-                            />
+                                <ProductsSubcategoryFilter
+                                    triggerClassName="bg-gray-50"
+                                    subcategories={subcategories?.data}
+                                />
 
-                            <ProductsGenderFilter triggerClassName="bg-gray-50" />
-                        </div>
+                                <ProductsGenderFilter triggerClassName="bg-gray-50" />
+                                <ScrollBar orientation="horizontal" />
+                            </div>
+                        </ScrollArea>
                     </div>
                 </Shell>
             </div>

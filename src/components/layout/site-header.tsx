@@ -16,7 +16,7 @@ export function SiteHeader() {
             )}
         >
             <Shell>
-                <nav className="h-20 hidden lg:flex justify-between items-center">
+                <nav className="h-20 flex justify-between items-center">
                     <Link href="/">
                         <span className=" text-2xl font-bold lg:inline-block">
                             {getNameInitials(siteConfig.name)}
@@ -24,17 +24,17 @@ export function SiteHeader() {
                         <span className="sr-only">Home</span>
                     </Link>
 
-                    <div className="flex gap-8">
-                        <Link href="/" className="hidden lg:inline-block">
+                    <div className="hidden lg:flex gap-8">
+                        <Link href="/">
                             Home
                         </Link>
-                        <Link href="/store?category=clothing" className="hidden lg:inline-block">
+                        <Link href="/store?category=clothing">
                             Clothing
                         </Link>
-                        <Link href="/store?category=shoes" className="hidden lg:inline-block">
+                        <Link href="/store?category=shoes">
                             Shoes
                         </Link>
-                        <Link href="/store?category=accessories" className="hidden lg:inline-block">
+                        <Link href="/store?category=accessories">
                             Accessories
                         </Link>
                     </div>
@@ -43,10 +43,9 @@ export function SiteHeader() {
                         {/* <ProductsCombobox /> */}
                         <CartSheet />
                         <AuthDropdown />
+                        <MobileNav />
                     </div>
                 </nav>
-
-                <MobileNav />
             </Shell>
         </header>
     );

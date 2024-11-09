@@ -69,13 +69,13 @@ export function ProductsCategoryFilter({
                     <Button
                         variant="outline"
                         role="combobox"
-                        className={cn("w-[200px] justify-between capitalize", triggerClassName)}
+                        className={cn("w-[180px] justify-between capitalize", triggerClassName)}
                     >
                         {selectedCategory ? selectedCategory : "Category"}
                         <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
+                <PopoverContent className="w-[180px] p-0">
                     <Command>
                         <CommandInput placeholder="Search category..." />
                         <CommandList>
@@ -177,19 +177,19 @@ export function ProductsSubcategoryFilter({
                     <Button
                         variant="outline"
                         role="combobox"
-                        className={cn("w-[200px] justify-between capitalize", triggerClassName)}
+                        className={cn("w-[180px] justify-between capitalize", triggerClassName)}
                     >
                         Sub Category
                         <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
+                <PopoverContent className="w-[180px] p-0">
                     <Command>
                         <CommandInput placeholder="Search Sub category..." />
                         <CommandList>
                             <CommandEmpty>No sub category category found.</CommandEmpty>
                             <CommandGroup>
-                                <ScrollArea className="h-[200px]">
+                                <ScrollArea className="h-[180px]">
                                     {subcategories?.map((subcat) => (
                                         <CommandItem
                                             className="py-2.5"
@@ -279,13 +279,13 @@ export function ProductsGenderFilter({
                     <Button
                         variant="outline"
                         role="combobox"
-                        className={cn("w-[200px] justify-between capitalize", triggerClassName)}
+                        className={cn("w-[180px] justify-between capitalize", triggerClassName)}
                     >
                         Gender
                         <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
+                <PopoverContent className="w-[180px] p-0">
                     <Command>
                         <CommandInput placeholder="Search Sub category..." />
                         <CommandList>
