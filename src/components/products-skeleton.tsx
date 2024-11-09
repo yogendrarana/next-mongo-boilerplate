@@ -1,9 +1,10 @@
-import { ProductCardSkeleton } from "@/components/product-card-skeleton"
-import { ContentSection } from "./layout/content-section"
+import { ProductCardSkeleton } from "@/components/product-card-skeleton";
+import { ContentSection } from "./layout/content-section";
+import { Shell } from "./shell";
 
 export function ProductsSkeletion() {
     return (
-        <div>
+        <Shell>
             <ContentSection
                 title="Store products"
                 description="Explore products from our store"
@@ -15,6 +16,6 @@ export function ProductsSkeletion() {
                     <ProductCardSkeleton key={i} />
                 ))}
             </ContentSection>
-        </div>
-    )
+        </Shell>
+    );
 }

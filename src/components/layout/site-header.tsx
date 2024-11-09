@@ -9,14 +9,14 @@ import { CartSheet } from "../checkout/cart-sheet";
 
 export function SiteHeader() {
     return (
-        <header className="sticky top-0 z-50 border-b">
+        <header
+            className={cn(
+                "sticky top-0 z-50 border-b",
+                "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 "
+            )}
+        >
             <Shell>
-                <nav
-                    className={cn(
-                        "h-20 hidden lg:flex justify-between items-center",
-                        "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
-                    )}
-                >
+                <nav className="h-20 hidden lg:flex justify-between items-center">
                     <Link href="/">
                         <span className=" text-2xl font-bold lg:inline-block">
                             {getNameInitials(siteConfig.name)}

@@ -73,7 +73,7 @@ export async function AuthDropdown({ className, ...props }: AuthDropdownProps) {
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuItem asChild>
-                        <Link href="/dashboard/analytics">
+                        <Link href="/admin/analytics">
                             <LayoutDashboard className="mr-2 size-4" aria-hidden="true" />
                             Admin Panel
                         </Link>

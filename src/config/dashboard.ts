@@ -1,38 +1,38 @@
 import { type SidebarNavItem } from "@/constants/types"
 
 export interface DashboardConfig {
-    sidebarNav: SidebarNavItem[]
+    adminNav: SidebarNavItem[]
 }
 
 export const dashboardConfig: DashboardConfig = {
-    sidebarNav: [
+    adminNav: [
         {
             title: "Analytics",
-            href: "/dashboard/analytics",
+            href: "/admin/analytics",
             icon: "analytics",
             external: false,
         },
         {
             title: "Products",
-            href: "/dashboard/products",
+            href: "/admin/products",
             icon: "products",
             external: false,
         },
         {
             title: "Users",
-            href: "/dashboard/users",
+            href: "/admin/users",
             icon: "users",
             external: false,
         },
         {
             title: "Orders",
-            href: "/dashboard/orders",
+            href: "/admin/orders",
             icon: "orders",
             external: false,
         },
         {
             title: "Settings",
-            href: "/dashboard/settings",
+            href: "/admin/settings",
             icon: "settings",
             external: false,
         },

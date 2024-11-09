@@ -1,12 +1,12 @@
 import { connectDb } from "../db";
+import { unstable_cache as cache } from "next/cache";
 import { getErrorMessage } from "@/lib/handle-error";
 import { ApiResponse } from "@/helpers/api-response";
 import { ProductSearchParams } from "@/constants/types/index";
 import ProductModel, { IProduct } from "../db/models/product-model";
-import { unstable_cache as cache, unstable_noStore as noStore } from "next/cache";
 
 // filter products
-function filterProducts(params: ProductSearchParams) {
+function buildQuery(params: ProductSearchParams) {
     const {
         gte,
         lte,
@@ -61,7 +61,7 @@ export async function getFilteredProducts(params: ProductSearchParams) {
     await connectDb();
 
     const { page, limit } = params;
-    const { matchStage, sortStage, paginationStage } = await filterProducts(params);
+    const { matchStage, sortStage, paginationStage } = await buildQuery(params);
 
     const pipeline = [
         { $match: matchStage },
@@ -114,7 +114,7 @@ export async function getFilteredProducts(params: ProductSearchParams) {
             revalidate: 3600,
             tags: [
                 "store",
-                ...Object.entries(params).map(([key, value]) => `products-${key}-${value}`)
+                ...Object.entries(params).map(([key, value]) => `store-${key}-${value}`)
             ]
         }
     )();
@@ -122,74 +122,6 @@ export async function getFilteredProducts(params: ProductSearchParams) {
     return result;
 }
 
-// get products by category
-export async function getProductsByCategory(category: string, params: ProductSearchParams) {
-    await connectDb();
-
-    const { page, limit } = params;
-    const { matchStage, sortStage, paginationStage } = await filterProducts({
-        ...params,
-        category
-    });
-
-    const pipeline = [
-        { $match: matchStage },
-        { $sort: sortStage },
-        {
-            $facet: {
-                metadata: [{ $count: "total" }],
-                products: [...paginationStage]
-            }
-        },
-        {
-            $project: {
-                products: 1,
-                totalCount: { $arrayElemAt: ["$metadata.total", 0] }
-            }
-        }
-    ];
-
-    // Generate a dynamic cache key based on all search parameters
-    const cacheKey = `products-${category}-${JSON.stringify(
-        Object.keys(params)
-            .sort()
-            .reduce((obj: { [key: string]: any }, key) => {
-                obj[key] = params[key];
-                return obj;
-            }, {})
-    )}`;
-
-    const result = await cache(
-        async () => {
-            try {
-                const [res] = await ProductModel.aggregate(pipeline).exec();
-                const { products, totalCount } = res;
-                const totalPages = Math.ceil(totalCount / Number(limit));
-                return ApiResponse.success("Successfully fetched products", {
-                    products: products as IProduct[],
-                    pagination: {
-                        currentPage: page,
-                        totalPages,
-                        totalItems: totalCount,
-                        itemsPerPage: limit
-                    }
-                });
-            } catch (err: any) {
-                return ApiResponse.failure(err.message);
-            }
-        },
-        [cacheKey],
-        {
-            revalidate: 3600,
-            tags: [
-                `products-${params.category}`,
-                ...Object.entries(params).map(([key, value]) => `products-${key}-${value}`)
-            ]
-        }
-    )();
-
-    return result;
-}
 
 // get featured products
 export async function getFeaturedProducts() {

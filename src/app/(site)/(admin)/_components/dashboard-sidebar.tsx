@@ -17,13 +17,13 @@ export function DashboardSidebar({ className, ...props }: DashboardSidebarProps)
     const pathname = usePathname();
     const { isSidebarOpen, toggleSidebar } = useDashboardStore();
 
-    if (!dashboardConfig.sidebarNav?.length) return null;
+    if (!dashboardConfig.adminNav?.length) return null;
 
     return (
         <aside className={cn("h-full w-full", className)} {...props}>
             <ScrollArea>
                 <div className={cn("flex w-full flex-col gap-2 text-sm", className)} {...props}>
-                    {dashboardConfig.sidebarNav.map((item, index) => {
+                    {dashboardConfig.adminNav.map((item, index) => {
                         const Icon = Icons[item.icon as keyof typeof Icons ?? "chevronLeft"];
 
                         if (!item.href) {

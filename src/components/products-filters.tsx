@@ -71,7 +71,7 @@ export function ProductsCategoryFilter({
                         role="combobox"
                         className={cn("w-[200px] justify-between capitalize", triggerClassName)}
                     >
-                        {selectedCategory ? selectedCategory : "Select category"}
+                        {selectedCategory ? selectedCategory : "Category"}
                         <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                 </PopoverTrigger>
@@ -179,7 +179,7 @@ export function ProductsSubcategoryFilter({
                         role="combobox"
                         className={cn("w-[200px] justify-between capitalize", triggerClassName)}
                     >
-                        Select Sub Category
+                        Sub Category
                         <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                 </PopoverTrigger>
@@ -281,7 +281,7 @@ export function ProductsGenderFilter({
                         role="combobox"
                         className={cn("w-[200px] justify-between capitalize", triggerClassName)}
                     >
-                        Select Gender
+                        Gender
                         <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                 </PopoverTrigger>

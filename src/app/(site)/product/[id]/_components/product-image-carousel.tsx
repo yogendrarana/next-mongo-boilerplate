@@ -81,12 +81,12 @@ export function ProductImageCarousel({
     return (
         <div
             aria-label="Product image carousel"
-            className={cn("flex flex-col gap-2", className)}
+            className={cn("flex flex-col gap-4", className)}
             {...props}
         >
             <div ref={emblaRef} className="overflow-hidden rounded-lg">
                 <div
-                    className="-ml-4 flex touch-pan-y"
+                    className="flex touch-pan-y"
                     style={{
                         backfaceVisibility: "hidden"
                     }}
@@ -114,45 +114,33 @@ export function ProductImageCarousel({
             </div>
             {images.length > 1 ? (
                 <div className="flex w-full items-center justify-center gap-2">
+                    {images.map((_, i) => (
+                        <Button
+                            key={i}
+                            variant="secondary"
+                            size="icon"
+                            className={cn(
+                                "h-5 w-5 rounded-full",
+                                i === selectedIndex ? "bg-black border-none" : "bg-gray-100 border"
+                            )}
+                            onClick={() => scrollTo(i)}
+                            onKeyDown={handleKeyDown}
+                        ></Button>
+                    ))}
                     <Button
                         variant="outline"
                         size="icon"
-                        className="mr-0.5 aspect-square size-7 rounded-none sm:mr-2 sm:size-8"
+                        className="ml-auto h-10 w-10 rounded-sm"
                         disabled={prevBtnDisabled}
                         onClick={scrollPrev}
                     >
                         <ChevronLeftIcon className="size-3 sm:size-4" aria-hidden="true" />
                         <span className="sr-only">Previous slide</span>
                     </Button>
-                    {images.map((image, i) => (
-                        <Button
-                            key={i}
-                            variant="outline"
-                            size="icon"
-                            className={cn(
-                                "group relative aspect-square size-full max-w-[100px] rounded-none shadow-sm hover:bg-transparent focus-visible:ring-foreground",
-                                i === selectedIndex && "ring-1 ring-foreground"
-                            )}
-                            onClick={() => scrollTo(i)}
-                            onKeyDown={handleKeyDown}
-                        >
-                            <div className="absolute inset-0 z-10 bg-zinc-950/20 group-hover:bg-zinc-950/40" />
-                            <Image
-                                src={image.url}
-                                alt={"product image"}
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                fill
-                                className="object-cover"
-                            />
-                            <span className="sr-only">
-                                Slide {i + 1} of {images.length}
-                            </span>
-                        </Button>
-                    ))}
                     <Button
                         variant="outline"
                         size="icon"
-                        className="ml-0.5 aspect-square size-7 rounded-none sm:ml-2 sm:size-8"
+                        className="h-10 w-10 rounded-sm"
                         disabled={nextBtnDisabled}
                         onClick={scrollNext}
                     >

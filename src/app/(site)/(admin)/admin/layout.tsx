@@ -15,19 +15,21 @@ interface DashboardStoreLayoutProps {
 export default async function DashboardStoreLayout({ children }: DashboardStoreLayoutProps) {
     const session = await auth();
 
-    if (!session) {
+    if (!session || !session.user) {
         redirect("/login");
     }
 
     return (
-        <Shell className="px-0 min-h-screen">
+        <div className="min-h-screen">
             <SiteHeader />
-            <div className="flex h-full py-2">
-                <DashboardSidebar className="h-full w-[15rem] hidden lg:block" />
-                <div className="w-full">
-                    <main className="w-full">{children}</main>
+            <Shell>
+                <div className="flex py-4 md:py-10">
+                    <DashboardSidebar className="h-full w-[15rem] hidden lg:block" />
+                    <div className="w-full">
+                        <main className="w-full">{children}</main>
+                    </div>
                 </div>
-            </div>
-        </Shell>
+            </Shell>
+        </div>
     );
 }

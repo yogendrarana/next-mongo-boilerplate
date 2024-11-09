@@ -22,6 +22,10 @@ const Analytics = () => {
                 <DateRangePicker />
             </div>
 
+            <div className="col-span-4">
+                <CentralAnalytics />
+            </div>
+
             <div className="grid gap-3 grid-cols-1 md:grid-cols-4">
                 <Kpi
                     title="All Time Revenue"
@@ -49,10 +53,6 @@ const Analytics = () => {
                 </div>
                 <div>
                     <CustomerAnalytics />
-                </div>
-
-                <div className="col-span-4">
-                    <CentralAnalytics />
                 </div>
             </div>
         </div>

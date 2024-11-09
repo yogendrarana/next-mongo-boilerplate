@@ -46,7 +46,7 @@ export function ProductCard({ product, className, ...props }: ProductCardProps) 
             {...props}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className={cn("group", "size-full overflow-hidden relative rounded-lg", className)}
+            className={cn("group", "overflow-hidden relative rounded-lg", className)}
         >
             <Link aria-label={product.name} href={`/product/${product._id}`}>
                 <CardHeader className="border-b p-0 overflow-hidden">
