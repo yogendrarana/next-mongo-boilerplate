@@ -10,7 +10,7 @@ import { ListOrdered, DollarSign, UsersRound } from "lucide-react";
 
 const Analytics = () => {
     return (
-        <div className="space-y-6">
+        <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-lg font-medium">Analytics</h1>
@@ -22,29 +22,32 @@ const Analytics = () => {
                 <DateRangePicker />
             </div>
 
-            <div className="col-span-4">
-                <CentralAnalytics />
-            </div>
-
             <div className="grid gap-3 grid-cols-1 md:grid-cols-4">
                 <Kpi
                     title="All Time Revenue"
                     value="20000"
-                    icon={<DollarSign className="h-full w-full" />}
+                    icon={<DollarSign className="h-5 w-5" />}
                 />
                 <Kpi
                     title="All Time Orders"
                     value="50000"
-                    icon={<ListOrdered className="h-full w-full" />}
+                    icon={<ListOrdered className="h-5 w-5" />}
                 />
                 <Kpi
                     title="All Time Customers"
                     value="100"
-                    icon={<UsersRound className="h-full w-full" />}
+                    icon={<UsersRound className="h-5 w-5" />}
                 />
-                <div className="row-span-2">
-                    <PopularProducts />
-                </div>
+                <Kpi
+                    title="All Time Customers"
+                    value="100"
+                    icon={<UsersRound className="h-5 w-5" />}
+                />
+            </div>
+
+            <CentralAnalytics />
+
+            <div className="grid gap-3 grid-cols-1 md:grid-cols-4">
                 <div>
                     <RevenueAnalytics />
                 </div>
@@ -54,6 +57,10 @@ const Analytics = () => {
                 <div>
                     <CustomerAnalytics />
                 </div>
+            </div>
+
+            <div className="row-span-2">
+                <PopularProducts />
             </div>
         </div>
     );
