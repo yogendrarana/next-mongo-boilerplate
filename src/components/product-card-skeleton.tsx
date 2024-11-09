@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils"
 import { Skeleton } from "@/components/ui/skeleton"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
-import { PlaceholderImage } from "@/components/utils/placeholder-image"
+import { PlaceholderImage } from "@/components/placeholder-image"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 
 interface ProductCardSkeletonProps

@@ -11,7 +11,7 @@ import {
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { siteConfig } from "@/config/site"
-import { Icons } from "@/components/utils/icons"
+import { Icons } from "@/components/icons"
 import type { MainNavItem } from "@/constants/types"
 import { Button } from "@/components/ui/button"
 import { useMediaQuery } from "@/hooks/use-media-query"

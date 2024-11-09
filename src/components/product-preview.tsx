@@ -26,7 +26,7 @@ export function ProductPreview({ product, children }: ProductPreviewProps) {
                     <Image
                         fill
                         loading="lazy"
-                        src={product.images[0] ?? '/images/product-placeholder.webp'}
+                        src={product.images[0].url ?? '/images/product-placeholder.webp'}
                         alt={product.name}
                         className="h-full w-full rounded-md object-cover"
                     />

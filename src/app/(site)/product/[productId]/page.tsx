@@ -10,11 +10,11 @@ import {
 } from "@/components/ui/accordion";
 import { formatMongoData } from "@/helpers";
 import { Separator } from "@/components/ui/separator";
-import { ProductCard } from "@/components/utils/product-card";
+import { ProductCard } from "@/components/product-card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { ProductImageCarousel } from "./_components/product-image-carousel";
 import { getProductById, getRelatedProducts } from "@/server/queries/product";
-import { Shell } from "@/components/utils/shell";
+import { Shell } from "@/components/shell";
 import { SiteHeader } from "@/components/layout/site-header";
 import SiteFooter from "@/components/layout/site-footer";
 import ProductDetail from "./_components/product-detail";

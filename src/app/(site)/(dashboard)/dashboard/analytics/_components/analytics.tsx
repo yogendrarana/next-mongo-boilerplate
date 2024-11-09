@@ -1,7 +1,7 @@
 import React from "react";
 import OrderAnalytics from "./order-analytics";
 import RevenueAnalytics from "./revenue-analytics";
-import { DateRangePicker } from "@/components/utils/date-range-picker";
+import { DateRangePicker } from "@/components/date-range-picker";
 import PopularProducts from "./popular-products";
 import CentralAnalytics from "./central-analytics";
 import Kpi from "./kpi";

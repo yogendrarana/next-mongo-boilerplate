@@ -1,5 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { ProductCardSkeleton } from "@/components/utils/product-card-skeleton";
+import { ProductCardSkeleton } from "@/components/product-card-skeleton";
 
 export default function ProductsLoading() {
     return (

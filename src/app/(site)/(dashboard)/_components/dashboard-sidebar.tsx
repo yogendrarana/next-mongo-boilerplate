@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
-import { Icons } from "@/components/utils/icons";
+import { Icons } from "@/components/icons";
 import { dashboardConfig } from "@/config/dashboard";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import useDashboardStore from "@/store/use-dashboard-store";
@@ -24,7 +24,7 @@ export function DashboardSidebar({ className, ...props }: DashboardSidebarProps)
             <ScrollArea>
                 <div className={cn("flex w-full flex-col gap-2 text-sm", className)} {...props}>
                     {dashboardConfig.sidebarNav.map((item, index) => {
-                        const Icon = Icons[item.icon ?? "chevronLeft"];
+                        const Icon = Icons[item.icon as keyof typeof Icons ?? "chevronLeft"];
 
                         if (!item.href) {
                             return (

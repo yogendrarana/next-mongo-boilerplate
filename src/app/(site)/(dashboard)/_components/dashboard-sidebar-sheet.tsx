@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Icons } from "@/components/utils/icons";
+import { Icons } from "@/components/icons";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import useDashboardStore from "@/store/use-dashboard-store";
 import { Button, type ButtonProps } from "@/components/ui/button";

@@ -10,9 +10,9 @@ import {
     SheetTitle,
     SheetTrigger
 } from "@/components/ui/sheet";
+import { Icons } from "@/components/icons";
 import { cn, formatPrice } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { Icons } from "@/components/utils/icons";
 import useCartStore from "@/store/use-cart-store";
 import { Separator } from "@/components/ui/separator";
 import { Button, buttonVariants } from "@/components/ui/button";

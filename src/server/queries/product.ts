@@ -1,22 +1,20 @@
-import { unstable_cache as cache, unstable_noStore as noStore } from "next/cache";
 import { connectDb } from "../db";
+import { getErrorMessage } from "@/lib/handle-error";
 import { ApiResponse } from "@/helpers/api-response";
 import { ProductSearchParams } from "@/constants/types/index";
-import CategoryModel, { ICategory } from "../db/models/category-model";
 import ProductModel, { IProduct } from "../db/models/product-model";
-import SubcategoryModel, { ISubcategory } from "../db/models/subcategory-model";
-import { getErrorMessage } from "@/lib/handle-error";
+import { unstable_cache as cache, unstable_noStore as noStore } from "next/cache";
 
 // filter products
-async function filterProducts(params: ProductSearchParams) {
+function filterProducts(params: ProductSearchParams) {
     const {
         gte,
         lte,
         page = 1,
         limit = 20,
         gender,
-        category,
-        subcategory,
+        categorySlug,
+        subcategorySlug,
         sort = "price",
         order = ""
     } = params;
@@ -24,13 +22,13 @@ async function filterProducts(params: ProductSearchParams) {
     // Match stage
     const matchStage: any = {};
 
-    if (category) {
-        const categoryValues = category.split(",").map((s) => s.trim());
+    if (categorySlug) {
+        const categoryValues = categorySlug.split(",").map((s) => s.trim());
         matchStage["category.slug"] = { $in: categoryValues };
     }
 
-    if (subcategory) {
-        const subcategoryValues = subcategory.split(",").map((s) => s.trim());
+    if (subcategorySlug) {
+        const subcategoryValues = subcategorySlug.split(",").map((s) => s.trim());
         matchStage["subcategory.slug"] = { $in: subcategoryValues };
     }
 
@@ -59,7 +57,7 @@ async function filterProducts(params: ProductSearchParams) {
 }
 
 // get products
-export async function getStoreProducts(params: ProductSearchParams) {
+export async function getFilteredProducts(params: ProductSearchParams) {
     await connectDb();
 
     const { page, limit } = params;
@@ -225,63 +223,6 @@ export async function getProductCountByCategory({ categoryId }: { categoryId: st
     )();
 }
 
-// get categories
-export async function getAllCategories(): Promise<{
-    success: boolean;
-    message: string;
-    data: ICategory[] | null;
-}> {
-    await connectDb();
-
-    const result = await cache(
-        async () => {
-            try {
-                const categories = await CategoryModel.find().lean().exec();
-                return {
-                    success: true,
-                    message: "Fetched all categories!",
-                    data: categories as ICategory[]
-                };
-            } catch (err: any) {
-                return { success: true, message: "Fetched all categories!", data: null };
-            }
-        },
-        ["all-categories"],
-        {
-            revalidate: 3600,
-            tags: ["all-categories"]
-        }
-    )();
-
-    return result;
-}
-
-// get all subcategories
-export async function getAllSubcategories() {
-    await connectDb();
-
-    const result = await cache(
-        async () => {
-            try {
-                const subcategories = await SubcategoryModel.find().lean().exec();
-                return ApiResponse.success(
-                    "Fetched all subcategories!",
-                    subcategories as ISubcategory[]
-                );
-            } catch (err: any) {
-                return ApiResponse.failure(err.message);
-            }
-        },
-        ["all-subcategories"],
-        {
-            revalidate: 3600,
-            tags: ["all-subcategories"]
-        }
-    )();
-
-    return result;
-}
-
 // get product by id
 export async function getProductById(productId: string) {
     await connectDb();
@@ -323,31 +264,6 @@ export async function getRelatedProducts(productId: string) {
             tags: [`related-products-${productId}`]
         }
     )();
-}
-
-// get all subcategories
-export async function getSubcategoriesOfCategory(slug: string) {
-    await connectDb();
-
-    const result = await cache(
-        async () => {
-            try {
-                const categories = await SubcategoryModel.find({ "category.slug": slug })
-                    .lean()
-                    .exec();
-                return ApiResponse.success("Fetched subcategories!", categories as ISubcategory[]);
-            } catch (err: any) {
-                return ApiResponse.failure(err.message);
-            }
-        },
-        [`subcategories-of-${slug}`],
-        {
-            revalidate: 3600,
-            tags: [`subcategories-of-${slug}`]
-        }
-    )();
-
-    return result;
 }
 
 // search product

@@ -1,9 +1,9 @@
 import { cn } from "@/lib/utils";
-import { Icons } from "@/components/utils/icons";
+import { Icons } from "@/components/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ProductCardSkeleton } from "@/components/utils/product-card-skeleton";
+import { ProductCardSkeleton } from "@/components/product-card-skeleton";
 
 export default function ProductLoading() {
     return (

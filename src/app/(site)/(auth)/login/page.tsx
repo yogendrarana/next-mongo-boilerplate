@@ -3,10 +3,10 @@ import React from "react"
 import Link from "next/link"
 import { Metadata } from "next"
 import { cn } from "@/lib/utils"
-import { Icons } from "@/components/utils/icons"
+import { Icons } from "@/components/icons"
 import { buttonVariants } from "@/components/ui/button"
 import { ComponentBooleanIcon } from "@radix-ui/react-icons"
-import { UserAuthForm } from "@/app/(auth)/_components/user-auth-form"
+import { UserAuthForm } from "../_components/user-auth-form"
 
 export const metadata: Metadata = {
     title: "Login",

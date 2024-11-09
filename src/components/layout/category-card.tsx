@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Icons } from "@/components/utils/icons";
+import { Icons } from "@/components/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ICategory } from "@/server/db/models/category-model";
 import { getProductCountByCategory } from "@/server/queries/product";

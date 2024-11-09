@@ -1,5 +1,5 @@
-import { ContentSection } from "@/components/utils/content-section"
-import { ProductCardSkeleton } from "@/components/utils/product-card-skeleton"
+import { ProductCardSkeleton } from "@/components/product-card-skeleton"
+import { ContentSection } from "./layout/content-section"
 
 export function ProductsSkeletion() {
     return (

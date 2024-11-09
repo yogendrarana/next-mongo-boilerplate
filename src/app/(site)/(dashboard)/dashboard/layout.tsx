@@ -1,7 +1,7 @@
 import * as React from "react";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import { Shell } from "@/components/utils/shell";
+import { Shell } from "@/components/shell";
 import { SiteHeader } from "@/components/layout/site-header";
 import { DashboardSidebar } from "../_components/dashboard-sidebar";
 

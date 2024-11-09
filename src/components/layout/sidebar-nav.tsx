@@ -4,7 +4,7 @@ import Link from "next/link"
 import type { SidebarNavItem } from "@/constants/types"
 
 import { cn } from "@/lib/utils"
-import { Icons } from "@/components/utils/icons"
+import { Icons } from "@/components/icons"
 import useDashboardStore from "@/store/use-dashboard-store"
 import { usePathname } from "next/navigation"
 
@@ -24,7 +24,7 @@ export function SidebarNav({ items, className, ...props }: SidebarNavProps) {
             {...props}
         >
             {items.map((item, index) => {
-                const Icon = Icons[item.icon ?? "chevronLeft"]
+                const Icon = Icons[item.icon as keyof typeof Icons ?? "chevronLeft"]
 
                 if (!item.href) {
                     return (

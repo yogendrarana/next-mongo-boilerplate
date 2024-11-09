@@ -13,7 +13,7 @@ import Link from "next/link";
 import { auth } from "@/auth";
 import { cn } from "@/lib/utils";
 import { SignOut } from "./sign-out";
-import { Icons } from "@/components/utils/icons";
+import { Icons } from "@/components/icons";
 import { getNameInitials } from "@/helpers/user";
 import { LayoutDashboard, Settings } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";

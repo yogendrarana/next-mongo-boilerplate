@@ -51,8 +51,8 @@ export type ProductSearchParams = {
     gte?: string;
     lte?: string;
     gender?: string;
-    category?: string;
-    subcategory?: string;
+    categorySlug?: string;
+    subcategorySlug?: string;
     page?: string;
     limit?: string;
     search?: string;

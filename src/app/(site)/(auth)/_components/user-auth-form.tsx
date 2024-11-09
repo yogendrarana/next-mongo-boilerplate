@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import { LoaderIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Icons } from "@/components/utils/icons";
+import { Icons } from "@/components/icons";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { userAuthSchema } from "@/lib/validations/auth";
 import { Button, buttonVariants } from "@/components/ui/button";

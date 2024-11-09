@@ -8,9 +8,9 @@ import {
     BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 import { formatMongoData } from "@/helpers";
-import { ProductCard } from "@/components/utils/product-card";
-import ProductFilterDropdown from "@/components/utils/product-filter-dropdown";
-import { getProductsByCategory, getSubcategoriesOfCategory } from "@/server/queries/product";
+import { ProductCard } from "@/components/product-card";
+import { getProductsByCategory } from "@/server/queries/product";
+import { getSubcategoriesOfCategory } from "@/server/queries/subcategory";
 
 interface CategoryProductsProps {
     slug: string;
@@ -46,7 +46,6 @@ export default async function CategoryProducts({
                     </BreadcrumbList>
                 </Breadcrumb>
 
-                <ProductFilterDropdown subCategories={subcategories?.data} />
             </header>
 
             <Suspense fallback={<div>Loading products...</div>}>

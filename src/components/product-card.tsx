@@ -13,7 +13,7 @@ import { Card, CardHeader } from "@/components/ui/card";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { IProduct } from "@/server/db/models/product-model";
 import { Check, EyeIcon, ShoppingCart } from "lucide-react";
-import { PlaceholderImage } from "@/components/utils/placeholder-image";
+import { PlaceholderImage } from "@/components/placeholder-image";
 
 interface ProductCardProps {
     product: IProduct;

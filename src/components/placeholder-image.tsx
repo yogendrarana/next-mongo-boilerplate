@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-import { Icons } from "@/components/utils/icons"
+import { Icons } from "@/components/icons"
 import { Slot } from "@radix-ui/react-slot"
 import { Skeleton } from "@/components/ui/skeleton"
 import { AspectRatio } from "@/components/ui/aspect-ratio"

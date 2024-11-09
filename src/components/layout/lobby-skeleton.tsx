@@ -3,14 +3,14 @@ import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
-} from "@/components/utils/page-header"
+} from "@/components/page-header"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { Skeleton } from "@/components/ui/skeleton"
 import { buttonVariants } from "@/components/ui/button"
 import { CategoryCardSkeleton } from "./category-card-skeleton"
 import { ContentSection } from "@/components/layout/content-section"
-import { ProductCardSkeleton } from "@/components/utils/product-card-skeleton"
+import { ProductCardSkeleton } from "@/components/product-card-skeleton"
 
 
 export function LobbySkeleton() {

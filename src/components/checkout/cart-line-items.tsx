@@ -1,6 +1,6 @@
 import Image from "next/image"
 
-import { Icons } from "@/components/utils/icons"
+import { Icons } from "@/components/icons"
 import { Slot } from "@radix-ui/react-slot"
 import { cn, formatPrice } from "@/lib/utils"
 import { TCartItem } from "@/store/use-cart-store"
