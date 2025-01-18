@@ -4,7 +4,7 @@ import { Lobby } from "@/components/layout/lobby";
 import SiteFooter from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { getFeaturedProducts } from "@/server/queries/product";
-import { LobbySkeleton } from "@/components/layout/lobby-skeleton";
+import { LobbySkeleton } from "@/components/fallback/lobby-skeleton";
 
 export default async function IndexPage() {
     const productsPromise = getFeaturedProducts();

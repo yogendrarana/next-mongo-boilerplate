@@ -1,11 +1,11 @@
 import React from "react";
+import Kpi from "./kpi";
 import OrderAnalytics from "./order-analytics";
 import RevenueAnalytics from "./revenue-analytics";
-import { DateRangePicker } from "@/components/date-range-picker";
 import PopularProducts from "./popular-products";
 import CentralAnalytics from "./central-analytics";
-import Kpi from "./kpi";
 import { CustomerAnalytics } from "./customer-analytics";
+import { DateRangePicker } from "@/components/date-range-picker";
 import { ListOrdered, DollarSign, UsersRound } from "lucide-react";
 
 const Analytics = () => {

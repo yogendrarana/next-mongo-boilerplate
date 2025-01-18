@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Shell } from "@/components/shell";
 import { MobileNav } from "./mobile-nav";
 import { siteConfig } from "@/config/site";
 import { getNameInitials } from "@/helpers/user";
 import { AuthDropdown } from "./auth-dropdown";
 import { CartSheet } from "../checkout/cart-sheet";
+import Container from "../container";
 
 export function SiteHeader() {
     return (
@@ -15,7 +15,7 @@ export function SiteHeader() {
                 "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 "
             )}
         >
-            <Shell>
+            <Container>
                 <nav className="h-20 flex justify-between items-center">
                     <Link href="/">
                         <span className=" text-2xl font-bold lg:inline-block">
@@ -46,7 +46,7 @@ export function SiteHeader() {
                         <MobileNav />
                     </div>
                 </nav>
-            </Shell>
+            </Container>
         </header>
     );
 }

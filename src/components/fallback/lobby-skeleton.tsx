@@ -6,16 +6,16 @@ import {
 } from "@/components/page-header"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
+import Container from "../container"
 import { Skeleton } from "@/components/ui/skeleton"
 import { buttonVariants } from "@/components/ui/button"
 import { CategoryCardSkeleton } from "./category-card-skeleton"
 import { ContentSection } from "@/components/layout/content-section"
 import { ProductCardSkeleton } from "@/components/product-card-skeleton"
 
-
 export function LobbySkeleton() {
   return (
-    <div className="max-w-6xl gap-0">
+    <Container>
       <PageHeader
         as="section"
         className="mx-auto items-center gap-2 text-center"
@@ -66,6 +66,6 @@ export function LobbySkeleton() {
           <ProductCardSkeleton key={i} />
         ))}
       </ContentSection>
-    </div>
+    </Container>
   )
 }

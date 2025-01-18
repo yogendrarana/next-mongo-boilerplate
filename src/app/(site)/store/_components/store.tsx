@@ -1,6 +1,6 @@
 import React from "react";
-import { Shell } from "@/components/shell";
 import { formatMongoData } from "@/helpers";
+import Container from "@/components/container";
 import { ProductCard } from "@/components/product-card";
 import { IProduct } from "@/server/db/models/product-model";
 import { getAllCategories } from "@/server/queries/category";
@@ -41,19 +41,14 @@ export default async function Store({
             </h3>
 
             <div className="py-8 bg-gray-50 border-t border-b">
-                <Shell>
-                    <div className="w-full flex flex-col md:flex-row justify-between items-center">
+                <Container>
+                    <div className="w-full flex justify-between items-center">
                         <p className="hidden md:flex">
                             {products?.data?.pagination.totalItems || 0} Products
                         </p>
 
-                        <ScrollArea className="w-screen whitespace-nowrap">
+                        <ScrollArea className="whitespace-nowrap">
                             <div className="w-full flex items-center gap-2">
-                                <ProductsCategoryFilter
-                                    triggerClassName="bg-gray-50"
-                                    categories={categories?.data}
-                                />
-
                                 <ProductsSubcategoryFilter
                                     triggerClassName="bg-gray-50"
                                     subcategories={subcategories?.data}
@@ -64,10 +59,10 @@ export default async function Store({
                             </div>
                         </ScrollArea>
                     </div>
-                </Shell>
+                </Container>
             </div>
 
-            <Shell>
+            <Container>
                 <div className="py-16 grid gap-4 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     {products?.data?.products.map((product: IProduct) => (
                         <ProductCard
@@ -76,7 +71,7 @@ export default async function Store({
                         />
                     ))}
                 </div>
-            </Shell>
+            </Container>
         </div>
     );
 }

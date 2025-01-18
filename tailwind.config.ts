@@ -10,18 +10,6 @@ const config = {
     ],
     prefix: "",
     theme: {
-        container: {
-            center: true,
-            padding: {
-                DEFAULT: "1.5rem",
-                sm: "0.5rem",
-                md: "1.25rem",
-                lg: "1.5rem"
-            },
-            screens: {
-                "2xl": "1600px"
-            }
-        },
         extend: {
             colors: {
                 border: "hsl(var(--border))",

@@ -2,11 +2,12 @@ import Link from "next/link";
 import { ShoppingBag } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import Container from "../container";
 
 export default function SiteFooter() {
     return (
-        <footer className="bg-white text-gray-600 py-8 px-4 border-t">
-            <div className="container mx-auto">
+        <footer className="bg-white text-gray-600 py-8 border-t">
+            <Container>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
                     <div className="lg:col-span-1">
                         <ShoppingBag className="h-8 w-8 text-gray-800" />
@@ -129,9 +130,9 @@ export default function SiteFooter() {
                         </p>
                     </div>
                 </div>
-                <div className="mt-8 pt-8 border-t text-sm text-center">
-                    © 2024 Commerce, Inc. All rights reserved.
-                </div>
+            </Container>
+            <div className="mt-8 pt-8 text-sm text-center border-t">
+                © 2024 Commerce, Inc. All rights reserved.
             </div>
         </footer>
     );

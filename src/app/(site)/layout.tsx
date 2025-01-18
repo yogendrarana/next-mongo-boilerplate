@@ -7,7 +7,7 @@ import { Inter } from "next/font/google";
 
 export const metadata: Metadata = {
     title: "Ecommerce Boilerplate | Next JS and Mongo DB",
-    description: "Next JS and Mongo DB Boilerplate"
+    description: "Ecommerce boilerplate created using Next JS and Mongo DB"
 };
 
 // fonts

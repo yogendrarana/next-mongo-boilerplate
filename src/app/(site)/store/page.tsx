@@ -23,15 +23,17 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     const productsPromise = getFilteredProducts(searchParams);
 
     return (
-        <React.Suspense fallback={<ProductsSkeletion />}>
+        <>
             <SiteHeader />
-            <Store
-                categoriesPromise={categoriesPromise}
-                subcategoriesPromise={subcategoriesPromise}
-                productsPromise={productsPromise}
-                searchParams={searchParams}
-            />
+            <React.Suspense fallback={<ProductsSkeletion />}>
+                <Store
+                    categoriesPromise={categoriesPromise}
+                    subcategoriesPromise={subcategoriesPromise}
+                    productsPromise={productsPromise}
+                    searchParams={searchParams}
+                />
+            </React.Suspense>
             <SiteFooter />
-        </React.Suspense>
+        </>
     );
 }
