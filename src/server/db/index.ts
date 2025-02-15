@@ -1,53 +1,35 @@
-"use server"
+import mongoose from "mongoose";
 
-import mongoose, { Connection } from 'mongoose';
-
-interface MongoConnection {
-    conn: Connection | null;
-    promise: Promise<Connection> | null;
+interface Connection {
+    isConnected?: number;
 }
 
-const productionDbUri = process.env.MONGODB_URI;
-const localDbUri = "mongodb://localhost:27017/next-mongo-boilerplate";
+const dbUri = process.env.MONGODB_URI!;
 
-if (process.env.NODE_ENV === "production" && !productionDbUri) {
-    throw new Error('Please define the production MONGODB_URI environment variable');
+if (!dbUri) {
+    throw new Error("Please add your MongoDB URI to .env");
 }
 
-if (!localDbUri) {
-    throw new Error('Please define the local MONGODB_URI environment variable');
-}
+const connection: Connection = {};
 
-const uri = process.env.NODE_ENV === 'production'
-    ? productionDbUri
-    : localDbUri;
-
-let cached: MongoConnection = (global as any).mongoose || { conn: null, promise: null };
-
-async function connectDb(): Promise<Connection> {
-    if (cached.conn) {
-        return cached.conn;
-    }
-
-    if (!cached.promise) {
-        const opts = {
-            bufferCommands: false,
-        };
-
-        cached.promise = mongoose.connect(uri!, opts).then((mongoose) => {
-            return mongoose.connection;
-        });
+async function connectDb() {
+    if (connection.isConnected) {
+        return;
     }
 
     try {
-        cached.conn = await cached.promise;
-        return cached.conn;
-    } catch (e) {
-        cached.promise = null;
-        throw e;
+        const db = await mongoose.connect(dbUri);
+        connection.isConnected = db.connections[0].readyState;
+    } catch (error) {
+        throw error;
     }
 }
 
-(global as any).mongoose = cached;
+// For development: Handle hot reloading
+if (process.env.NODE_ENV === "development") {
+    if (!(global as any)._mongooseConnection) {
+        (global as any)._mongooseConnection = connection;
+    }
+}
 
 export { connectDb };
